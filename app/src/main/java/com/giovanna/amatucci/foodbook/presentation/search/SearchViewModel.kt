@@ -29,8 +29,8 @@ class SearchViewModel(
 
         viewModelScope.launch {
             _uiState.value = SearchScreenUiState.Loading
-
-            when (val result = searchRecipesUseCase(query)) {
+            val result = searchRecipesUseCase(query)
+            when (result) {
                 is ApiResult.Success -> {
                     if (result.data.isEmpty()) {
                         _uiState.value = SearchScreenUiState.Empty

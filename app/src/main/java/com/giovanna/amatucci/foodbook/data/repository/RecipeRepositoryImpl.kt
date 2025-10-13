@@ -18,8 +18,9 @@ class RecipeRepositoryImpl(
 
     override suspend fun searchRecipes(query: String): ApiResult<List<RecipeSummary>> =
         withContext(ioDispatcher) {
+            val apiResult = apiService.searchRecipes(query)
             Timber.d("Buscando receitas para a query: '%s'", query)
-            when (val apiResult = apiService.searchRecipes(query)) {
+            when (apiResult) {
                 is ApiResult.Success -> {
                     val recipes = apiResult.data.results.map { it.toDomain() }
                     Timber.i("Busca bem-sucedida. Encontradas %d receitas.", recipes.size)
@@ -35,8 +36,9 @@ class RecipeRepositoryImpl(
 
     override suspend fun getRecipeDetails(id: Int): ApiResult<RecipeDetails> =
         withContext(ioDispatcher) {
+            val apiResult = apiService.getRecipeDetails(id)
             Timber.d("Buscando detalhes para o ID da receita: %d", id)
-            when (val apiResult = apiService.getRecipeDetails(id)) {
+            when (apiResult) {
                 is ApiResult.Success -> {
                     try {
                         val recipeDetails = apiResult.data.toDomain()
