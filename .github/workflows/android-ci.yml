@@ -34,7 +34,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Create the local.properties file with the API Key
-        run: echo "API_KEY=${{ secrets.API_KEY }}" > app/local.properties
+        run: echo "API_KEY=${{ secrets.API_KEY }}" > local.properties
 
       - name: Building with Gradle
         run: ./gradlew build
