@@ -30,7 +30,7 @@ android {
         buildConfigField(
             "String",
             "APIKEY_PROPERTIES",
-            "\"${localPropertiesFile.getProperty("apikey.properties")}\""
+            "\"${localPropertiesFile.getProperty("API_KEY")}\""
         )
     }
 
