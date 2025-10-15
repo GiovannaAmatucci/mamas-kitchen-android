@@ -1,5 +1,6 @@
 package com.giovanna.amatucci.foodbook.data.mapper
 
+import android.text.Html
 import com.giovanna.amatucci.foodbook.data.model.RecipeInformationDto
 import com.giovanna.amatucci.foodbook.data.model.RecipeSearchResultDto
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
@@ -21,11 +22,17 @@ fun RecipeInformationDto.toDomain(): RecipeDetails {
         ?.map { stepDto -> "${stepDto.number}. ${stepDto.step}" }
         ?: emptyList()
 
+    val summaryCleaned = if (this.summary.isNotBlank()) {
+        Html.fromHtml(this.summary, Html.FROM_HTML_MODE_COMPACT).toString()
+    } else {
+        ""
+    }
+
     return RecipeDetails(
         id = this.id,
         title = this.title,
         imageUrl = this.image,
-        summary = this.summary,
+        summary = summaryCleaned,
         servings = this.servings,
         readyInMinutes = this.readyInMinutes,
         ingredients = ingredientList,

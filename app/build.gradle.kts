@@ -83,6 +83,7 @@ android {
 dependencies {
     // ---------- 🧱 Core & Kotlin ----------
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
 
     // ---------- 🧠 State, Lifecycle & ViewModel ----------
     implementation(libs.androidx.lifecycle.runtime.ktx)

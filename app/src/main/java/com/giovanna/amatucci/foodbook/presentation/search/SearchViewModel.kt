@@ -9,10 +9,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
-    private val searchRecipesUseCase: SearchRecipesUseCase
+    private val searchRecipesUseCase: SearchRecipesUseCase,
 ) : ViewModel() {
-
-    // StateFlow para o texto digitado no campo de busca
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 
@@ -38,8 +36,9 @@ class SearchViewModel(
                         _uiState.value = SearchScreenUiState.Success(result.data)
                     }
                 }
+
                 is ApiResult.Error -> {
-                    val errorMessage = result.exception.message ?: "Ocorreu um erro desconhecido"
+                    val errorMessage = result.exception.message
                     _uiState.value = SearchScreenUiState.Error(errorMessage)
                 }
             }
