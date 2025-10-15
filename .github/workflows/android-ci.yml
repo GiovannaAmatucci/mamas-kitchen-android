@@ -1,0 +1,37 @@
+name: Android CI
+
+on:
+
+  pull_request:
+    branches: [ "main", "dev" ]
+  push:
+    branches: [ "main", "dev" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Java (JDK)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Gradle Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Construir com o Gradle
+        run: ./gradlew build
