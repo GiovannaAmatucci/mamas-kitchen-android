@@ -8,6 +8,7 @@ ksp = "2.2.0-2.0.2"
 coreKtx = "1.17.0"
 lifecycle = "2.9.4"
 activity = "1.11.0"
+appCompat = "1.7.1"
 
 # 🎨 Jetpack Compose
 composeBom = "2025.10.00"
@@ -35,6 +36,7 @@ timber = "5.0.1"
 [libraries]
 # ---------- 🧱 Core & Kotlin ----------
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appCompat" }
 
 # ---------- 🧠 State, Lifecycle & ViewModel ----------
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }

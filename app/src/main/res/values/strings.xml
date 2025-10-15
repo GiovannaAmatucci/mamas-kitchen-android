@@ -1,3 +1,30 @@
 <resources>
-    <string name="app_name">Food Book</string>
+    <string name="app_name">FoodBook</string>
+
+    <!-- ===================================================================== -->
+    <!-- Common / Shared Strings                                               -->
+    <!-- ===================================================================== -->
+    <string name="common_error_generic">Ocorreu um erro desconhecido. Por favor, tente novamente.</string>
+    <string name="common_button_back">Voltar</string>
+    <string name="common_button_retry">Tentar Novamente</string>
+
+
+    <!-- ===================================================================== -->
+    <!-- Search Screen                                                         -->
+    <!-- ===================================================================== -->
+    <string name="search_screen_title">Buscar Receitas</string>
+    <string name="search_field_placeholder">Digite um prato ou ingrediente</string>
+    <string name="search_button_text">Buscar</string>
+    <string name="search_idle_message">Pronto para buscar sua próxima receita!</string>
+    <string name="search_empty_message">Nenhuma receita encontrada para \"%1$s\"</string>
+
+
+    <!-- ===================================================================== -->
+    <!-- Details Screen                                                        -->
+    <!-- ===================================================================== -->
+    <string name="details_screen_title_default">Detalhes</string>
+    <string name="details_section_title_ingredients">Ingredientes</string>
+    <string name="details_section_title_instructions">Instruções</string>
+    <string name="details_error_message_loading_failed">Falha ao carregar detalhes da receita.</string>
+
 </resources>

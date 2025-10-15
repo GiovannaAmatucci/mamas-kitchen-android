@@ -11,5 +11,5 @@ sealed interface SearchScreenUiState {
 
     data object Empty : SearchScreenUiState
 
-    data class Error(val message: String) : SearchScreenUiState
+    data class Error(val message: String? = null) : SearchScreenUiState
 }

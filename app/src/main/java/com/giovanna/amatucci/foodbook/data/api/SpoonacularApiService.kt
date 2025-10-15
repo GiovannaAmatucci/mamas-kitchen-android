@@ -5,6 +5,7 @@ import com.giovanna.amatucci.foodbook.data.model.RecipeInformationDto
 import com.giovanna.amatucci.foodbook.data.model.RecipeSearchResponseDto
 import com.giovanna.amatucci.foodbook.data.network.ApiResult
 import com.giovanna.amatucci.foodbook.data.network.KtorClient
+import com.giovanna.amatucci.foodbook.util.LogMessages
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
@@ -24,7 +25,7 @@ class SpoonacularApiService(
             }.body<RecipeSearchResponseDto>()
             ApiResult.Success(response)
         } catch (e: Exception) {
-            Timber.e(e, "Failed to search recipes for query: $query")
+            Timber.e(e, LogMessages.API_SEARCH_FAILED, query)
             ApiResult.Error(e)
         }
     }
@@ -36,7 +37,7 @@ class SpoonacularApiService(
             }.body<RecipeInformationDto>()
             ApiResult.Success(response)
         } catch (e: Exception) {
-            Timber.e(e, "Failed to get recipe details for id: $id")
+            Timber.e(e, LogMessages.API_DETAILS_FAILED, id)
             ApiResult.Error(e)
         }
     }

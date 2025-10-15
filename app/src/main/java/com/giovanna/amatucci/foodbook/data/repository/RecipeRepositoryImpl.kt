@@ -6,6 +6,7 @@ import com.giovanna.amatucci.foodbook.data.network.ApiResult
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
 import com.giovanna.amatucci.foodbook.domain.model.RecipeSummary
 import com.giovanna.amatucci.foodbook.domain.repository.RecipeRepository
+import com.giovanna.amatucci.foodbook.util.LogMessages
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -19,16 +20,16 @@ class RecipeRepositoryImpl(
     override suspend fun searchRecipes(query: String): ApiResult<List<RecipeSummary>> =
         withContext(ioDispatcher) {
             val apiResult = apiService.searchRecipes(query)
-            Timber.d("Buscando receitas para a query: '%s'", query)
+            Timber.d(LogMessages.REPO_SEARCHING_RECIPES, query)
             when (apiResult) {
                 is ApiResult.Success -> {
                     val recipes = apiResult.data.results.map { it.toDomain() }
-                    Timber.i("Busca bem-sucedida. Encontradas %d receitas.", recipes.size)
+                    Timber.i(LogMessages.REPO_SEARCH_SUCCESS, recipes.size)
                     ApiResult.Success(recipes)
                 }
 
                 is ApiResult.Error -> {
-                    Timber.w("Falha na busca de receitas propagada para a camada de domínio.")
+                    Timber.w(LogMessages.REPO_SEARCH_FAILURE_PROPAGATED)
                     apiResult
                 }
             }
@@ -37,21 +38,21 @@ class RecipeRepositoryImpl(
     override suspend fun getRecipeDetails(id: Int): ApiResult<RecipeDetails> =
         withContext(ioDispatcher) {
             val apiResult = apiService.getRecipeDetails(id)
-            Timber.d("Buscando detalhes para o ID da receita: %d", id)
+            Timber.d(LogMessages.REPO_FETCHING_DETAILS, id)
             when (apiResult) {
                 is ApiResult.Success -> {
                     try {
                         val recipeDetails = apiResult.data.toDomain()
-                        Timber.i("Detalhes encontrados para o ID: %d.", id)
+                        Timber.i(LogMessages.REPO_DETAILS_SUCCESS, id)
                         ApiResult.Success(recipeDetails)
                     } catch (e: Exception) {
-                        Timber.e(e, "Falha ao mapear os detalhes da receita para o domínio.")
+                        Timber.e(e, LogMessages.REPO_MAPPING_ERROR)
                         ApiResult.Error(e)
                     }
                 }
 
                 is ApiResult.Error -> {
-                    Timber.w("Falha na busca de detalhes propagada para a camada de domínio.")
+                    Timber.w(LogMessages.REPO_DETAILS_FAILURE_PROPAGATED)
                     apiResult
                 }
             }
