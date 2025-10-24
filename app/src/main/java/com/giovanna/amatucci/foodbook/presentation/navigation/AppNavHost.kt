@@ -1,42 +1,53 @@
 package com.giovanna.amatucci.foodbook.presentation.navigation
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
+import androidx.navigation.compose.navigation
+import com.giovanna.amatucci.foodbook.presentation.authentication.AuthScreen
 import com.giovanna.amatucci.foodbook.presentation.details.DetailsScreen
-import com.giovanna.amatucci.foodbook.presentation.details.DetailsViewModel
 import com.giovanna.amatucci.foodbook.presentation.search.SearchScreen
-import org.koin.androidx.compose.koinViewModel
-import org.koin.core.parameter.parametersOf
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppNavHost(navController: NavHostController) {
+fun AppNavHost(
+    navController: NavHostController
+) {
     NavHost(
-        navController = navController, startDestination = SearchScreen, modifier = Modifier
+        navController = navController,
+        startDestination = AuthGraph
     ) {
-        composable<SearchScreen> {
-            SearchScreen(
-                onNavigateToRecipe = { id ->
-                    navController.navigate(DetailsScreen(recipeId = id))
-                }
-            )
+        navigation<AuthGraph>(
+            startDestination = AuthScreen
+        ) {
+            composable<AuthScreen> {
+                AuthScreen(
+                    onNavigateToHome = {
+                        navController.navigate(MainGraph) {
+                            popUpTo(AuthGraph) {
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
+            }
         }
-        composable<DetailsScreen> { backStackEntry ->
-            val args: DetailsScreen = backStackEntry.toRoute()
-            val oIdDaReceita = args.recipeId
+        navigation<MainGraph>(
+            startDestination = SearchScreen
+        ) {
+            composable<SearchScreen> {
+                SearchScreen(
+                    onNavigateToRecipe = { recipeId ->
+                        navController.navigate(DetailsScreen(recipeId = recipeId))
+                    }
+                )
+            }
 
-            val detailsViewModel: DetailsViewModel = koinViewModel(
-                parameters = { parametersOf(oIdDaReceita) }
-            )
-            DetailsScreen(
-                onNavigateBack = { navController.popBackStack() },
-                viewModel = detailsViewModel
-            )
+            composable<DetailsScreen> {
+                DetailsScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
         }
     }
 }
