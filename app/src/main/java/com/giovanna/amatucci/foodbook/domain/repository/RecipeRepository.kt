@@ -1,19 +1,10 @@
 package com.giovanna.amatucci.foodbook.domain.repository
 
-import androidx.paging.PagingData
+import com.giovanna.amatucci.foodbook.data.network.ApiResult
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
-import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
-import com.giovanna.amatucci.foodbook.util.ResultWrapper
-import kotlinx.coroutines.flow.Flow
+import com.giovanna.amatucci.foodbook.domain.model.RecipeSummary
 
 interface RecipeRepository {
-
-    fun searchRecipesPaginated(
-        query: String, recipeTypes: List<String>? = null
-    ): Flow<PagingData<RecipeItem>>
-
-    suspend fun getRecipeDetails(recipeId: String): ResultWrapper<RecipeDetails>
-
-    suspend fun saveSearchQuery(query: String)
-
+    suspend fun searchRecipes(query: String): ApiResult<List<RecipeSummary>>
+    suspend fun getRecipeDetails(id: Int): ApiResult<RecipeDetails>
 }

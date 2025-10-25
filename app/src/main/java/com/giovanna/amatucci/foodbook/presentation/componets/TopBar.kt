@@ -8,21 +8,24 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import com.giovanna.amatucci.foodbook.R
+import com.giovanna.amatucci.foodbook.presentation.details.DetailsUiState
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsTopAppBar(
-    uiState: String, onNavigateBack: () -> Unit
+    uiState: DetailsUiState, onNavigateBack: () -> Unit
 ) {
     TopAppBar(title = {
-        Text(uiState)
+        val title = when (uiState) {
+            is DetailsUiState.Success -> uiState.recipeDetails.title
+            else -> ""
+        }
+        Text(text = title)
     }, navigationIcon = {
         IconButton(onClick = onNavigateBack) {
             Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = R.string.common_button_back.toString()
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar"
             )
         }
     })

@@ -3,7 +3,6 @@
 agp = "8.13.0-alpha01"
 kotlin = "2.2.20"
 ksp = "2.2.0-2.0.2"
-secretsGradlePlugin = "2.0.1"
 
 # 🤖 AndroidX
 coreKtx = "1.17.0"
@@ -32,17 +31,6 @@ koin = "4.1.1"
 
 # Timber (Logging)
 timber = "5.0.1"
-
-#room
-room = "2.8.3"
-
-# SQLCipher
-sqlcipher = "4.5.4"
-androidxSqlite = "2.6.1"
-adapters = "3.2.0-alpha11"
-
-# Paging
-paging = "3.3.6"
 
 
 [libraries]
@@ -76,9 +64,7 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 
 # ---------- 🌐 Networking (Ktor & Serialization) ----------
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
-ktor-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
 ktor-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
-ktor-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
 ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
@@ -99,25 +85,9 @@ koin-test = { module = "io.insert-koin:koin-test" }
 # Logging
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
-# Room
-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
-
-# SQLCipher
-#noinspection Aligned16KB
-sqlcipher = { module = "net.zetetic:android-database-sqlcipher", version.ref = "sqlcipher" }
-androidx-sqlite = { module = "androidx.sqlite:sqlite", version.ref = "androidxSqlite" }
-androidx-adapters = { group = "androidx.databinding", name = "adapters", version.ref = "adapters" }
-
-# Paging
-androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
-androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
-
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-secrets-gradle = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secretsGradlePlugin" }

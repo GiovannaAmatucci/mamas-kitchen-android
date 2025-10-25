@@ -6,10 +6,9 @@ plugins {
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.secrets.gradle)
 }
-val keyProperties = Properties().apply {
-    load(File(rootDir, "key.properties").inputStream())
+val localPropertiesFile = Properties().apply {
+    load(File(rootDir, "local.properties").inputStream())
 }
 
 
@@ -27,20 +26,11 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        buildConfigField("String", "BASE_URL", "\"platform.fatsecret.com\"")
-        buildConfigField("String", "TOKEN_URL", "\"oauth.fatsecret.com\"")
-        buildConfigField(
-            "String", "DB_PASSPHRASE", "\"${keyProperties.getProperty("DB_PASSPHRASE")}\""
-        )
+        buildConfigField("String", "BASE_URL", "\"api.spoonacular.com\"")
         buildConfigField(
             "String",
-            "FATSECRET_CLIENT_ID",
-            "\"${keyProperties.getProperty("FATSECRET_CLIENT_ID")}\""
-        )
-        buildConfigField(
-            "String",
-            "FATSECRET_CLIENT_SECRET",
-            "\"${keyProperties.getProperty("FATSECRET_CLIENT_SECRET")}\""
+            "APIKEY_PROPERTIES",
+            "\"${localPropertiesFile.getProperty("API_KEY")}\""
         )
     }
 
@@ -120,9 +110,7 @@ dependencies {
 
     // ---------- 🌐 Networking (Ktor & Serialization) ----------
     implementation(libs.ktor.client.core)
-    implementation(libs.ktor.auth)
     implementation(libs.ktor.cio)
-    implementation(libs.ktor.okhttp)
     implementation(libs.ktor.client.android)
     implementation(libs.ktor.client.logging)
     implementation(libs.ktor.client.content.negotiation)
@@ -131,7 +119,6 @@ dependencies {
 
     // ---------- 🖼️ Image Loading ----------
     implementation(libs.coil.compose)
-    implementation(libs.androidx.adapters)
 
     // ---------- 🧪 Testing ----------
     testImplementation(libs.junit)
@@ -145,18 +132,5 @@ dependencies {
 
     // --- Logging (Timber) ---
     implementation(libs.timber)
-
-    // --- Room ---
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
-    ksp(libs.room.compiler)
-
-    // --- SQLCipher ---
-    implementation(libs.sqlcipher)
-    implementation(libs.androidx.sqlite)
-
-    // --- Paging ---
-    implementation(libs.androidx.paging.runtime)
-    implementation(libs.androidx.paging.compose)
 
 }

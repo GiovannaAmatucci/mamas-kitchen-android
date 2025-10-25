@@ -8,14 +8,14 @@ import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import timber.log.Timber
 
+
 class FoodBookApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         setupKoin()
-        setupTimber()
     }
     private fun setupTimber() {
-        if (BuildConfig.DEBUG_MODE) {
+        if (BuildConfig.DEBUG) {
             Timber.Forest.plant(Timber.DebugTree())
             Timber.Forest.d("Timber Initialized.")
         }
@@ -23,7 +23,7 @@ class FoodBookApplication : Application() {
 
     private fun setupKoin() {
             startKoin {
-                if (BuildConfig.DEBUG_MODE) androidLogger(Level.DEBUG) else androidLogger(Level.NONE)
+                if (BuildConfig.DEBUG) androidLogger(Level.DEBUG) else androidLogger(Level.NONE)
                 androidContext(this@FoodBookApplication)
                 modules(appModules)
             }

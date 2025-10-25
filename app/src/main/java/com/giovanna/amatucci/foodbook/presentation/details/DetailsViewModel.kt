@@ -1,59 +1,37 @@
 package com.giovanna.amatucci.foodbook.presentation.details
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
-import com.giovanna.amatucci.foodbook.R
+import com.giovanna.amatucci.foodbook.data.network.ApiResult
 import com.giovanna.amatucci.foodbook.domain.usecase.GetRecipeDetailsUseCase
-import com.giovanna.amatucci.foodbook.presentation.navigation.DetailsScreen
-import com.giovanna.amatucci.foodbook.util.ResultWrapper
-import com.giovanna.amatucci.foodbook.util.UiText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class DetailsViewModel(
-    private val getRecipeDetailsUseCase: GetRecipeDetailsUseCase, savedStateHandle: SavedStateHandle
+    private val getRecipeDetailsUseCase: GetRecipeDetailsUseCase, private val recipeId: Int
 ) : ViewModel() {
-
-    private val _uiState = MutableStateFlow(DetailUiState())
+    private val _uiState = MutableStateFlow<DetailsUiState>(DetailsUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     init {
-        val navArgs: DetailsScreen = savedStateHandle.toRoute()
-        val recipeId = navArgs.recipeId
-
-        if (recipeId.isNotBlank()) {
-            getRecipeDetails(recipeId)
-        } else {
-            _uiState.update {
-                it.copy(
-                    status = DetailsStatus.Error,
-                    error = UiText.StringResource(R.string.details_error_invalid_id)
-                )
-            }
-        }
+        fetchRecipeDetails(recipeId)
     }
 
-    private fun getRecipeDetails(recipeId: String) {
+    fun fetchRecipeDetails(id: Int) {
         viewModelScope.launch {
-            _uiState.update { it.copy(status = DetailsStatus.Loading) }
-            when (val result = getRecipeDetailsUseCase(recipeId)) {
-                is ResultWrapper.Success -> {
-                    _uiState.update {
-                        it.copy(status = DetailsStatus.Success, recipe = result.data)
-                    }
+            _uiState.value = DetailsUiState.Loading
+
+            val result = getRecipeDetailsUseCase(id)
+
+            when (result) {
+                is ApiResult.Success -> {
+                    _uiState.value = DetailsUiState.Success(result.data)
                 }
 
-                is ResultWrapper.Error, is ResultWrapper.Exception -> {
-                    _uiState.update {
-                        it.copy(
-                            status = DetailsStatus.Error,
-                            error = UiText.StringResource(R.string.details_error_api_failure)
-                        )
-                    }
+                is ApiResult.Error -> {
+                    val errorMessage = result.exception.message
+                    _uiState.value = DetailsUiState.Error(errorMessage)
                 }
             }
         }
