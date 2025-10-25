@@ -32,6 +32,10 @@ jobs:
 
       - name: Make Gradle executable
         run: chmod +x ./gradlew
+
+      - name: Create local.properties
+        run: echo "sdk.dir=$ANDROID_HOME" > local.properties
+
       - name: Create key.properties file
         env:
           FATSECRET_CLIENT_ID: ${{ secrets.FATSECRET_CLIENT_ID }}
