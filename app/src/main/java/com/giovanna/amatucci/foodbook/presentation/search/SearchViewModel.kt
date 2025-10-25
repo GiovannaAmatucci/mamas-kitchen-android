@@ -2,45 +2,56 @@ package com.giovanna.amatucci.foodbook.presentation.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.giovanna.amatucci.foodbook.data.network.ApiResult
+import androidx.paging.cachedIn
+import com.giovanna.amatucci.foodbook.domain.usecase.SaveSearchQueryUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.SearchRecipesUseCase
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 
+
+@OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
 class SearchViewModel(
     private val searchRecipesUseCase: SearchRecipesUseCase,
+    private val saveSearchQueryUseCase: SaveSearchQueryUseCase
 ) : ViewModel() {
-    private val _searchQuery = MutableStateFlow("")
-    val searchQuery = _searchQuery.asStateFlow()
 
-    private val _uiState = MutableStateFlow<SearchScreenUiState>(SearchScreenUiState.Idle)
-    val uiState = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(SearchUiState())
+    val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
 
-    fun onQueryChange(newQuery: String) {
-        _searchQuery.value = newQuery
+    init {
+        val recipesFlow = _uiState
+            .debounce(500L)
+            .distinctUntilChanged { old, new -> old.searchQuery == new.searchQuery }
+            .onEach { state ->
+                if (state.searchQuery.length > 2) {
+                    saveSearchQueryUseCase(state.searchQuery)
+                }
+            }
+            .flatMapLatest { state ->
+                if (state.searchQuery.length > 2) {
+                    searchRecipesUseCase(state.searchQuery)
+                } else {
+                    emptyFlow()
+                }
+            }
+            .cachedIn(viewModelScope)
+
+        _uiState.update { it.copy(recipes = recipesFlow) }
     }
 
-    fun searchRecipes() {
-        val query = _searchQuery.value
-        if (query.isBlank()) return
-
-        viewModelScope.launch {
-            _uiState.value = SearchScreenUiState.Loading
-            val result = searchRecipesUseCase(query)
-            when (result) {
-                is ApiResult.Success -> {
-                    if (result.data.isEmpty()) {
-                        _uiState.value = SearchScreenUiState.Empty
-                    } else {
-                        _uiState.value = SearchScreenUiState.Success(result.data)
-                    }
-                }
-
-                is ApiResult.Error -> {
-                    val errorMessage = result.exception.message
-                    _uiState.value = SearchScreenUiState.Error(errorMessage)
-                }
+    fun onEvent(event: SearchEvent) {
+        when (event) {
+            is SearchEvent.OnSearchQueryChange -> {
+                _uiState.update { it.copy(searchQuery = event.query) }
             }
         }
     }

@@ -8,22 +8,23 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.request.header
+import io.ktor.http.ContentType
 import io.ktor.http.URLProtocol
+import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 
-interface KtorClient {
+interface TokenHttpClient {
     operator fun invoke(): HttpClient
 }
 
-class KtorClientImpl(
+class TokenHttpClientImpl(
     private val baseHostUrl: String,
     private val requestTimeout: Long,
     private val connectTimeout: Long,
     private val isDebug: Boolean
-) : KtorClient {
+) : TokenHttpClient {
     override fun invoke(): HttpClient = HttpClient(Android) {
         install(ContentNegotiation) {
             json(Json {
@@ -33,11 +34,11 @@ class KtorClientImpl(
             })
         }
         defaultRequest {
+            contentType(ContentType.Application.Json)
             url {
                 protocol = URLProtocol.HTTPS
                 host = baseHostUrl
             }
-            header("Content-Type", "application/json")
         }
         install(HttpTimeout) {
             requestTimeoutMillis = requestTimeout

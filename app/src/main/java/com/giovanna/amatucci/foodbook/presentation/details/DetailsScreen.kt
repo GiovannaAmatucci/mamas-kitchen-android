@@ -2,11 +2,13 @@ package com.giovanna.amatucci.foodbook.presentation.details
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,17 +31,17 @@ import com.giovanna.amatucci.foodbook.presentation.componets.DetailsTopAppBar
 import com.giovanna.amatucci.foodbook.presentation.componets.EmptyMessage
 import com.giovanna.amatucci.foodbook.presentation.componets.LoadingIndicator
 import com.giovanna.amatucci.foodbook.presentation.componets.SectionTitle
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsScreen(
-    onNavigateBack: () -> Unit, viewModel: DetailsViewModel
+    onNavigateBack: () -> Unit, viewModel: DetailsViewModel = koinViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val state = uiState
-
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+val title = state.recipe?.name?: stringResource(R.string.details_section_title_instructions)
     Scaffold(topBar = {
-        DetailsTopAppBar(uiState = uiState, onNavigateBack = onNavigateBack)
+        DetailsTopAppBar(uiState = title, onNavigateBack = onNavigateBack)
     }) { paddingValues ->
         Box(
             modifier = Modifier
@@ -47,17 +49,19 @@ fun DetailsScreen(
                 .padding(paddingValues),
             contentAlignment = Alignment.Center
         ) {
-            when (state) {
-                is DetailsUiState.Loading -> {
+            when (state.status) {
+                DetailsStatus.Loading -> {
                     LoadingIndicator()
                 }
 
-                is DetailsUiState.Error -> {
+                DetailsStatus.Error -> {
                     EmptyMessage(message = stringResource(R.string.details_error_message_loading_failed))
                 }
 
-                is DetailsUiState.Success -> {
-                    RecipeDetailsContent(recipe = state.recipeDetails)
+                DetailsStatus.Success -> {
+                    state.recipe?.let { recipe ->
+                        RecipeDetailsContent(recipe = recipe)
+                    }
                 }
             }
         }
@@ -72,8 +76,7 @@ private fun RecipeDetailsContent(recipe: RecipeDetails) {
     ) {
         item {
             AsyncImage(
-                model = recipe.imageUrl,
-                contentDescription = recipe.title,
+                model = recipe.imageUrls?.firstOrNull(), contentDescription = recipe.description,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(250.dp),
@@ -81,26 +84,29 @@ private fun RecipeDetailsContent(recipe: RecipeDetails) {
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = recipe.title,
+                text = recipe.name ?: "",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = recipe.summary, style = MaterialTheme.typography.bodyMedium
+                text = recipe.description ?: "",
+                style = MaterialTheme.typography.bodyMedium
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
 
         item {
-            SectionTitle(
-                stringResource(R.string.details_section_title_ingredients)
-            )
+            SectionTitle(stringResource(R.string.details_section_title_ingredients))
             Spacer(modifier = Modifier.height(8.dp))
         }
         items(recipe.ingredients) { ingredient ->
-            SectionTitle(ingredient)
+            Text(
+                text = "• ${ingredient.description}",
+                modifier = Modifier.padding(bottom = 4.dp, start = 8.dp),
+                style = MaterialTheme.typography.bodyLarge
+            )
         }
 
         item {
@@ -108,8 +114,20 @@ private fun RecipeDetailsContent(recipe: RecipeDetails) {
             SectionTitle(stringResource(R.string.details_section_title_instructions))
             Spacer(modifier = Modifier.height(8.dp))
         }
-        items(recipe.instructions) { instruction ->
-            SectionTitle(instruction)
+
+        items(recipe.directions) { instruction ->
+            Row(modifier = Modifier.padding(bottom = 8.dp)) {
+                Text(
+                    text = "${instruction.number}.",
+                    modifier = Modifier.width(32.dp),
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Text(
+                    text = instruction.description,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
         }
     }
 }

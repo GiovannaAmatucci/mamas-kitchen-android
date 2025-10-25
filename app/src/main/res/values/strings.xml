@@ -17,6 +17,8 @@
     <string name="search_button_text">Buscar</string>
     <string name="search_idle_message">Pronto para buscar sua próxima receita!</string>
     <string name="search_empty_message">Nenhuma receita encontrada para \"%1$s\"</string>
+    <string name="search_error_message_loading_failed">Falha ao carregar receitas.</string>
+    <string name="search_error_api">Falha na API.</string>
 
 
     <!-- ===================================================================== -->
@@ -26,5 +28,17 @@
     <string name="details_section_title_ingredients">Ingredientes</string>
     <string name="details_section_title_instructions">Instruções</string>
     <string name="details_error_message_loading_failed">Falha ao carregar detalhes da receita.</string>
+    <string name="details_error_message_no_ingredients">Nenhum ingrediente encontrado.</string>
+    <string name="details_error_message_no_instructions">Nenhuma instrução encontrada.</string>
+    <string name="details_error_message_no_recipe">Nenhuma receita encontrada.</string>
+    <string name="details_error_invalid_id">ID inválido.</string>
+    <string name="details_error_api_failure">Falha na API.</string>
+
+
+    <!-- ===================================================================== -->
+    <!-- Auth Screen                                                      -->
+    <!-- ===================================================================== -->
+    <string name="auth_error_with_code">Erro %1$d: %2$s</string>
+    <string name="auth_error_unknown">Erro desconhecido ao buscar token</string>
 
 </resources>

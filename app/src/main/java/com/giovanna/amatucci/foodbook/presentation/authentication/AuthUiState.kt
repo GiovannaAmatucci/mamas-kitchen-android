@@ -1,0 +1,13 @@
+package com.giovanna.amatucci.foodbook.presentation.authentication
+
+import com.giovanna.amatucci.foodbook.util.UiText
+
+sealed interface AuthUiState {
+    data object Idle : AuthUiState
+    data object Loading : AuthUiState
+    data class Authenticated(
+        val navigateToHome: Boolean = false
+    ) : AuthUiState
+
+    data class AuthenticationFailed(val errorMessage: UiText) : AuthUiState
+}
