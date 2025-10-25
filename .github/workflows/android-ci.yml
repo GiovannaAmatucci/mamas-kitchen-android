@@ -33,8 +33,11 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
-      - name: Create the local.properties file with the API Key
-        run: echo "API_KEY=${{ secrets.API_KEY }}" > local.properties
+      - name: Create the key.properties file with the FATSECRET_CLIENT_ID
+        run: echo "FATSECRET_CLIENT_ID =${{ secrets.FATSECRET_CLIENT_ID  }}" > key.properties
+
+      - name: Create the key.properties file with the FATSECRET_CLIENT_SECRET
+        run: echo "FATSECRET_CLIENT_SECRET =${{ secrets.FATSECRET_CLIENT_SECRET  }}" > key.properties
 
       - name: Building with Gradle
         run: ./gradlew build
