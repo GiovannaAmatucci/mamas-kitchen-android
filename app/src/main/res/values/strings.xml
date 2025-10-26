@@ -15,6 +15,9 @@
     <string name="search_screen_title">Buscar Receitas</string>
     <string name="search_field_placeholder">Digite um prato ou ingrediente</string>
     <string name="search_button_text">Buscar</string>
+    <string name="search_back_description">Voltar</string>
+    <string name="search_close_description">Fechar e limpar busca</string>
+    <string name="search_access_item_description">Acessar Item.</string>
     <string name="search_idle_message">Pronto para buscar sua próxima receita!</string>
     <string name="search_empty_message">Nenhuma receita encontrada para \"%1$s\"</string>
     <string name="search_error_message_loading_failed">Falha ao carregar receitas.</string>
