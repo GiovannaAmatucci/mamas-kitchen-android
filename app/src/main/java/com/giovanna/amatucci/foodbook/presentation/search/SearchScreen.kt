@@ -23,9 +23,9 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
-import com.giovanna.amatucci.foodbook.presentation.componets.EmptyMessage
-import com.giovanna.amatucci.foodbook.presentation.componets.LoadingIndicator
-import com.giovanna.amatucci.foodbook.presentation.componets.RecipeList
+import com.giovanna.amatucci.foodbook.presentation.components.EmptyMessage
+import com.giovanna.amatucci.foodbook.presentation.components.LoadingIndicator
+import com.giovanna.amatucci.foodbook.presentation.components.RecipeList
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -89,7 +89,6 @@ private fun SearchContent(
                         LoadingIndicator()
                     }
 
-                    // 3. Se deu erro no refresh, mostre erro (pode ser a mesma mensagem de vazio).
                     recipes.loadState.refresh is LoadState.Error -> {
                         EmptyMessage(stringResource(R.string.search_error_message_loading_failed))
                     }

@@ -4,20 +4,24 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.giovanna.amatucci.foodbook.data.remote.api.FatSecretRecipeApi
 import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipeDataMapper
+import com.giovanna.amatucci.foodbook.di.util.LogMessages
+import com.giovanna.amatucci.foodbook.di.util.LogWriter
+import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
-import com.giovanna.amatucci.foodbook.util.LogMessages
-import com.giovanna.amatucci.foodbook.util.ResultWrapper
-import timber.log.Timber
 
 private const val FATSECRET_STARTING_PAGE_INDEX = 1
 
 class RecipePagingSource(
     private val api: FatSecretRecipeApi,
     private val mapper: RecipeDataMapper,
-    private val query: String,
+    private val query: String, private val logWriter: LogWriter
 ) : PagingSource<Int, RecipeItem>() {
+    companion object {
+        private const val TAG = "RecipePagingSource"
+    }
+
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RecipeItem> {
-        val position = params.key ?: 1
+        val position = params.key ?: FATSECRET_STARTING_PAGE_INDEX
         val maxResults = params.loadSize
 
         return try {
@@ -27,34 +31,41 @@ class RecipePagingSource(
                 is ResultWrapper.Success -> {
                     val recipesSearch = apiResult.data.recipesSearch
                     val recipeDtos = recipesSearch?.recipeSearch ?: emptyList()
-
-                    if (recipeDtos.isNotEmpty()) {
-                        val domainData = recipeDtos.map { mapper.searchRecipeDtoToDomain(it) }
-
-                        LoadResult.Page(
-                            data = domainData,
-                            prevKey = if (position == FATSECRET_STARTING_PAGE_INDEX) null else position - 1,
-                            nextKey = if (domainData.isEmpty()) null else position + 1
-                        )
+                    val domainData = recipeDtos.map { mapper.searchRecipeDtoToDomain(it) }
+                    val nextKey = if (recipeDtos.isEmpty()) {
+                        null
                     } else {
-                        LoadResult.Page(data = emptyList(), prevKey = null, nextKey = null)
+                        position + 1
                     }
+
+                    LoadResult.Page(
+                        data = domainData,
+                        prevKey = if (position == FATSECRET_STARTING_PAGE_INDEX) null else position - 1,
+                        nextKey = nextKey
+                    )
                 }
 
                 is ResultWrapper.Error -> {
-                    Timber.e(LogMessages.PAGING_SOURCE_LOAD_FAILURE_API, apiResult.code)
-                    LoadResult.Error(Exception(LogMessages.PAGING_SOURCE_LOAD_FAILURE_API))
+                    val msg = LogMessages.PAGING_LOAD_API_ERROR.format(
+                        apiResult.message, apiResult.code
+                    )
+                    logWriter.e(TAG, msg)
+                    LoadResult.Error(Exception(apiResult.message))
                 }
 
-                is ResultWrapper.Exception -> LoadResult.Error(
-                    apiResult.exception
-                )
+                is ResultWrapper.Exception -> {
+                    val msg =
+                        LogMessages.PAGING_LOAD_API_EXCEPTION.format(apiResult.exception.message)
+                    logWriter.e(TAG, msg)
+                    LoadResult.Error(apiResult.exception)
+                }
             }
         } catch (e: Exception) {
+            val msg = LogMessages.PAGING_LOAD_UNKNOWN_ERROR.format(e.message)
+            logWriter.e(TAG, msg, e)
             LoadResult.Error(e)
         }
     }
-
 
     override fun getRefreshKey(state: PagingState<Int, RecipeItem>): Int? {
         return state.anchorPosition?.let { anchorPosition ->

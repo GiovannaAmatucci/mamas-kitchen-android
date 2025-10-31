@@ -8,52 +8,63 @@ import com.giovanna.amatucci.foodbook.data.local.model.SearchEntity
 import com.giovanna.amatucci.foodbook.data.paging.RecipePagingSource
 import com.giovanna.amatucci.foodbook.data.remote.api.FatSecretRecipeApi
 import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipeDataMapper
+import com.giovanna.amatucci.foodbook.di.util.LogMessages
+import com.giovanna.amatucci.foodbook.di.util.LogWriter
+import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 import com.giovanna.amatucci.foodbook.domain.repository.RecipeRepository
-import com.giovanna.amatucci.foodbook.util.LogMessages
-import com.giovanna.amatucci.foodbook.util.ResultWrapper
 import kotlinx.coroutines.flow.Flow
-import timber.log.Timber
 
 
 class RecipeRepositoryImpl(
     private val api: FatSecretRecipeApi,
     private val dao: SearchDao,
-    private val mapper: RecipeDataMapper
+    private val mapper: RecipeDataMapper,
+    private val logWriter: LogWriter
 ) : RecipeRepository {
+    companion object {
+        private const val TAG = "RecipeRepository"
+    }
 
     override fun searchRecipesPaginated(
         query: String, recipeTypes: List<String>?
     ): Flow<PagingData<RecipeItem>> {
-        Timber.d(LogMessages.REPO_PAGER_CREATED.format(query))
+        logWriter.d(TAG, LogMessages.REPO_PAGER_CREATED.format(query))
         return Pager(
             config = PagingConfig(
                 pageSize = 20, enablePlaceholders = false, initialLoadSize = 20
             ), pagingSourceFactory = {
-                RecipePagingSource(api, mapper, query)
+                RecipePagingSource(api, mapper, query, logWriter)
             }).flow
     }
 
     override suspend fun getRecipeDetails(recipeId: String): ResultWrapper<RecipeDetails> {
-        Timber.d(LogMessages.REPO_FETCHING_DETAILS.format(recipeId))
+        logWriter.d(TAG, LogMessages.REPO_DETAILS_REQUEST.format(recipeId))
+        val apiResult = api.getRecipeDetails(recipeId)
 
-        return when (val apiResult = api.getRecipeDetails(recipeId)) {
+        return when (apiResult) {
             is ResultWrapper.Success -> {
                 val recipeDto = apiResult.data.recipe
                 val recipeDetails = mapper.recipeDetailDtoToDomain(recipeDto)
 
-                Timber.d(LogMessages.REPO_DETAILS_SUCCESS.format(recipeId))
+                logWriter.d(TAG, LogMessages.REPO_DETAILS_SUCCESS.format(recipeDetails.id))
                 ResultWrapper.Success(recipeDetails)
             }
 
             is ResultWrapper.Error -> {
-                Timber.e(LogMessages.REPO_DETAILS_FAILURE_PROPAGATED.format(apiResult.code))
+                logWriter.e(
+                    TAG, message = LogMessages.REPO_DETAILS_API_ERROR.format(
+                        apiResult.code, apiResult.message
+                    )
+                )
                 apiResult
             }
 
             is ResultWrapper.Exception -> {
-                Timber.e(LogMessages.REPO_DETAILS_FAILURE_PROPAGATED.format(apiResult.exception))
+                logWriter.e(
+                    TAG, LogMessages.REPO_DETAILS_API_EXCEPTION.format(apiResult.exception.message)
+                )
                 apiResult
             }
         }

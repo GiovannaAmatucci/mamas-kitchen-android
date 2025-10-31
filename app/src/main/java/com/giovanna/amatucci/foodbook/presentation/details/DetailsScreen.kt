@@ -1,11 +1,9 @@
 package com.giovanna.amatucci.foodbook.presentation.details
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -19,18 +17,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
+import com.giovanna.amatucci.foodbook.presentation.components.EmptyMessage
+import com.giovanna.amatucci.foodbook.presentation.components.LoadingIndicator
+import com.giovanna.amatucci.foodbook.presentation.components.RecipeImages
+import com.giovanna.amatucci.foodbook.presentation.components.SectionTitle
 import com.giovanna.amatucci.foodbook.presentation.componets.DetailsTopAppBar
-import com.giovanna.amatucci.foodbook.presentation.componets.EmptyMessage
-import com.giovanna.amatucci.foodbook.presentation.componets.LoadingIndicator
-import com.giovanna.amatucci.foodbook.presentation.componets.SectionTitle
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,7 +57,7 @@ val title = state.recipe?.name?: stringResource(R.string.details_section_title_i
 
                 DetailsStatus.Success -> {
                     state.recipe?.let { recipe ->
-                        RecipeDetailsContent(recipe = recipe)
+                        RecipeDetailsContent(recipe = recipe, modifier = Modifier)
                     }
                 }
             }
@@ -70,17 +67,17 @@ val title = state.recipe?.name?: stringResource(R.string.details_section_title_i
 
 
 @Composable
-private fun RecipeDetailsContent(recipe: RecipeDetails) {
+private fun RecipeDetailsContent(recipe: RecipeDetails, modifier: Modifier) {
     LazyColumn(
-        modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(16.dp)
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
     ) {
         item {
-            AsyncImage(
-                model = recipe.imageUrls?.firstOrNull(), contentDescription = recipe.description,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(250.dp),
-                contentScale = ContentScale.Crop
+            Spacer(modifier = Modifier.height(16.dp))
+            RecipeImages(images = recipe.imageUrls ?: emptyList())
+            Spacer(
+                modifier = Modifier.height(24.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
