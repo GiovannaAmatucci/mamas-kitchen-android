@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.componets
+package com.giovanna.amatucci.foodbook.presentation.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

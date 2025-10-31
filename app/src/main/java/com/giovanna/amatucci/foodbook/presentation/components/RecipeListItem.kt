@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.componets
+package com.giovanna.amatucci.foodbook.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -57,14 +57,6 @@ fun RecipeListItem(recipe: RecipeItem, onClick: () -> Unit) {
                 SectionTitle(
                     title = recipe.name?:""
                 )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                recipe.description?.let {
-                    SectionTitle(
-                        title = recipe.description
-                    )
-                }
             }
         }
     }

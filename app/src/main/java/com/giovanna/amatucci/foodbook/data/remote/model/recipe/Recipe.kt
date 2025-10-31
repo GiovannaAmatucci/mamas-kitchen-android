@@ -1,10 +1,8 @@
 package com.giovanna.amatucci.foodbook.data.remote.model.recipe
 
 
-import com.giovanna.amatucci.foodbook.data.remote.model.recipe.ServingSizes
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 
 @Serializable
 data class Recipe(
