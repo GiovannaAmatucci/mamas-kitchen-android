@@ -5,7 +5,4 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Ingredients(
-    @SerialName("ingredient")
-    val ingredient: List<Ingredient>
-)
+data class Ingredients(@SerialName("ingredient") val ingredient: List<Ingredient>)

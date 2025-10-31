@@ -3,12 +3,10 @@ package com.giovanna.amatucci.foodbook.presentation.authentication
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giovanna.amatucci.foodbook.R
-import com.giovanna.amatucci.foodbook.di.util.LogMessages
-import com.giovanna.amatucci.foodbook.di.util.LogWriter
-import com.giovanna.amatucci.foodbook.domain.usecase.CheckAuthenticationStatusUseCase
-import com.giovanna.amatucci.foodbook.domain.usecase.FetchAndSaveTokenUseCase
 import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
 import com.giovanna.amatucci.foodbook.di.util.UiText
+import com.giovanna.amatucci.foodbook.domain.usecase.CheckAuthenticationStatusUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.FetchAndSaveTokenUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -46,23 +44,24 @@ class AuthViewModel(
     private fun fetchToken() = viewModelScope.launch {
         _uiState.value = AuthUiState.Loading
 
-        val result = fetchToken.invoke()
+        fetchToken.invoke().let { result ->
+            when (result) {
+                is ResultWrapper.Success -> {
+                    _uiState.value = AuthUiState.Authenticated(navigateToHome = true)
+                }
 
-        when (result) {
-            is ResultWrapper.Success -> {
-                _uiState.value = AuthUiState.Authenticated(navigateToHome = true)
-            }
+                is ResultWrapper.Error -> {
+                    _uiState.value = AuthUiState.AuthenticationFailed(
+                        UiText.StringResource(R.string.auth_error_with_code, result.code)
+                    )
+                }
 
-            is ResultWrapper.Error -> {
-                _uiState.value = AuthUiState.AuthenticationFailed(
-                    UiText.StringResource(R.string.auth_error_with_code, result.code)
-                )
-            }
-
-            is ResultWrapper.Exception -> {
-                _uiState.value = AuthUiState.AuthenticationFailed(result.exception.message?.let {
-                    UiText.DynamicString(it)
-                } ?: UiText.StringResource(R.string.auth_error_unknown))
+                is ResultWrapper.Exception -> {
+                    _uiState.value =
+                        AuthUiState.AuthenticationFailed(result.exception.message?.let {
+                            UiText.DynamicString(it)
+                        } ?: UiText.StringResource(R.string.auth_error_unknown))
+                }
             }
         }
     }

@@ -25,41 +25,38 @@ class RecipePagingSource(
         val maxResults = params.loadSize
 
         return try {
-            val apiResult = api.searchRecipes(query, position, maxResults)
+            api.searchRecipes(query, position, maxResults).let { apiResult ->
+                when (apiResult) {
+                    is ResultWrapper.Success -> {
+                        val recipesSearch = apiResult.data.recipesSearch
+                        val recipeDtos = recipesSearch?.recipeSearch ?: emptyList()
+                        val domainData = recipeDtos.map { mapper.searchRecipeDtoToDomain(it) }
+                        val nextKey = if (recipeDtos.isEmpty()) null else position + 1
 
-            when (apiResult) {
-                is ResultWrapper.Success -> {
-                    val recipesSearch = apiResult.data.recipesSearch
-                    val recipeDtos = recipesSearch?.recipeSearch ?: emptyList()
-                    val domainData = recipeDtos.map { mapper.searchRecipeDtoToDomain(it) }
-                    val nextKey = if (recipeDtos.isEmpty()) {
-                        null
-                    } else {
-                        position + 1
+                        LoadResult.Page(
+                            data = domainData,
+                            prevKey = if (position == FATSECRET_STARTING_PAGE_INDEX) null else position - 1,
+                            nextKey = nextKey
+                        )
                     }
 
-                    LoadResult.Page(
-                        data = domainData,
-                        prevKey = if (position == FATSECRET_STARTING_PAGE_INDEX) null else position - 1,
-                        nextKey = nextKey
-                    )
-                }
+                    is ResultWrapper.Error -> {
+                        val msg = LogMessages.PAGING_LOAD_API_ERROR.format(
+                            apiResult.message, apiResult.code
+                        )
+                        logWriter.e(TAG, msg)
+                        LoadResult.Error(Exception(apiResult.message))
+                    }
 
-                is ResultWrapper.Error -> {
-                    val msg = LogMessages.PAGING_LOAD_API_ERROR.format(
-                        apiResult.message, apiResult.code
-                    )
-                    logWriter.e(TAG, msg)
-                    LoadResult.Error(Exception(apiResult.message))
-                }
-
-                is ResultWrapper.Exception -> {
-                    val msg =
-                        LogMessages.PAGING_LOAD_API_EXCEPTION.format(apiResult.exception.message)
-                    logWriter.e(TAG, msg)
-                    LoadResult.Error(apiResult.exception)
+                    is ResultWrapper.Exception -> {
+                        val msg =
+                            LogMessages.PAGING_LOAD_API_EXCEPTION.format(apiResult.exception.message)
+                        logWriter.e(TAG, msg)
+                        LoadResult.Error(apiResult.exception)
+                    }
                 }
             }
+
         } catch (e: Exception) {
             val msg = LogMessages.PAGING_LOAD_UNKNOWN_ERROR.format(e.message)
             logWriter.e(TAG, msg, e)

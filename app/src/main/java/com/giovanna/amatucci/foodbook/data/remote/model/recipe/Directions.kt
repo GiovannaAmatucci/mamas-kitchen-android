@@ -6,6 +6,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Directions(
-    @SerialName("direction")
-    val direction: List<Direction>
+    @SerialName("direction") val direction: List<Direction>
 )

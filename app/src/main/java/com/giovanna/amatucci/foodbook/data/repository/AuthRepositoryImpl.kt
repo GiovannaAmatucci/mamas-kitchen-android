@@ -19,38 +19,41 @@ class AuthRepositoryImpl(
         private const val TAG = "AuthRepository"
     }
 
-    override suspend fun fetchAndSaveToken(): ResultWrapper<TokenResponse> =
-        withContext(Dispatchers.IO) {
-            val apiResult = authApi.getAccessToken()
-            when (apiResult) {
-                is ResultWrapper.Success -> {
-                    try {
-                        val tokenData = apiResult.data
-                        logWriter.d(
-                            TAG, LogMessages.TOKEN_REPO_SAVE.format(tokenData.accessToken)
-                        )
-                        tokenRepository.saveToken(tokenData.accessToken)
-                        apiResult
-                    } catch (dbException: Exception) {
-                        logWriter.e(
-                            TAG, LogMessages.TOKEN_REPO_GET_NOT_FOUND.format(dbException.message)
-                        )
-                        ResultWrapper.Exception(dbException)
+    override suspend fun fetchAndSaveToken(): ResultWrapper<TokenResponse> {
+        return withContext(Dispatchers.IO) {
+            authApi.getAccessToken().let { apiResult ->
+                when (apiResult) {
+                    is ResultWrapper.Success -> {
+                        try {
+                            val tokenData = apiResult.data
+                            logWriter.d(
+                                TAG, LogMessages.TOKEN_REPO_SAVE.format(tokenData.accessToken)
+                            )
+                            tokenRepository.updateToken(tokenData.accessToken)
+                            apiResult
+                        } catch (dbException: Exception) {
+                            logWriter.e(
+                                TAG,
+                                LogMessages.TOKEN_REPO_GET_NOT_FOUND.format(dbException.message)
+                            )
+                            ResultWrapper.Exception(dbException)
+                        }
                     }
-                }
 
-                is ResultWrapper.Error -> {
-                    logWriter.e(TAG, message = LogMessages.TOKEN_REPO_GET_NOT_FOUND)
-                    apiResult
-                }
+                    is ResultWrapper.Error -> {
+                        logWriter.e(TAG, message = LogMessages.TOKEN_REPO_GET_NOT_FOUND)
+                        apiResult
+                    }
 
-                is ResultWrapper.Exception -> {
-                    logWriter.e(
-                        TAG,
-                        LogMessages.TOKEN_REPO_GET_NOT_FOUND.format(apiResult.exception.message)
-                    )
-                    apiResult
+                    is ResultWrapper.Exception -> {
+                        logWriter.e(
+                            TAG,
+                            LogMessages.TOKEN_REPO_GET_NOT_FOUND.format(apiResult.exception.message)
+                        )
+                        apiResult
+                    }
                 }
             }
         }
+    }
 }

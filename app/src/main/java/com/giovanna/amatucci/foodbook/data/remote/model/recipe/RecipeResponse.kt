@@ -5,7 +5,4 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RecipeResponse(
-    @SerialName("recipe")
-    val recipe: Recipe
-)
+data class RecipeResponse(@SerialName("recipe") val recipe: Recipe)
