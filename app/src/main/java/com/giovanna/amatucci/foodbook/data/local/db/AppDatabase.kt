@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.giovanna.amatucci.foodbook.data.local.ds.CryptoManager
 import com.giovanna.amatucci.foodbook.data.local.model.SearchEntity
 import kotlinx.coroutines.runBlocking
 import net.sqlcipher.database.SupportFactory
