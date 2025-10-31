@@ -5,8 +5,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.giovanna.amatucci.foodbook.presentation.componets.LoadingIndicator
+import com.giovanna.amatucci.foodbook.R
+import com.giovanna.amatucci.foodbook.presentation.components.LoadingIndicator
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -22,13 +24,13 @@ fun AuthScreen(
             viewModel.onEvent(AuthEvent.OnNavigationHandled)
         }
     }
-    when (val state = uiState) {
+    when (uiState) {
         is AuthUiState.Loading -> {
             LoadingIndicator()
         }
         is AuthUiState.AuthenticationFailed -> {
            Button(onClick = { viewModel.onEvent(AuthEvent.OnTokenRequest) }) {
-               Text("Tentar novamente")
+               Text(stringResource(R.string.common_button_retry))
            }
         }
         is AuthUiState.Idle, is AuthUiState.Authenticated -> {

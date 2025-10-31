@@ -30,9 +30,6 @@ android {
         buildConfigField("String", "BASE_URL", "\"platform.fatsecret.com\"")
         buildConfigField("String", "TOKEN_URL", "\"oauth.fatsecret.com\"")
         buildConfigField(
-            "String", "DB_PASSPHRASE", "\"${keyProperties.getProperty("DB_PASSPHRASE")}\""
-        )
-        buildConfigField(
             "String",
             "FATSECRET_CLIENT_ID",
             "\"${keyProperties.getProperty("FATSECRET_CLIENT_ID")}\""
@@ -128,20 +125,32 @@ dependencies {
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlin.coroutines.core)
+    implementation(libs.kotlin.coroutines.android)
+    implementation(libs.ktor.client.mock)
+
 
     // ---------- 🖼️ Image Loading ----------
     implementation(libs.coil.compose)
-    implementation(libs.androidx.adapters)
 
-    // ---------- 🧪 Testing ----------
+    // ---------- 🧪 Testing (Local) ----------
     testImplementation(libs.junit)
+    testImplementation(libs.test.mockk)
+    testImplementation(libs.test.turbine)
+    testImplementation(libs.koin.test)
+    testImplementation(libs.paging.test)
+    testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.androidx.test.coreKtx)
+
+    // --- Instrumentation Tests (Android) --- 🧪
+    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-    testImplementation(libs.koin.test)
 
     // --- Logging (Timber) ---
     implementation(libs.timber)
@@ -151,9 +160,13 @@ dependencies {
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
 
+    // --- DataStore ---
+    implementation(libs.data.store)
+
     // --- SQLCipher ---
     implementation(libs.sqlcipher)
-    implementation(libs.androidx.sqlite)
+    implementation(libs.sqlite.ktx)
+
 
     // --- Paging ---
     implementation(libs.androidx.paging.runtime)
