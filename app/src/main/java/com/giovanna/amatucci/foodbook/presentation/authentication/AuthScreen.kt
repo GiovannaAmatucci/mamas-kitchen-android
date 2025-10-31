@@ -29,12 +29,12 @@ fun AuthScreen(
             LoadingIndicator()
         }
         is AuthUiState.AuthenticationFailed -> {
-           Button(onClick = { viewModel.onEvent(AuthEvent.OnTokenRequest) }) {
-               Text(stringResource(R.string.common_button_retry))
-           }
+            Button(onClick = { viewModel.onEvent(AuthEvent.OnTokenRequest) }) {
+                Text(stringResource(R.string.common_button_retry))
+            }
         }
         is AuthUiState.Idle, is AuthUiState.Authenticated -> {
-           LoadingIndicator()
+            LoadingIndicator()
         }
     }
 }

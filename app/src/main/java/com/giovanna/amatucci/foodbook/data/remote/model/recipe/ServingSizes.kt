@@ -4,7 +4,4 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ServingSizes(
-    @SerialName("serving")
-    val serving: Serving? = null
-)
+data class ServingSizes(@SerialName("serving") val serving: Serving? = null)

@@ -21,10 +21,10 @@ class FoodBookApplication : Application() {
     }
 
     private fun setupKoin() {
-            startKoin {
-                if (BuildConfig.DEBUG_MODE) androidLogger(Level.DEBUG) else androidLogger(Level.NONE)
-                androidContext(this@FoodBookApplication)
-                modules(appModules)
-            }
+        startKoin {
+            if (BuildConfig.DEBUG_MODE) androidLogger(Level.DEBUG) else androidLogger(Level.NONE)
+            androidContext(this@FoodBookApplication)
+            modules(appModules)
+        }
     }
 }

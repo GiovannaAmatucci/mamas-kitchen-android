@@ -23,11 +23,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
+import com.giovanna.amatucci.foodbook.presentation.components.DetailsTopAppBar
 import com.giovanna.amatucci.foodbook.presentation.components.EmptyMessage
 import com.giovanna.amatucci.foodbook.presentation.components.LoadingIndicator
 import com.giovanna.amatucci.foodbook.presentation.components.RecipeImages
 import com.giovanna.amatucci.foodbook.presentation.components.SectionTitle
-import com.giovanna.amatucci.foodbook.presentation.components.DetailsTopAppBar
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,7 +36,7 @@ fun DetailsScreen(
     onNavigateBack: () -> Unit, viewModel: DetailsViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-val title = state.recipe?.name?: stringResource(R.string.details_section_title_instructions)
+    val title = state.recipe?.name ?: stringResource(R.string.details_section_title_instructions)
     Scaffold(topBar = {
         DetailsTopAppBar(uiState = title, onNavigateBack = onNavigateBack)
     }) { paddingValues ->

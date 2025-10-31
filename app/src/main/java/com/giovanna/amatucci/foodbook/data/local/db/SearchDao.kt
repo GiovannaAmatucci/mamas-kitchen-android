@@ -9,7 +9,7 @@ import com.giovanna.amatucci.foodbook.data.local.model.SearchEntity
 
 @Dao
 interface SearchDao {
-    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSearch(search: SearchEntity)
 
     @Query("SELECT * FROM searchEntity")

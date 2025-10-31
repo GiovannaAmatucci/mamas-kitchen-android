@@ -1,7 +1,6 @@
 package com.giovanna.amatucci.foodbook.presentation.authentication
 
 import com.giovanna.amatucci.foodbook.di.util.UiText
-
 sealed interface AuthUiState {
     data object Idle : AuthUiState
     data object Loading : AuthUiState

@@ -1,7 +1,7 @@
 package com.giovanna.amatucci.foodbook.di
 
 import com.giovanna.amatucci.foodbook.BuildConfig
-import com.giovanna.amatucci.foodbook.data.local.db.AppDatabase
+import com.giovanna.amatucci.foodbook.data.local.db.AppDatabase.Companion.getDatabase
 import com.giovanna.amatucci.foodbook.data.local.ds.CryptoManager
 import com.giovanna.amatucci.foodbook.data.local.ds.KeyDataStore
 import com.giovanna.amatucci.foodbook.data.local.ds.KeyStorage
@@ -35,6 +35,10 @@ import com.giovanna.amatucci.foodbook.domain.usecase.SearchRecipesUseCaseImpl
 import com.giovanna.amatucci.foodbook.presentation.authentication.AuthViewModel
 import com.giovanna.amatucci.foodbook.presentation.details.DetailsViewModel
 import com.giovanna.amatucci.foodbook.presentation.search.SearchViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -71,12 +75,16 @@ val databaseModule = module {
     single<KeyStorage> { KeyDataStore(androidContext()) }
     single<TokenStorage> { TokenDataStore(androidContext()) }
     single { CryptoManager(get()) }
+    single { CoroutineScope(Dispatchers.IO + SupervisorJob()) }
     single {
-        AppDatabase.getDatabase(
-            context = androidContext(), cryptoManager = get()
-        )
+        val scope: CoroutineScope = get()
+        scope.async {
+            getDatabase(
+                context = androidContext(),
+                cryptoManager = get()
+            )
+        }
     }
-    single { get<AppDatabase>().searchDao() }
 }
 
 /**

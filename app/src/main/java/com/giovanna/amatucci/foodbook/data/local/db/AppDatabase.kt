@@ -7,7 +7,8 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.giovanna.amatucci.foodbook.data.local.ds.CryptoManager
 import com.giovanna.amatucci.foodbook.data.local.model.SearchEntity
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import net.sqlcipher.database.SupportFactory
 
 @Database(entities = [SearchEntity::class], version = 2, exportSchema = false)
@@ -18,22 +19,26 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null
+        private val mutex = Mutex()
 
-        fun getDatabase(context: Context, cryptoManager: CryptoManager): AppDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val passphrase = runBlocking {
-                    cryptoManager.getDecryptedDbKey()
+        suspend fun getDatabase(context: Context, cryptoManager: CryptoManager): AppDatabase {
+            return INSTANCE ?: mutex.withLock {
+                INSTANCE ?: buildDatabase(context, cryptoManager).also {
+                    INSTANCE = it
                 }
-
-                val factory = SupportFactory(passphrase)
-
-                val instance = Room.databaseBuilder(
-                    context.applicationContext, AppDatabase::class.java, "foodbook.db"
-                ).openHelperFactory(factory).build()
-
-                INSTANCE = instance
-                instance
             }
+        }
+
+        private suspend fun buildDatabase(
+            context: Context,
+            cryptoManager: CryptoManager
+        ): AppDatabase {
+            val passphrase = cryptoManager.getDecryptedDbKey()
+            val factory = SupportFactory(passphrase)
+
+            return Room.databaseBuilder(
+                context.applicationContext, AppDatabase::class.java, "foodbook.db"
+            ).openHelperFactory(factory).build()
         }
     }
 }

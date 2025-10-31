@@ -6,6 +6,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RecipeImages(
-    @SerialName("recipe_image")
-    val recipeImage: List<String>
+    @SerialName("recipe_image") val recipeImage: List<String>
 )

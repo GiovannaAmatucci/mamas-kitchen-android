@@ -47,7 +47,6 @@ class NetworkHttpClientImpl(
     override fun invoke(): HttpClient = HttpClient(Android) {
         install(ContentNegotiation) {
             json(Json {
-                prettyPrint = true
                 isLenient = true
                 ignoreUnknownKeys = true
                 explicitNulls = false
@@ -77,13 +76,15 @@ class NetworkHttpClientImpl(
                         logWriter.w(TAG, LogMessages.KTOR_REFRESH_TOKEN_START)
                         val oldTokenThatFailed = oldTokens?.accessToken
                         val currentTokenInDb = token.getToken()
-                        if (oldTokenThatFailed != currentTokenInDb && currentTokenInDb != null) {
-                            logWriter.d(
-                                TAG, LogMessages.KTOR_REFRESH_TOKEN_SUCCESS.format(
-                                    currentTokenInDb
+                        if (oldTokenThatFailed != currentTokenInDb) {
+                            currentTokenInDb?.let { token ->
+                                logWriter.d(
+                                    TAG, LogMessages.KTOR_REFRESH_TOKEN_SUCCESS.format(
+                                        currentTokenInDb
+                                    )
                                 )
-                            )
-                            return@withLock BearerTokens(currentTokenInDb, "")
+                                return@withLock BearerTokens(token, "")
+                            }
                         }
                         val result = auth.fetchAndSaveToken()
                         if (result is ResultWrapper.Success) {
@@ -108,9 +109,7 @@ class NetworkHttpClientImpl(
             level = if (isDebug) LogLevel.ALL else LogLevel.NONE
             logger = object : Logger {
                 override fun log(message: String) {
-                    if (isDebug) {
-                        logWriter.d(TAG, message)
-                    }
+                    if (isDebug) logWriter.d(TAG, message)
                 }
             }
         }

@@ -6,8 +6,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RecipeCategory(
-    @SerialName("recipe_category_name")
-    val recipeCategoryName: String,
-    @SerialName("recipe_category_url")
-    val recipeCategoryUrl: String
+    @SerialName("recipe_category_name") val recipeCategoryName: String,
+    @SerialName("recipe_category_url") val recipeCategoryUrl: String
 )

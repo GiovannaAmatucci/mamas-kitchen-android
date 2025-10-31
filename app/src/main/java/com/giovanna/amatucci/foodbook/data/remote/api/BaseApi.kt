@@ -49,6 +49,10 @@ abstract class BaseApi(
             val msg = LogMessages.API_ERROR_UNEXPECTED.format(e.message)
             logWriter.e(TAG, msg, e)
             ResultWrapper.Error(msg, -3)
+        } catch (e: Throwable) {
+            val msg = LogMessages.API_ERROR_UNEXPECTED.format(e.message)
+            logWriter.e(TAG, msg, e)
+            ResultWrapper.Error(msg, -3)
         }
     }
 }
