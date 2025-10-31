@@ -2,7 +2,7 @@ package com.giovanna.amatucci.foodbook.di
 
 import com.giovanna.amatucci.foodbook.BuildConfig
 import com.giovanna.amatucci.foodbook.data.local.db.AppDatabase
-import com.giovanna.amatucci.foodbook.data.local.db.CryptoManager
+import com.giovanna.amatucci.foodbook.data.local.ds.CryptoManager
 import com.giovanna.amatucci.foodbook.data.local.ds.KeyDataStore
 import com.giovanna.amatucci.foodbook.data.local.ds.KeyStorage
 import com.giovanna.amatucci.foodbook.data.local.ds.TokenDataStore
