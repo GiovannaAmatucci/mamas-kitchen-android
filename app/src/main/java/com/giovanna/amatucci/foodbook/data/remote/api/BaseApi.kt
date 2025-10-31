@@ -5,12 +5,9 @@ import com.giovanna.amatucci.foodbook.di.util.LogWriter
 import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ServerResponseException
-import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.ContentConvertException
 import kotlinx.io.IOException
-import io.ktor.client.statement.bodyAsText
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.json.Json
 
 abstract class BaseApi(
     protected val logWriter: LogWriter

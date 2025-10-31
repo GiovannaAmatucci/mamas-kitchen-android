@@ -16,8 +16,7 @@ class FoodBookApplication : Application() {
     }
     private fun setupTimber() {
         if (BuildConfig.DEBUG_MODE) {
-            Timber.Forest.plant(Timber.DebugTree())
-            Timber.Forest.d("Timber Initialized.")
+            Timber.plant(Timber.DebugTree())
         }
     }
 
