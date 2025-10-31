@@ -8,6 +8,9 @@ class TokenRepositoryImpl(private val tokenStorage: TokenStorage) : TokenReposit
     override suspend fun saveToken(token: String) = tokenStorage.saveToken(token)
 
     override suspend fun getToken(): String? = tokenStorage.getToken()
-
     override suspend fun clearToken() = tokenStorage.clearToken()
+    override suspend fun updateToken(token: String) {
+        clearToken()
+        saveToken(token = token)
+    }
 }
