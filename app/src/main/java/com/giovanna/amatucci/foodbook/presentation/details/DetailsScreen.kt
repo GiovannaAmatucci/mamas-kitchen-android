@@ -27,7 +27,7 @@ import com.giovanna.amatucci.foodbook.presentation.components.EmptyMessage
 import com.giovanna.amatucci.foodbook.presentation.components.LoadingIndicator
 import com.giovanna.amatucci.foodbook.presentation.components.RecipeImages
 import com.giovanna.amatucci.foodbook.presentation.components.SectionTitle
-import com.giovanna.amatucci.foodbook.presentation.componets.DetailsTopAppBar
+import com.giovanna.amatucci.foodbook.presentation.components.DetailsTopAppBar
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
