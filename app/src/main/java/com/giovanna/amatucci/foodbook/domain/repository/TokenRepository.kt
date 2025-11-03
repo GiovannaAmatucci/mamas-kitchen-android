@@ -1,9 +1,10 @@
 package com.giovanna.amatucci.foodbook.domain.repository
 
 interface TokenRepository {
-    suspend fun saveToken(token: String)
+    suspend fun saveToken(token: String, expiresIn: Int)
     suspend fun getToken(): String?
     suspend fun clearToken()
-    suspend fun updateToken(token: String)
+    suspend fun updateToken(token: String, expiresIn: Int)
+    suspend fun isTokenExpired(): Boolean
 
 }
