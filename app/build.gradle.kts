@@ -151,6 +151,7 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    debugImplementation(libs.android.leakcanary)
 
     // --- Logging (Timber) ---
     implementation(libs.timber)
@@ -160,13 +161,10 @@ dependencies {
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
 
-    // --- DataStore ---
-    implementation(libs.data.store)
-
-    // --- SQLCipher ---
+    // --- Security ---
     implementation(libs.sqlcipher)
     implementation(libs.sqlite.ktx)
-
+    implementation(libs.security.crypto)
 
     // --- Paging ---
     implementation(libs.androidx.paging.runtime)
