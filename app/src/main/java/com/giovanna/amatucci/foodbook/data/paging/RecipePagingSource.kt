@@ -4,9 +4,9 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.giovanna.amatucci.foodbook.data.remote.api.FatSecretRecipeApi
 import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipeDataMapper
-import com.giovanna.amatucci.foodbook.di.util.LogMessages
 import com.giovanna.amatucci.foodbook.di.util.LogWriter
 import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
+import com.giovanna.amatucci.foodbook.di.util.constants.LogMessages
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 
 private const val FATSECRET_STARTING_PAGE_INDEX = 1

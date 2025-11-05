@@ -1,8 +1,8 @@
 package com.giovanna.amatucci.foodbook.data.remote.api
 
-import com.giovanna.amatucci.foodbook.di.util.LogMessages
 import com.giovanna.amatucci.foodbook.di.util.LogWriter
 import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
+import com.giovanna.amatucci.foodbook.di.util.constants.LogMessages
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.serialization.ContentConvertException

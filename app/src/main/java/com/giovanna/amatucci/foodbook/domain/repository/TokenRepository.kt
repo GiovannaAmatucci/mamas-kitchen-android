@@ -1,9 +1,10 @@
 package com.giovanna.amatucci.foodbook.domain.repository
 
-interface TokenRepository {
-    suspend fun saveToken(token: String)
-    suspend fun getToken(): String?
-    suspend fun clearToken()
-    suspend fun updateToken(token: String)
+import com.giovanna.amatucci.foodbook.data.remote.model.TokenResponse
 
+interface TokenRepository {
+    suspend fun saveToken(response: TokenResponse)
+    suspend fun getValidAccessToken(): String?
+
+    suspend fun clearToken()
 }

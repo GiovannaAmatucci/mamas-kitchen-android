@@ -28,7 +28,7 @@ import com.giovanna.amatucci.foodbook.presentation.components.LoadingIndicator
 import com.giovanna.amatucci.foodbook.presentation.components.RecipeList
 import org.koin.androidx.compose.koinViewModel
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     onNavigateToRecipe: (id: String) -> Unit, viewModel: SearchViewModel = koinViewModel()
@@ -36,23 +36,6 @@ fun SearchScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val recipes = uiState.recipes.collectAsLazyPagingItems()
 
-
-    SearchContent(
-        searchQuery = uiState.searchQuery,
-        onQueryChange = { query -> viewModel.onEvent(SearchEvent.OnSearchQueryChange(query)) },
-        recipes = recipes,
-        onRecipeClick = onNavigateToRecipe
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun SearchContent(
-    searchQuery: String,
-    onQueryChange: (String) -> Unit,
-    recipes: LazyPagingItems<RecipeItem>,
-    onRecipeClick: (String) -> Unit
-) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -64,43 +47,59 @@ private fun SearchContent(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            OutlinedTextField(
-                value = searchQuery,
-                onValueChange = onQueryChange,
-                label = { Text(stringResource(R.string.search_screen_title)) },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
+            SearchContent(
+                searchQuery = uiState.searchQuery,
+                onQueryChange = { query -> viewModel.onEvent(SearchEvent.OnSearchQueryChange(query)) },
+                recipes = recipes,
+                onRecipeClick = onNavigateToRecipe
             )
-            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
 
-            Box(modifier = Modifier.fillMaxSize()) {
-                val isSearchQueryEmpty = searchQuery.isBlank()
-                val isInitialLoad =
-                    recipes.loadState.refresh is LoadState.Loading && recipes.itemCount == 0
-                val isEmptyResult =
-                    recipes.loadState.refresh is LoadState.NotLoading && recipes.itemCount == 0
 
-                when {
-                    isSearchQueryEmpty -> {
-                        EmptyMessage(stringResource(R.string.search_idle_message))
-                    }
+@Composable
+private fun SearchContent(
+    searchQuery: String,
+    onQueryChange: (String) -> Unit,
+    recipes: LazyPagingItems<RecipeItem>,
+    onRecipeClick: (String) -> Unit
+) {
 
-                    isInitialLoad -> {
-                        LoadingIndicator()
-                    }
+    OutlinedTextField(
+        value = searchQuery,
+        onValueChange = onQueryChange,
+        label = { Text(stringResource(R.string.search_screen_title)) },
+        modifier = Modifier.fillMaxWidth(),
+        singleLine = true
+    )
+    Spacer(modifier = Modifier.height(16.dp))
 
-                    recipes.loadState.refresh is LoadState.Error -> {
-                        EmptyMessage(stringResource(R.string.search_error_message_loading_failed))
-                    }
+    Box(modifier = Modifier.fillMaxSize()) {
+        val isSearchQueryEmpty = searchQuery.isBlank()
+        val isInitialLoad = recipes.loadState.refresh is LoadState.Loading && recipes.itemCount == 0
+        val isEmptyResult =
+            recipes.loadState.refresh is LoadState.NotLoading && recipes.itemCount == 0
 
-                    isEmptyResult -> {
-                        EmptyMessage(stringResource(R.string.search_empty_message, searchQuery))
-                    }
+        when {
+            isSearchQueryEmpty -> {
+                EmptyMessage(stringResource(R.string.search_idle_message))
+            }
 
-                    else -> {
-                        RecipeList(recipes = recipes, onRecipeClick = onRecipeClick)
-                    }
-                }
+            isInitialLoad -> {
+                LoadingIndicator()
+            }
+
+            recipes.loadState.refresh is LoadState.Error -> {
+                EmptyMessage(stringResource(R.string.search_error_message_loading_failed))
+            }
+
+            isEmptyResult -> {
+                EmptyMessage(stringResource(R.string.search_empty_message, searchQuery))
+            }
+
+            else -> {
+                RecipeList(recipes = recipes, onRecipeClick = onRecipeClick)
             }
         }
     }
