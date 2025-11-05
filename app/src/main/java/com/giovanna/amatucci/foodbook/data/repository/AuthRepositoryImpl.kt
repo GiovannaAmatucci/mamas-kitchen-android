@@ -2,9 +2,9 @@ package com.giovanna.amatucci.foodbook.data.repository
 
 import com.giovanna.amatucci.foodbook.data.remote.api.AuthApi
 import com.giovanna.amatucci.foodbook.data.remote.model.TokenResponse
-import com.giovanna.amatucci.foodbook.di.util.LogMessages
 import com.giovanna.amatucci.foodbook.di.util.LogWriter
 import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
+import com.giovanna.amatucci.foodbook.di.util.constants.LogMessages
 import com.giovanna.amatucci.foodbook.domain.repository.AuthRepository
 import com.giovanna.amatucci.foodbook.domain.repository.TokenRepository
 import kotlinx.coroutines.Dispatchers
@@ -21,34 +21,33 @@ class AuthRepositoryImpl(
 
     override suspend fun fetchAndSaveToken(): ResultWrapper<TokenResponse> {
         return withContext(Dispatchers.IO) {
+            logWriter.d(TAG, LogMessages.AUTH_TOKEN_REQUEST)
             authApi.getAccessToken().let { apiResult ->
                 when (apiResult) {
                     is ResultWrapper.Success -> {
                         try {
-                            val tokenData = apiResult.data
+                            tokenRepository.clearToken()
                             logWriter.d(
-                                TAG, LogMessages.TOKEN_REPO_SAVE.format(tokenData.accessToken)
+                                TAG, LogMessages.TOKEN_REPO_SAVE_SUCCESS
                             )
-                            tokenRepository.updateToken(tokenData.accessToken)
+                            tokenRepository.saveToken(apiResult.data)
                             apiResult
                         } catch (dbException: Exception) {
                             logWriter.e(
-                                TAG,
-                                LogMessages.TOKEN_REPO_GET_NOT_FOUND.format(dbException.message)
+                                TAG, LogMessages.AUTH_TOKEN_SAVE_FAILURE.format(dbException.message)
                             )
                             ResultWrapper.Exception(dbException)
                         }
                     }
 
                     is ResultWrapper.Error -> {
-                        logWriter.e(TAG, message = LogMessages.TOKEN_REPO_GET_NOT_FOUND)
+                        logWriter.e(TAG, message = LogMessages.AUTH_TOKEN_FAILURE)
                         apiResult
                     }
 
                     is ResultWrapper.Exception -> {
                         logWriter.e(
-                            TAG,
-                            LogMessages.TOKEN_REPO_GET_NOT_FOUND.format(apiResult.exception.message)
+                            TAG, LogMessages.AUTH_TOKEN_FAILURE.format(apiResult.exception.message)
                         )
                         apiResult
                     }

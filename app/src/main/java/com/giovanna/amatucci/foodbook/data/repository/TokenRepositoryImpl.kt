@@ -1,20 +1,85 @@
 package com.giovanna.amatucci.foodbook.data.repository
 
-import com.giovanna.amatucci.foodbook.data.local.ds.TokenStorage
+import com.giovanna.amatucci.foodbook.data.local.db.AccessTokenDao
+import com.giovanna.amatucci.foodbook.data.local.db.CryptographyManager
+import com.giovanna.amatucci.foodbook.data.local.model.TokenEntity
+import com.giovanna.amatucci.foodbook.data.remote.model.TokenResponse
+import com.giovanna.amatucci.foodbook.di.util.LogWriter
+import com.giovanna.amatucci.foodbook.di.util.constants.LogMessages
 import com.giovanna.amatucci.foodbook.domain.repository.TokenRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.util.Date
 
+class TokenRepositoryImpl(
+    private val dao: AccessTokenDao,
+    private val cryptoManager: CryptographyManager,
+    private val logWriter: LogWriter
+) : TokenRepository {
 
-class TokenRepositoryImpl(private val tokenStorage: TokenStorage) : TokenRepository {
-    override suspend fun saveToken(token: String, expiresIn: Int) =
-        tokenStorage.saveToken(token, expiresIn = expiresIn)
-
-    override suspend fun getToken(): String? = tokenStorage.getToken()
-    override suspend fun clearToken() = tokenStorage.clearToken()
-    override suspend fun updateToken(token: String, expiresIn: Int) {
-        clearToken()
-        saveToken(token = token, expiresIn = expiresIn)
+    companion object {
+        private const val TAG = "TokenRepository"
     }
 
-    override suspend fun isTokenExpired(): Boolean = tokenStorage.isTokenExpired()
+    override suspend fun saveToken(response: TokenResponse) {
+        withContext(Dispatchers.IO) {
+            logWriter.d(TAG, LogMessages.TOKEN_REPO_SAVE_START)
+            try {
+                val token = response.accessToken ?: return@withContext
+                val (iv, encryptedToken) = cryptoManager.encrypt(token)
+                val expiresInMillis = response.expiresIn
+                val expiresAt = System.currentTimeMillis() + expiresInMillis
+                val entity = TokenEntity(
+                    encryptedAccessToken = encryptedToken,
+                    initializationVector = iv,
+                    expiresAtMillis = expiresAt
+                )
+                dao.saveToken(entity)
+                logWriter.d(
+                    TAG, LogMessages.TOKEN_REPO_SAVE_SUCCESS.format(Date(expiresAt).toString())
+                )
+            } catch (e: Exception) {
+                logWriter.e(TAG, LogMessages.TOKEN_REPO_SAVE_FAILURE.format(e.message))
+            }
+        }
+    }
 
+    override suspend fun getValidAccessToken(): String? {
+        return withContext(Dispatchers.IO) {
+            logWriter.d(TAG, LogMessages.TOKEN_REPO_GET_START)
+            dao.getToken().let { entity ->
+                if (entity == null) {
+                    logWriter.w(TAG, LogMessages.TOKEN_REPO_GET_NOT_FOUND)
+                    return@withContext null
+                }
+                if (System.currentTimeMillis() >= entity.expiresAtMillis) {
+                    logWriter.w(TAG, LogMessages.TOKEN_REPO_GET_EXPIRED)
+                    return@withContext null
+                }
+                return@withContext try {
+                    val decryptedToken = cryptoManager.decrypt(
+                        iv = entity.initializationVector,
+                        encryptedData = entity.encryptedAccessToken
+                    )
+                    logWriter.d(TAG, LogMessages.TOKEN_REPO_GET_SUCCESS)
+                    decryptedToken
+
+                } catch (e: Exception) {
+                    logWriter.e(TAG, LogMessages.TOKEN_REPO_DECRYPT_FAILURE.format(e.message))
+                    null
+                }
+            }
+        }
+    }
+
+    override suspend fun clearToken() {
+        withContext(Dispatchers.IO) {
+            try {
+                dao.deleteToken()
+                logWriter.w(TAG, LogMessages.TOKEN_REPO_CLEAR)
+            } catch (e: Exception) {
+                logWriter.e(TAG, LogMessages.TOKEN_REPO_CLEAR_FAILURE.format(e.message))
+            }
+        }
+    }
 }
