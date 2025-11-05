@@ -1,12 +1,9 @@
 package com.giovanna.amatucci.foodbook.di
 
+import androidx.room.Room
 import com.giovanna.amatucci.foodbook.BuildConfig
-import com.giovanna.amatucci.foodbook.data.local.db.AppDatabase.Companion.getDatabase
-import com.giovanna.amatucci.foodbook.data.local.ds.CryptoManager
-import com.giovanna.amatucci.foodbook.data.local.ds.KeyDataStore
-import com.giovanna.amatucci.foodbook.data.local.ds.KeyStorage
-import com.giovanna.amatucci.foodbook.data.local.ds.TokenDataStore
-import com.giovanna.amatucci.foodbook.data.local.ds.TokenStorage
+import com.giovanna.amatucci.foodbook.data.local.db.AppDatabase
+import com.giovanna.amatucci.foodbook.data.local.db.CryptographyManager
 import com.giovanna.amatucci.foodbook.data.remote.api.AuthApi
 import com.giovanna.amatucci.foodbook.data.remote.api.AuthApiImpl
 import com.giovanna.amatucci.foodbook.data.remote.api.FatSecretRecipeApi
@@ -35,10 +32,6 @@ import com.giovanna.amatucci.foodbook.domain.usecase.SearchRecipesUseCaseImpl
 import com.giovanna.amatucci.foodbook.presentation.authentication.AuthViewModel
 import com.giovanna.amatucci.foodbook.presentation.details.DetailsViewModel
 import com.giovanna.amatucci.foodbook.presentation.search.SearchViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -55,7 +48,7 @@ val coreModule = module {
  * Módulo para todas as dependências relacionadas à rede (Ktor, APIs, Mappers).
  */
 val networkModule = module {
-    single<NetworkHttpClient> {
+    single<NetworkHttpClient>(createdAtStart = true) {
         NetworkHttpClientImpl(
             baseHostUrl = BuildConfig.BASE_URL,
             requestTimeout = BuildConfig.REQUEST_TIMEOUT,
@@ -63,7 +56,7 @@ val networkModule = module {
             isDebug = BuildConfig.DEBUG_MODE, token = get(), auth = get(), logWriter = get()
         )
     }
-    single<AuthApi> { AuthApiImpl(logWriter = get()) }
+    single<AuthApi> { AuthApiImpl(logWriter = get(), tokenUrl = BuildConfig.TOKEN_URL) }
     single<FatSecretRecipeApi> { FatSecretRecipeApiImpl(client = get(), logWriter = get()) }
     single { RecipeDataMapper() }
 }
@@ -72,19 +65,16 @@ val networkModule = module {
  * Módulo para todas as dependências de armazenamento local (Room, DataStore, Crypto).
  */
 val databaseModule = module {
-    single<KeyStorage> { KeyDataStore(androidContext()) }
-    single<TokenStorage> { TokenDataStore(androidContext()) }
-    single { CryptoManager(get()) }
-    single { CoroutineScope(Dispatchers.IO + SupervisorJob()) }
-    single {
-        val scope: CoroutineScope = get()
-        scope.async {
-            getDatabase(
-                context = androidContext(),
-                cryptoManager = get()
-            )
-        }
+    single { CryptographyManager() }
+    single(createdAtStart = true) {
+        Room.databaseBuilder(
+            androidContext(),
+            AppDatabase::class.java,
+            "foodbook_database.db"
+        ).build()
     }
+    single { get<AppDatabase>().accessTokenDao() }
+    single { get<AppDatabase>().searchDao() }
 }
 
 /**
@@ -92,7 +82,7 @@ val databaseModule = module {
  */
 val repositoryModule = module {
     single<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
-    single<TokenRepository> { TokenRepositoryImpl(get()) }
+    single<TokenRepository> { TokenRepositoryImpl(get(), get(), get()) }
     single<RecipeRepository> { RecipeRepositoryImpl(get(), get(), get(), get()) }
 }
 

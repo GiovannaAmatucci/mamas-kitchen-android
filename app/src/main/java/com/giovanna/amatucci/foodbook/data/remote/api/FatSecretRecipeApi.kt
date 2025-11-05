@@ -3,10 +3,10 @@ package com.giovanna.amatucci.foodbook.data.remote.api
 import com.giovanna.amatucci.foodbook.data.remote.model.recipe.RecipeResponse
 import com.giovanna.amatucci.foodbook.data.remote.model.search.SearchResponse
 import com.giovanna.amatucci.foodbook.data.remote.network.NetworkHttpClient
-import com.giovanna.amatucci.foodbook.di.util.ApiConstants
-import com.giovanna.amatucci.foodbook.di.util.LogMessages
 import com.giovanna.amatucci.foodbook.di.util.LogWriter
 import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
+import com.giovanna.amatucci.foodbook.di.util.constants.ApiConstants
+import com.giovanna.amatucci.foodbook.di.util.constants.LogMessages
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter

@@ -3,24 +3,22 @@ package com.giovanna.amatucci.foodbook.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.giovanna.amatucci.foodbook.data.local.db.AppDatabase
+import com.giovanna.amatucci.foodbook.data.local.db.SearchDao
 import com.giovanna.amatucci.foodbook.data.local.model.SearchEntity
 import com.giovanna.amatucci.foodbook.data.paging.RecipePagingSource
 import com.giovanna.amatucci.foodbook.data.remote.api.FatSecretRecipeApi
 import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipeDataMapper
-import com.giovanna.amatucci.foodbook.di.util.LogMessages
 import com.giovanna.amatucci.foodbook.di.util.LogWriter
 import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
+import com.giovanna.amatucci.foodbook.di.util.constants.LogMessages
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 import com.giovanna.amatucci.foodbook.domain.repository.RecipeRepository
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 
 
 class RecipeRepositoryImpl(
-    private val api: FatSecretRecipeApi,
-    private val dbDeferred: Deferred<AppDatabase>,
+    private val api: FatSecretRecipeApi, private val dao: SearchDao,
     private val mapper: RecipeDataMapper,
     private val logWriter: LogWriter
 ) : RecipeRepository {
@@ -45,17 +43,23 @@ class RecipeRepositoryImpl(
         api.getRecipeDetails(recipeId).let { apiResult ->
             return when (apiResult) {
                 is ResultWrapper.Success -> {
-                    val recipeDto = apiResult.data.recipe
-                    val recipeDetails = mapper.recipeDetailDtoToDomain(recipeDto)
+                    try {
+                        val recipeDto = apiResult.data.recipe
+                        val recipeDetails = mapper.recipeDetailDtoToDomain(recipeDto)
 
-                    logWriter.d(TAG, LogMessages.REPO_DETAILS_SUCCESS.format(recipeDetails.id))
-                    ResultWrapper.Success(recipeDetails)
+                        logWriter.d(TAG, LogMessages.REPO_DETAILS_SUCCESS.format(recipeDetails.id))
+                        ResultWrapper.Success(recipeDetails)
+
+                    } catch (e: Exception) {
+                        logWriter.e(TAG, LogMessages.REPO_DETAILS_MAPPER_FAILURE.format(e.message))
+                        ResultWrapper.Exception(e)
+                    }
                 }
 
                 is ResultWrapper.Error -> {
                     logWriter.e(
-                        TAG, message = LogMessages.REPO_DETAILS_API_ERROR.format(
-                            apiResult.code, apiResult.message
+                        TAG, LogMessages.REPO_DETAILS_API_ERROR.format(
+                            apiResult.code.toString(), apiResult.message
                         )
                     )
                     apiResult
@@ -74,7 +78,6 @@ class RecipeRepositoryImpl(
 
     override suspend fun saveSearchQuery(query: String) {
         if (query.isBlank()) return
-        val dao = dbDeferred.await().searchDao()
         val currentHistory = dao.getSearchHistory()
         val currentQueries = currentHistory?.queries ?: emptyList()
         val newQueries = buildList {

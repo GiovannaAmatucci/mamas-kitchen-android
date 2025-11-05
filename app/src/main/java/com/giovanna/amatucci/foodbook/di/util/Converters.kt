@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.data.local.db
+package com.giovanna.amatucci.foodbook.di.util
 
 import androidx.room.TypeConverter
 import kotlinx.serialization.json.Json

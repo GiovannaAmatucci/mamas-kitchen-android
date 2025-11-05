@@ -32,7 +32,7 @@ class RecipeDataMapper {
             servings = recipeDto.numberOfServings,
             ingredients = recipeDto.ingredients?.ingredient!!.map { ingredientDtoToDomain(it) },
             directions = recipeDto.directions?.direction!!.map { directionDtoToDomain(it) },
-            categories = recipeDto.recipeCategories.recipeCategory.map { it.recipeCategoryName })
+            categories = recipeDto.recipeCategories?.recipeCategory?.map { it.recipeCategoryName })
     }
 
     private fun ingredientDtoToDomain(ingredientDto: Ingredient): IngredientInfo {

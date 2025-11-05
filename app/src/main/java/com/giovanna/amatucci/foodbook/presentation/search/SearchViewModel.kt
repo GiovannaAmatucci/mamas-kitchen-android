@@ -6,7 +6,6 @@ import androidx.paging.cachedIn
 import com.giovanna.amatucci.foodbook.domain.usecase.SaveSearchQueryUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.SearchRecipesUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +17,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 
 
-@OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class SearchViewModel(
     private val searchRecipesUseCase: SearchRecipesUseCase,
     private val saveSearchQueryUseCase: SaveSearchQueryUseCase

@@ -3,10 +3,10 @@ package com.giovanna.amatucci.foodbook.data.remote.api
 
 import com.giovanna.amatucci.foodbook.BuildConfig
 import com.giovanna.amatucci.foodbook.data.remote.model.TokenResponse
-import com.giovanna.amatucci.foodbook.di.util.ApiConstants
-import com.giovanna.amatucci.foodbook.di.util.LogMessages
 import com.giovanna.amatucci.foodbook.di.util.LogWriter
 import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
+import com.giovanna.amatucci.foodbook.di.util.constants.ApiConstants
+import com.giovanna.amatucci.foodbook.di.util.constants.LogMessages
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.android.Android
@@ -16,6 +16,7 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.basicAuth
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -33,7 +34,10 @@ interface AuthApi {
     ): ResultWrapper<TokenResponse>
 }
 
-class AuthApiImpl(private val logWriter: LogWriter) : AuthApi {
+class AuthApiImpl(private val logWriter: LogWriter, tokenUrl: String) : AuthApi {
+    companion object {
+        private const val TAG = "AuthApi"
+    }
     val client: HttpClient = HttpClient(Android) {
         install(ContentNegotiation) {
             json(Json {
@@ -46,7 +50,7 @@ class AuthApiImpl(private val logWriter: LogWriter) : AuthApi {
             contentType(ContentType.Application.Json)
             url {
                 protocol = URLProtocol.HTTPS
-                host = BuildConfig.TOKEN_URL
+                host = tokenUrl
             }
         }
 
@@ -62,31 +66,24 @@ class AuthApiImpl(private val logWriter: LogWriter) : AuthApi {
         }
     }
 
-    companion object {
-        private const val TAG = "AuthApi"
-    }
-
-    override suspend fun getAccessToken(): ResultWrapper<TokenResponse> {
+    override suspend fun getAccessToken(
+    ): ResultWrapper<TokenResponse> {
         logWriter.d(TAG, LogMessages.AUTH_TOKEN_REQUEST)
-
         return try {
             val response = client.post(ApiConstants.Methods.TOKEN) {
+                basicAuth(BuildConfig.FATSECRET_CLIENT_ID, BuildConfig.FATSECRET_CLIENT_SECRET)
                 contentType(ContentType.Application.FormUrlEncoded)
                 setBody(
                     FormDataContent(
                         parametersOf(
                             ApiConstants.Params.GRANT_TYPE to listOf(ApiConstants.Values.CLIENT_CREDENTIALS),
-                            ApiConstants.Params.SCOPE to listOf(ApiConstants.Values.BASIC),
-                            ApiConstants.Params.CLIENT_ID to listOf(BuildConfig.FATSECRET_CLIENT_ID),
-                            ApiConstants.Params.CLIENT_SECRET to listOf(BuildConfig.FATSECRET_CLIENT_SECRET)
+                            ApiConstants.Params.SCOPE to listOf(ApiConstants.Values.BASIC)
                         )
                     )
                 )
             }
-
-            val tokenResponse: TokenResponse = response.body()
             logWriter.d(TAG, LogMessages.AUTH_TOKEN_SUCCESS)
-            ResultWrapper.Success(tokenResponse)
+            ResultWrapper.Success(response.body())
         } catch (e: ResponseException) {
             val msg = LogMessages.AUTH_TOKEN_FAILURE.format(e.message)
             logWriter.e(TAG, msg)

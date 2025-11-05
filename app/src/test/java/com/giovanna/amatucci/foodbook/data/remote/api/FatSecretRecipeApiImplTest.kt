@@ -1,5 +1,6 @@
 package com.giovanna.amatucci.foodbook.data.remote.api
 
+import com.giovanna.amatucci.foodbook.data.remote.model.recipe.RecipeResponse
 import com.giovanna.amatucci.foodbook.data.remote.model.search.SearchResponse
 import com.giovanna.amatucci.foodbook.data.remote.network.NetworkHttpClient
 import com.giovanna.amatucci.foodbook.di.util.LogWriter
@@ -144,9 +145,19 @@ class FatSecretRecipeApiImplTest {
     fun `getRecipeDetails when the API call is successful MUST return ResultWrapper Success`() =
         runTest {
             // ARRANGE
-            val successJson =
-                """{"recipes_search": {"results": { "recipe": [] },"page_number": "0","max_results": "20","total_results": "100"}}"""
-            val expectedResponse = json.decodeFromString<SearchResponse>(successJson)
+            val successJson = """ { "recipe": { "recipe_id": "12345", 
+                    |"recipe_name": "Delicious Chicken",
+                    | "recipe_description": "A very tasty chicken recipe.", 
+                    | "recipe_images": { "recipe_image": ["http://example.com/image.jpg"] },
+                    |  "number_of_servings": "4", 
+                    |  "recipe_categories": { "recipe_category": [ { "recipe_category_name": "Main Course", 
+                    |  "recipe_category_url": "http://example.com/main" } ] }, 
+                    |  "recipe_types": { "recipe_type": ["Chicken"] },
+                    |   "preparation_time_min": "15",
+                    |    "cooking_time_min": "30",
+                    |     "ingredients": null,
+                    |      "directions": null } } """.trimMargin()
+            val expectedResponse = json.decodeFromString<RecipeResponse>(successJson)
 
             val mockEngine = MockEngine {
                 respond(
@@ -156,11 +167,10 @@ class FatSecretRecipeApiImplTest {
                 )
             }
             val mockKtorClient = createMockKtorClient(mockEngine)
-
             coEvery { mockHttpClientProvider() } returns mockKtorClient
 
             // ACT
-            val result = fatSecretRecipeApi.searchRecipes("chicken", 0, 20)
+            val result = fatSecretRecipeApi.getRecipeDetails("12345")
 
             // ASSERT
             assertTrue("O resultado deveria ser de sucesso", result is ResultWrapper.Success)
