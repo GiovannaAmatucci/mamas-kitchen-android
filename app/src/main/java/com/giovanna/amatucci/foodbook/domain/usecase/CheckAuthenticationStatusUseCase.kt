@@ -1,6 +1,8 @@
 package com.giovanna.amatucci.foodbook.domain.usecase
 
 import com.giovanna.amatucci.foodbook.domain.repository.TokenRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 interface CheckAuthenticationStatusUseCase {
     suspend operator fun invoke(): Boolean
@@ -8,7 +10,7 @@ interface CheckAuthenticationStatusUseCase {
 
 class CheckAuthenticationStatusUseCaseImpl(private val tokenRepository: TokenRepository) :
     CheckAuthenticationStatusUseCase {
-    override suspend operator fun invoke(): Boolean {
-        return tokenRepository.getToken() != null
+    override suspend operator fun invoke(): Boolean = withContext(Dispatchers.IO) {
+        tokenRepository.getValidAccessToken() != null
     }
 }

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
-import com.giovanna.amatucci.foodbook.di.util.UiText
+import com.giovanna.amatucci.foodbook.di.util.constants.UiText
 import com.giovanna.amatucci.foodbook.domain.usecase.CheckAuthenticationStatusUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.FetchAndSaveTokenUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,8 +14,8 @@ import kotlinx.coroutines.launch
 
 
 class AuthViewModel(
-    private val checkAuthStatus: CheckAuthenticationStatusUseCase,
-    private val fetchToken: FetchAndSaveTokenUseCase
+    private val checkAuthStatusUseCase: CheckAuthenticationStatusUseCase,
+    private val fetchTokenUseCase: FetchAndSaveTokenUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<AuthUiState>(AuthUiState.Idle)
     val uiState = _uiState.asStateFlow()
@@ -33,18 +33,22 @@ class AuthViewModel(
 
     private fun checkExistingToken() = viewModelScope.launch {
         _uiState.value = AuthUiState.Loading
-        if (checkAuthStatus()) {
+        if (checkAuthStatusUseCase.invoke()) {
             _uiState.value = AuthUiState.Authenticated(navigateToHome = true)
         } else {
-            fetchToken()
+            executeTokenFetch()
         }
     }
-
-
     private fun fetchToken() = viewModelScope.launch {
-        _uiState.value = AuthUiState.Loading
+        if (_uiState.value is AuthUiState.Loading) return@launch
 
-        fetchToken.invoke().let { result ->
+        _uiState.value = AuthUiState.Loading
+        executeTokenFetch()
+    }
+
+    private suspend fun executeTokenFetch() {
+
+        fetchTokenUseCase.invoke().let { result ->
             when (result) {
                 is ResultWrapper.Success -> {
                     _uiState.value = AuthUiState.Authenticated(navigateToHome = true)
