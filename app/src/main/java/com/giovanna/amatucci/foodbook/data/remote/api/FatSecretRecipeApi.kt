@@ -16,7 +16,7 @@ interface FatSecretRecipeApi {
         expression: String, pageNumber: Int, maxResult: Int
     ): ResultWrapper<SearchResponse>
 
-    suspend fun getRecipeDetails(id: String): ResultWrapper<RecipeResponse>
+    suspend fun getRecipeDetails(id: String?): ResultWrapper<RecipeResponse>
 }
 
 class FatSecretRecipeApiImpl(
@@ -38,7 +38,7 @@ class FatSecretRecipeApiImpl(
         }
     }
 
-    override suspend fun getRecipeDetails(id: String): ResultWrapper<RecipeResponse> {
+    override suspend fun getRecipeDetails(id: String?): ResultWrapper<RecipeResponse> {
         logWriter.d(TAG, LogMessages.API_RECIPE_DETAILS.format(id))
         return safeApiCall {
             client().get(ApiConstants.Methods.REST_RECIPE_V2) {

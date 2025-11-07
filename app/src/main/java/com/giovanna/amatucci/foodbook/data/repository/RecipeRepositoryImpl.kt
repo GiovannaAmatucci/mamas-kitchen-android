@@ -18,7 +18,8 @@ import kotlinx.coroutines.flow.Flow
 
 
 class RecipeRepositoryImpl(
-    private val api: FatSecretRecipeApi, private val dao: SearchDao,
+    private val api: FatSecretRecipeApi,
+    private val dao: SearchDao,
     private val mapper: RecipeDataMapper,
     private val logWriter: LogWriter
 ) : RecipeRepository {
@@ -86,6 +87,7 @@ class RecipeRepositoryImpl(
         }.take(10)
         val newHistory = SearchEntity(id = currentHistory?.id ?: 0, queries = newQueries)
         dao.insertSearch(newHistory)
+
     }
 }
 
