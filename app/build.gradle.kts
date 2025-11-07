@@ -27,7 +27,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        buildConfigField("String", "BASE_URL", "\"platform.fatsecret.com\"")
+        buildConfigField("String", "BASE_URL", "\"platform.fatsecret.com/rest\"")
         buildConfigField("String", "TOKEN_URL", "\"oauth.fatsecret.com\"")
         buildConfigField(
             "String",
@@ -102,6 +102,8 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
+    implementation(libs.koin.androidx.compose.navigation)
+
 
     // ---------- 🎨 Jetpack Compose UI ----------
     implementation(platform(libs.androidx.compose.bom))
@@ -160,6 +162,7 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
+    implementation(libs.room.paging)
 
     // --- Security ---
     implementation(libs.sqlcipher)
