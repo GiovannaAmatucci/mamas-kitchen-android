@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -38,7 +41,15 @@ fun DetailsScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val title = state.recipe?.name ?: stringResource(R.string.details_section_title_instructions)
     Scaffold(topBar = {
-        DetailsTopAppBar(uiState = title, onNavigateBack = onNavigateBack)
+        DetailsTopAppBar(
+            uiState = title,
+            onNavigateBack = onNavigateBack,
+            action = {
+                viewModel.onEvent(DetailsEvent.ToggleFavorite)
+            },
+            imageVector = if (state.isFavorite == true) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+            tint = if (state.isFavorite == true) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+        )
     }) { paddingValues ->
         Box(
             modifier = Modifier

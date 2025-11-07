@@ -7,15 +7,24 @@ import androidx.navigation.toRoute
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
 import com.giovanna.amatucci.foodbook.di.util.constants.UiText
-import com.giovanna.amatucci.foodbook.domain.usecase.GetRecipeDetailsUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.details.GetRecipeDetailsUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.favorite.AddFavoriteUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.favorite.IsFavoriteUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.favorite.RemoveFavoriteUseCase
 import com.giovanna.amatucci.foodbook.presentation.navigation.DetailsScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class DetailsViewModel(
-    private val getRecipeDetailsUseCase: GetRecipeDetailsUseCase, savedStateHandle: SavedStateHandle
+    private val getRecipeDetailsUseCase: GetRecipeDetailsUseCase,
+    private val isFavoriteUseCase: IsFavoriteUseCase,
+    private val addFavoriteUseCase: AddFavoriteUseCase,
+    private val removeFavoriteUseCase: RemoveFavoriteUseCase,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DetailUiState())
@@ -27,6 +36,7 @@ class DetailsViewModel(
 
         if (recipeId.isNotBlank()) {
             getRecipeDetails(recipeId)
+            observeFavoriteStatus(recipeId)
         } else {
             _uiState.update {
                 it.copy(
@@ -34,6 +44,12 @@ class DetailsViewModel(
                     error = UiText.StringResource(R.string.details_error_invalid_id)
                 )
             }
+        }
+    }
+
+    fun onEvent(event: DetailsEvent) {
+        when (event) {
+            DetailsEvent.ToggleFavorite -> toggleFavorite()
         }
     }
 
@@ -56,6 +72,21 @@ class DetailsViewModel(
                     }
                 }
             }
+        }
+    }
+
+    private fun observeFavoriteStatus(recipeId: String) {
+        isFavoriteUseCase(recipeId).onEach { isFavorite ->
+            _uiState.update { it.copy(isFavorite = isFavorite) }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun toggleFavorite() = viewModelScope.launch {
+        val currentRecipe = _uiState.value.recipe ?: return@launch
+        if (_uiState.value.isFavorite == true) {
+            removeFavoriteUseCase(currentRecipe.id ?: "")
+        } else {
+            addFavoriteUseCase(currentRecipe)
         }
     }
 }
