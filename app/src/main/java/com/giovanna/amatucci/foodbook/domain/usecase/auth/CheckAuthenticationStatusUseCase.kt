@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.domain.usecase
+package com.giovanna.amatucci.foodbook.domain.usecase.auth
 
 import com.giovanna.amatucci.foodbook.domain.repository.TokenRepository
 import kotlinx.coroutines.Dispatchers

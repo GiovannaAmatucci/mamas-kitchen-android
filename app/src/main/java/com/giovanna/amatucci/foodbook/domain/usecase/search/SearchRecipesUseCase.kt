@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.domain.usecase
+package com.giovanna.amatucci.foodbook.domain.usecase.search
 
 import androidx.paging.PagingData
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem

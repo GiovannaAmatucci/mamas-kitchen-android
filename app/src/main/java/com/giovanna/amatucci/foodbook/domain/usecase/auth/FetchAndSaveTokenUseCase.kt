@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.domain.usecase
+package com.giovanna.amatucci.foodbook.domain.usecase.auth
 
 import com.giovanna.amatucci.foodbook.data.remote.model.TokenResponse
 import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
