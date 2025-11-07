@@ -12,25 +12,36 @@ import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipeDataMapper
 import com.giovanna.amatucci.foodbook.data.remote.network.NetworkHttpClient
 import com.giovanna.amatucci.foodbook.data.remote.network.NetworkHttpClientImpl
 import com.giovanna.amatucci.foodbook.data.repository.AuthRepositoryImpl
+import com.giovanna.amatucci.foodbook.data.repository.FavoriteRepositoryImpl
 import com.giovanna.amatucci.foodbook.data.repository.RecipeRepositoryImpl
 import com.giovanna.amatucci.foodbook.data.repository.TokenRepositoryImpl
 import com.giovanna.amatucci.foodbook.di.util.LogWriter
 import com.giovanna.amatucci.foodbook.di.util.TimberLogWriter
 import com.giovanna.amatucci.foodbook.domain.repository.AuthRepository
+import com.giovanna.amatucci.foodbook.domain.repository.FavoriteRepository
 import com.giovanna.amatucci.foodbook.domain.repository.RecipeRepository
 import com.giovanna.amatucci.foodbook.domain.repository.TokenRepository
-import com.giovanna.amatucci.foodbook.domain.usecase.CheckAuthenticationStatusUseCase
-import com.giovanna.amatucci.foodbook.domain.usecase.CheckAuthenticationStatusUseCaseImpl
-import com.giovanna.amatucci.foodbook.domain.usecase.FetchAndSaveTokenUseCase
-import com.giovanna.amatucci.foodbook.domain.usecase.FetchAndSaveTokenUseCaseImpl
-import com.giovanna.amatucci.foodbook.domain.usecase.GetRecipeDetailsUseCase
-import com.giovanna.amatucci.foodbook.domain.usecase.GetRecipeDetailsUseCaseImpl
-import com.giovanna.amatucci.foodbook.domain.usecase.SaveSearchQueryUseCase
-import com.giovanna.amatucci.foodbook.domain.usecase.SaveSearchQueryUseCaseImpl
-import com.giovanna.amatucci.foodbook.domain.usecase.SearchRecipesUseCase
-import com.giovanna.amatucci.foodbook.domain.usecase.SearchRecipesUseCaseImpl
+import com.giovanna.amatucci.foodbook.domain.usecase.auth.CheckAuthenticationStatusUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.auth.CheckAuthenticationStatusUseCaseImpl
+import com.giovanna.amatucci.foodbook.domain.usecase.auth.FetchAndSaveTokenUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.auth.FetchAndSaveTokenUseCaseImpl
+import com.giovanna.amatucci.foodbook.domain.usecase.details.GetRecipeDetailsUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.details.GetRecipeDetailsUseCaseImpl
+import com.giovanna.amatucci.foodbook.domain.usecase.favorite.AddFavoriteUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.favorite.AddFavoriteUseCaseImpl
+import com.giovanna.amatucci.foodbook.domain.usecase.favorite.GetFavoritesUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.favorite.GetFavoritesUseCaseImpl
+import com.giovanna.amatucci.foodbook.domain.usecase.favorite.IsFavoriteUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.favorite.IsFavoriteUseCaseImpl
+import com.giovanna.amatucci.foodbook.domain.usecase.favorite.RemoveFavoriteUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.favorite.RemoveFavoriteUseCaseImpl
+import com.giovanna.amatucci.foodbook.domain.usecase.search.SaveSearchQueryUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.search.SaveSearchQueryUseCaseImpl
+import com.giovanna.amatucci.foodbook.domain.usecase.search.SearchRecipesUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.search.SearchRecipesUseCaseImpl
 import com.giovanna.amatucci.foodbook.presentation.authentication.AuthViewModel
 import com.giovanna.amatucci.foodbook.presentation.details.DetailsViewModel
+import com.giovanna.amatucci.foodbook.presentation.favorites.FavoritesViewModel
 import com.giovanna.amatucci.foodbook.presentation.search.SearchViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
@@ -71,10 +82,11 @@ val databaseModule = module {
             androidContext(),
             AppDatabase::class.java,
             "foodbook_database.db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
     single { get<AppDatabase>().accessTokenDao() }
     single { get<AppDatabase>().searchDao() }
+    single { get<AppDatabase>().favoriteDao() }
 }
 
 /**
@@ -84,6 +96,7 @@ val repositoryModule = module {
     single<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
     single<TokenRepository> { TokenRepositoryImpl(get(), get(), get()) }
     single<RecipeRepository> { RecipeRepositoryImpl(get(), get(), get(), get()) }
+    single<FavoriteRepository> { FavoriteRepositoryImpl(get(), get(), get()) }
 }
 
 /**
@@ -95,6 +108,10 @@ val domainModule = module {
     factory<SearchRecipesUseCase> { SearchRecipesUseCaseImpl(repository = get()) }
     factory<GetRecipeDetailsUseCase> { GetRecipeDetailsUseCaseImpl(repository = get()) }
     factory<SaveSearchQueryUseCase> { SaveSearchQueryUseCaseImpl(repository = get()) }
+    factory<AddFavoriteUseCase> { AddFavoriteUseCaseImpl(repository = get()) }
+    factory<GetFavoritesUseCase> { GetFavoritesUseCaseImpl(repository = get()) }
+    factory<RemoveFavoriteUseCase> { RemoveFavoriteUseCaseImpl(repository = get()) }
+    factory<IsFavoriteUseCase> { IsFavoriteUseCaseImpl(repository = get()) }
 }
 
 /**
@@ -103,7 +120,8 @@ val domainModule = module {
 val viewModelModule = module {
     viewModel { AuthViewModel(get(), get()) }
     viewModel { SearchViewModel(get(), get()) }
-    viewModel { DetailsViewModel(get(), get()) }
+    viewModel { DetailsViewModel(get(), get(), get(), get(), get()) }
+    viewModel { FavoritesViewModel(get()) }
 }
 
 val appModules = listOf(

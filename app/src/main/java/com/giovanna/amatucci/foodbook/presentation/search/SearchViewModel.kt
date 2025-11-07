@@ -3,8 +3,8 @@ package com.giovanna.amatucci.foodbook.presentation.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.giovanna.amatucci.foodbook.domain.usecase.SaveSearchQueryUseCase
-import com.giovanna.amatucci.foodbook.domain.usecase.SearchRecipesUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.search.SaveSearchQueryUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.search.SearchRecipesUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

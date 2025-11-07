@@ -6,6 +6,7 @@ import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
 data class DetailUiState(
     val status: DetailsStatus = DetailsStatus.Loading,
     val recipe: RecipeDetails? = null,
-    val error: UiText? = null
+    val error: UiText? = null,
+    val isFavorite: Boolean? = null
 )
 

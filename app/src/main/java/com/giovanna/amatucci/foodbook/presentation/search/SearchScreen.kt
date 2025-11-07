@@ -7,11 +7,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -26,24 +25,18 @@ import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 import com.giovanna.amatucci.foodbook.presentation.components.EmptyMessage
 import com.giovanna.amatucci.foodbook.presentation.components.LoadingIndicator
 import com.giovanna.amatucci.foodbook.presentation.components.RecipeList
-import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
-    onNavigateToRecipe: (id: String) -> Unit, viewModel: SearchViewModel = koinViewModel()
+    onNavigateToRecipe: (id: String) -> Unit, viewModel: SearchViewModel
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val recipes = uiState.recipes.collectAsLazyPagingItems()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.search_screen_title)) })
-        }) { paddingValues ->
-        Column(
+    Column(
             modifier = Modifier
-                .padding(paddingValues)
+                .padding()
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
@@ -55,7 +48,6 @@ fun SearchScreen(
             )
         }
     }
-}
 
 
 @Composable
@@ -65,7 +57,6 @@ private fun SearchContent(
     recipes: LazyPagingItems<RecipeItem>,
     onRecipeClick: (String) -> Unit
 ) {
-
     OutlinedTextField(
         value = searchQuery,
         onValueChange = onQueryChange,

@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.domain.usecase
+package com.giovanna.amatucci.foodbook.domain.usecase.search
 
 import com.giovanna.amatucci.foodbook.domain.repository.RecipeRepository
 

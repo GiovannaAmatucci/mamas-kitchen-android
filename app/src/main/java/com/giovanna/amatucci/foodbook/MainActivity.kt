@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
 import com.giovanna.amatucci.foodbook.presentation.navigation.AppNavHost
 import com.giovanna.amatucci.foodbook.ui.theme.FoodBookTheme
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -14,7 +15,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             FoodBookTheme {
                 val navController = rememberNavController()
-                AppNavHost(navController)
+                AppNavHost(navController = navController)
             }
         }
     }

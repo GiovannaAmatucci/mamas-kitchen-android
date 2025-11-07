@@ -17,12 +17,11 @@ object LogMessages {
     const val TOKEN_REPO_GET_START = "Buscando token válido do repositório..."
     const val TOKEN_REPO_GET_SUCCESS = "Token válido encontrado no DB e descriptografado."
     const val TOKEN_REPO_GET_NOT_FOUND = "Nenhum token encontrado no DB."
-    const val TOKEN_REPO_GET_EXPIRED = "Token encontrado no DB, mas está expirado. Deletando..."
+    const val TOKEN_REPO_GET_EXPIRED = "Token encontrado no DB, mas está expirado."
     const val TOKEN_REPO_DECRYPT_FAILURE =
         "Falha ao descriptografar token. Chave pode ter sido invalidada. Causa: %s"
     const val TOKEN_REPO_CLEAR = "Limpando token do repositório."
-
-    const val TOKEN_REPO_CLEAR_FAILURE = "Falha ao limpar token do DB. Causa: %s."
+    const val TOKEN_REPO_CLEAR_FAILURE = "Falha ao limpar token do DB. Causa: %s"
 
 
     // --- CLIENTE KTOR (Plugin de Auth) ---
@@ -54,6 +53,9 @@ object LogMessages {
     // --- API DE RECEITAS (FatSecretRecipeApi) ---
     const val API_RECIPE_SEARCH = "Buscando receitas. Query: '%s', Página: %s"
     const val API_RECIPE_DETAILS = "Buscando detalhes da receita. ID: %s"
+    const val API_FAVORITE_ADD = "Adicionando receita %s aos favoritos via API."
+    const val API_FAVORITE_DELETE = "Removendo receita %s dos favoritos via API."
+    const val API_FAVORITES_GET = "Buscando lista de favoritos da API. Página: %d"
 
 
     // --- PAGING SOURCE (RecipePagingSource) ---
@@ -68,7 +70,22 @@ object LogMessages {
     const val REPO_DETAILS_SUCCESS = "Detalhes encontrados e mapeados para o domínio. ID: %s"
     const val REPO_DETAILS_API_ERROR = "Erro da API ao buscar detalhes. Código: %s, Mensagem: %s"
     const val REPO_DETAILS_API_EXCEPTION = "Exceção da API ao buscar detalhes: %s"
-
     const val REPO_DETAILS_MAPPER_FAILURE =
         "Sucesso da API, mas falha ao mapear DTO -> Domain. Causa: %s"
+    const val REPO_SAVE_SEARCH_QUERY = "Salvando busca recente no DB: '%s'"
+
+
+    // --- REPOSITÓRIO DE FAVORITOS (FavoriteRepository) ---
+    const val REPO_FAVORITE_ADD_START = "Adicionando favorito ao repositório. ID: %s"
+    const val REPO_FAVORITE_ADD_SUCCESS_API = "API confirmou adição do favorito. ID: %s"
+    const val REPO_FAVORITE_ADD_SUCCESS_DB = "Favorito salvo no DB com sucesso. ID: %s"
+    const val REPO_FAVORITE_ADD_FAILURE_API = "Falha ao adicionar favorito na API. ID: %s"
+    const val REPO_FAVORITE_REMOVE_START = "Removendo favorito do repositório. ID: %s"
+    const val REPO_FAVORITE_REMOVE_SUCCESS_API = "API confirmou remoção do favorito. ID: %s"
+    const val REPO_FAVORITE_REMOVE_SUCCESS_DB = "Favorito removido do DB com sucesso. ID: %s"
+    const val REPO_FAVORITE_REMOVE_FAILURE_API = "Falha ao remover favorito na API. ID: %s"
+    const val REPO_FAVORITE_SYNC_START = "Iniciando sincronização de favoritos com a API."
+    const val REPO_FAVORITE_SYNC_SUCCESS = "Sincronização concluída. %d favoritos recebidos e salvos no DB."
+    const val REPO_FAVORITE_SYNC_FAILURE_API = "Falha na API durante a sincronização de favoritos. Causa: %s"
+
 }

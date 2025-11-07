@@ -8,13 +8,19 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.giovanna.amatucci.foodbook.R
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsTopAppBar(
-    uiState: String, onNavigateBack: () -> Unit
+    uiState: String,
+    onNavigateBack: () -> Unit,
+    action: () -> Unit,
+    imageVector: ImageVector,
+    tint: Color
 ) {
     TopAppBar(title = {
         Text(uiState)
@@ -24,6 +30,13 @@ fun DetailsTopAppBar(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = R.string.common_button_back.toString()
             )
+        }
+    }, actions = {
+        IconButton(onClick = action) {
+            Icon(
+                imageVector = imageVector, contentDescription = "Favoritar", tint = tint
+            )
+
         }
     })
 }

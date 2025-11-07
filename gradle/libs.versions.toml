@@ -64,6 +64,7 @@ koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin" }
 koin-core = { module = "io.insert-koin:koin-core" }
 koin-android = { module = "io.insert-koin:koin-android" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose" }
+koin-androidx-compose-navigation = { module = "io.insert-koin:koin-androidx-compose-navigation" }
 
 
 # ---------- 🎨 Jetpack Compose UI ----------
@@ -117,6 +118,7 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-paging = {module = "androidx.room:room-paging", version.ref = "room"}
 
 
 # Security
