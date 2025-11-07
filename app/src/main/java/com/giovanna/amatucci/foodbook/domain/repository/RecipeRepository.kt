@@ -1,9 +1,9 @@
 package com.giovanna.amatucci.foodbook.domain.repository
 
 import androidx.paging.PagingData
+import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
-import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
 import kotlinx.coroutines.flow.Flow
 
 interface RecipeRepository {
@@ -15,5 +15,5 @@ interface RecipeRepository {
     suspend fun getRecipeDetails(recipeId: String): ResultWrapper<RecipeDetails>
 
     suspend fun saveSearchQuery(query: String)
-
 }
+

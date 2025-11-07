@@ -39,9 +39,18 @@
 
 
     <!-- ===================================================================== -->
+    <!-- Favorite Screen                                                   -->
+    <!-- ===================================================================== -->
+    <string name="favorites_screen_title">Favoritos</string>
+    <string name="favorites_empty_message">Nenhuma receita encontrada.</string>
+
+    <!-- ===================================================================== -->
     <!-- Auth Screen                                                      -->
     <!-- ===================================================================== -->
     <string name="auth_error_with_code">Erro %1$d: %2$s</string>
     <string name="auth_error_unknown">Erro desconhecido ao buscar token</string>
+
+
+
 
 </resources>

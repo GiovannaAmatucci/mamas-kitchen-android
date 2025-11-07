@@ -18,9 +18,9 @@ object ApiConstants {
         const val RECIPES_SEARCH = "recipes.search.v3"
         const val TOKEN = "connect/token"
 
-        const val REST_RECIPE_V2 = "rest/recipe/v2"
+        const val REST_RECIPE_V2 = "recipe/v2"
 
-        const val REST_RECIPES_SEARCH_V3 = "rest/recipes/search/v3"
+        const val REST_RECIPES_SEARCH_V3 = "recipes/search/v3"
 
     }
 

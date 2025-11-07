@@ -95,7 +95,7 @@ val OnBackgroundLight = Color(0xFF1A1C19)
 /**
  * @param SurfaceLight A cor principal para superfícies de componentes como Cards, BottomSheets, Menus e Dialogs.
  */
-val SurfaceLight = Color(0xFFFCFDF7)
+val SurfaceLight = Color(0xFFE4E4D5)
 
 /**
  * @param OnSurfaceLight Cor para o texto e ícones exibidos SOBRE a cor [SurfaceLight].
@@ -223,7 +223,7 @@ val OnErrorContainerDark = Color(0xFFFFDAD6)
 /**
  * @param BackgroundDark A cor de fundo principal da tela para o tema escuro.
  */
-val BackgroundDark = Color(0xFF1A1C19)
+val BackgroundDark = Color(0xF0000000)
 
 /**
  * @param OnBackgroundDark Cor para o texto e ícones exibidos SOBRE a cor [BackgroundDark].

@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
 import com.giovanna.amatucci.foodbook.di.util.constants.UiText
-import com.giovanna.amatucci.foodbook.domain.usecase.CheckAuthenticationStatusUseCase
-import com.giovanna.amatucci.foodbook.domain.usecase.FetchAndSaveTokenUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.auth.CheckAuthenticationStatusUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.auth.FetchAndSaveTokenUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
