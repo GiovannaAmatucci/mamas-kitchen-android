@@ -27,7 +27,7 @@ class DetailsViewModel(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(DetailUiState())
+    private val _uiState = MutableStateFlow(DetailsUiState())
     val uiState = _uiState.asStateFlow()
 
     init {
@@ -52,23 +52,24 @@ class DetailsViewModel(
             DetailsEvent.ToggleFavorite -> toggleFavorite()
         }
     }
-
     private fun getRecipeDetails(recipeId: String) {
         viewModelScope.launch {
             _uiState.update { it.copy(status = DetailsStatus.Loading) }
-            when (val result = getRecipeDetailsUseCase(recipeId)) {
-                is ResultWrapper.Success -> {
-                    _uiState.update {
-                        it.copy(status = DetailsStatus.Success, recipe = result.data)
+            getRecipeDetailsUseCase(recipeId).let { result ->
+                when(result) {
+                    is ResultWrapper.Success -> {
+                        _uiState.update {
+                            it.copy(status = DetailsStatus.Success, recipe = result.data)
+                        }
                     }
-                }
 
-                is ResultWrapper.Error, is ResultWrapper.Exception -> {
-                    _uiState.update {
-                        it.copy(
-                            status = DetailsStatus.Error,
-                            error = UiText.StringResource(R.string.details_error_api_failure)
-                        )
+                    is ResultWrapper.Error, is ResultWrapper.Exception -> {
+                        _uiState.update {
+                            it.copy(
+                                status = DetailsStatus.Error,
+                                error = UiText.StringResource(R.string.details_error_api_failure)
+                            )
+                        }
                     }
                 }
             }

@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.giovanna.amatucci.foodbook.presentation.authentication.AuthScreen
 import com.giovanna.amatucci.foodbook.presentation.details.DetailsScreen
+import com.giovanna.amatucci.foodbook.presentation.favorites.FavoritesViewModel
 import com.giovanna.amatucci.foodbook.presentation.main.MainScreen
 import com.giovanna.amatucci.foodbook.presentation.search.SearchViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -15,11 +16,9 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AppNavHost(
-    modifier: Modifier = Modifier,
     navController: NavHostController,
 ) {
     NavHost(
-        modifier = modifier,
         navController = navController,
         startDestination = AuthGraph
     ) {
@@ -44,8 +43,12 @@ fun AppNavHost(
                 viewModelStoreOwner = mainGraphEntry
             )
 
+            val favoriteViewModel: FavoritesViewModel = koinViewModel(
+                viewModelStoreOwner = mainGraphEntry
+            )
+
             MainScreen(
-                searchViewModel = searchViewModel,
+                searchViewModel = searchViewModel, favoriteViewModel = favoriteViewModel,
                     onNavigateToRecipe = { recipeId ->
                         navController.navigate(DetailsScreen(recipeId = recipeId))
                     }
@@ -53,7 +56,7 @@ fun AppNavHost(
             }
             composable<DetailsScreen> {
                 DetailsScreen(
-                    onNavigateBack = { navController.popBackStack() }
+                    onNavigateBack = { navController.popBackStack() },
                 )
             }
         }

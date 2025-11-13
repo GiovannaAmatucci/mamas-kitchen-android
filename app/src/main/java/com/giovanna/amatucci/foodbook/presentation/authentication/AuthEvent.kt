@@ -1,6 +1,6 @@
 package com.giovanna.amatucci.foodbook.presentation.authentication
 
-sealed class AuthEvent {
-    data object OnTokenRequest : AuthEvent()
-    data object OnNavigationHandled : AuthEvent()
+sealed interface AuthEvent {
+    data object RequestToken : AuthEvent
+    data object NavigationCompleted : AuthEvent
 }
