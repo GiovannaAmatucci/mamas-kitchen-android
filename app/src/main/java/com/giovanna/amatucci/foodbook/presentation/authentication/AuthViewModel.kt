@@ -26,8 +26,8 @@ class AuthViewModel(
 
     fun onEvent(event: AuthEvent) {
         when (event) {
-            AuthEvent.OnTokenRequest -> fetchToken()
-            AuthEvent.OnNavigationHandled -> onNavigationHandled()
+            AuthEvent.RequestToken -> fetchToken()
+            AuthEvent.NavigationCompleted -> onNavigationHandled()
         }
     }
 

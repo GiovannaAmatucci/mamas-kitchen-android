@@ -29,12 +29,18 @@ import com.giovanna.amatucci.foodbook.domain.usecase.details.GetRecipeDetailsUse
 import com.giovanna.amatucci.foodbook.domain.usecase.details.GetRecipeDetailsUseCaseImpl
 import com.giovanna.amatucci.foodbook.domain.usecase.favorite.AddFavoriteUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.favorite.AddFavoriteUseCaseImpl
+import com.giovanna.amatucci.foodbook.domain.usecase.favorite.DeleteAllFavoritesUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.favorite.DeleteAllFavoritesUseCaseImpl
 import com.giovanna.amatucci.foodbook.domain.usecase.favorite.GetFavoritesUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.favorite.GetFavoritesUseCaseImpl
 import com.giovanna.amatucci.foodbook.domain.usecase.favorite.IsFavoriteUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.favorite.IsFavoriteUseCaseImpl
 import com.giovanna.amatucci.foodbook.domain.usecase.favorite.RemoveFavoriteUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.favorite.RemoveFavoriteUseCaseImpl
+import com.giovanna.amatucci.foodbook.domain.usecase.search.ClearSearchHistoryUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.search.ClearSearchHistoryUseCaseImpl
+import com.giovanna.amatucci.foodbook.domain.usecase.search.GetSearchQueriesUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.search.GetSearchQueriesUseCaseImpl
 import com.giovanna.amatucci.foodbook.domain.usecase.search.SaveSearchQueryUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.search.SaveSearchQueryUseCaseImpl
 import com.giovanna.amatucci.foodbook.domain.usecase.search.SearchRecipesUseCase
@@ -82,7 +88,7 @@ val databaseModule = module {
             androidContext(),
             AppDatabase::class.java,
             "foodbook_database.db"
-        ).fallbackToDestructiveMigration().build()
+        ).fallbackToDestructiveMigration(true).build()
     }
     single { get<AppDatabase>().accessTokenDao() }
     single { get<AppDatabase>().searchDao() }
@@ -105,12 +111,15 @@ val repositoryModule = module {
 val domainModule = module {
     factory<CheckAuthenticationStatusUseCase> { CheckAuthenticationStatusUseCaseImpl(get()) }
     factory<FetchAndSaveTokenUseCase> { FetchAndSaveTokenUseCaseImpl(get()) }
-    factory<SearchRecipesUseCase> { SearchRecipesUseCaseImpl(repository = get()) }
     factory<GetRecipeDetailsUseCase> { GetRecipeDetailsUseCaseImpl(repository = get()) }
     factory<SaveSearchQueryUseCase> { SaveSearchQueryUseCaseImpl(repository = get()) }
+    factory<GetSearchQueriesUseCase> { GetSearchQueriesUseCaseImpl(repository = get()) }
+    factory<SearchRecipesUseCase> { SearchRecipesUseCaseImpl(repository = get()) }
+    factory<ClearSearchHistoryUseCase>{ ClearSearchHistoryUseCaseImpl(repository = get()) }
     factory<AddFavoriteUseCase> { AddFavoriteUseCaseImpl(repository = get()) }
     factory<GetFavoritesUseCase> { GetFavoritesUseCaseImpl(repository = get()) }
     factory<RemoveFavoriteUseCase> { RemoveFavoriteUseCaseImpl(repository = get()) }
+    factory<DeleteAllFavoritesUseCase>{ DeleteAllFavoritesUseCaseImpl(repository = get()) }
     factory<IsFavoriteUseCase> { IsFavoriteUseCaseImpl(repository = get()) }
 }
 
@@ -119,9 +128,9 @@ val domainModule = module {
  */
 val viewModelModule = module {
     viewModel { AuthViewModel(get(), get()) }
-    viewModel { SearchViewModel(get(), get()) }
+    viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { DetailsViewModel(get(), get(), get(), get(), get()) }
-    viewModel { FavoritesViewModel(get()) }
+    viewModel { FavoritesViewModel(get(), get()) }
 }
 
 val appModules = listOf(

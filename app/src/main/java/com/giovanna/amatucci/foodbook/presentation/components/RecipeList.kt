@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
@@ -18,10 +17,19 @@ fun RecipeList(recipes: LazyPagingItems<RecipeItem>, onRecipeClick: (String) -> 
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(recipes.itemCount) { index ->
-            recipes[index]?.let { recipe ->
-                RecipeListItem(
-                    recipe = recipe, onClick = { recipe.id?.let { onRecipeClick(it.toString()) } }
+        items(
+            count = recipes.itemCount,
+            key = { index ->
+                recipes[index]?.id ?: recipes[index]?.name ?: index
+            }
+        ) { index ->
+            // ===========================================
+
+            val recipe = recipes[index]
+            if (recipe != null) {
+                RecipeCard(
+                    recipe = recipe,
+                    onClick = { onRecipeClick(recipe.id.toString()) }
                 )
             }
         }

@@ -33,20 +33,28 @@ class FavoriteRepositoryImpl(
         }
     }
 
+    override fun isFavorite(recipeId: String): Flow<Boolean> =
+        favoriteDao.isFavorite(recipeId.toLong())
+
+    override fun getFavorites(query: String): Flow<PagingData<RecipeItem>> {
+        val preparedQuery = "%$query%"
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20, enablePlaceholders = false
+            ),
+            pagingSourceFactory = { favoriteDao.getAllFavoritesPaged(preparedQuery) }).flow.map { pagingData ->
+            pagingData.map { favoriteEntity ->
+                mapper.favoriteEntityToDomain(favoriteEntity)
+            }
+        }
+    }
+
     override suspend fun removeFavorite(recipeId: String) {
         logWriter.d(TAG, LogMessages.REPO_FAVORITE_REMOVE_START.format(recipeId))
         favoriteDao.deleteFavorite(recipeId)
     }
 
-    override fun isFavorite(recipeId: String): Flow<Boolean> =
-        favoriteDao.isFavorite(recipeId.toLong())
-
-    override fun getFavorites(): Flow<PagingData<RecipeItem>> = Pager(
-        config = PagingConfig(
-            pageSize = 20, enablePlaceholders = false
-        ), pagingSourceFactory = { favoriteDao.getAllFavoritesPaged() }).flow.map { pagingData ->
-        pagingData.map { favoriteEntity ->
-            mapper.favoriteEntityToDomain(favoriteEntity)
-        }
+    override suspend fun deleteAllFavorites() {
+        favoriteDao.deleteAllFavorites()
     }
 }

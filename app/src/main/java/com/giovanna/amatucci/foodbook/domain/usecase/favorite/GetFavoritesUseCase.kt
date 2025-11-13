@@ -6,10 +6,11 @@ import com.giovanna.amatucci.foodbook.domain.repository.FavoriteRepository
 import kotlinx.coroutines.flow.Flow
 
 interface GetFavoritesUseCase {
-    operator fun invoke(): Flow<PagingData<RecipeItem>>
+    operator fun invoke(query: String): Flow<PagingData<RecipeItem>>
 }
 
 
 class GetFavoritesUseCaseImpl(private val repository: FavoriteRepository) : GetFavoritesUseCase {
-    override operator fun invoke(): Flow<PagingData<RecipeItem>> = repository.getFavorites()
+    override operator fun invoke(query: String): Flow<PagingData<RecipeItem>> =
+        repository.getFavorites(query)
 }

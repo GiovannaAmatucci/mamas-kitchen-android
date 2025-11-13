@@ -10,11 +10,6 @@ object AuthScreen
 
 @Serializable
 object MainGraph
-
-@Serializable
-object MainScreen
-
-
 @Serializable
 data class DetailsScreen(val recipeId: String)
 

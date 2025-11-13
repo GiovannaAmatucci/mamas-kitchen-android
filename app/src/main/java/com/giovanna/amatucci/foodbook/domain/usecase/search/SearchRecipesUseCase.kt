@@ -10,7 +10,10 @@ interface SearchRecipesUseCase {
     suspend operator fun invoke(query: String): Flow<PagingData<RecipeItem>>
 }
 
-class SearchRecipesUseCaseImpl(private val repository: RecipeRepository) : SearchRecipesUseCase {
+class SearchRecipesUseCaseImpl(
+    private val repository: RecipeRepository,
+) : SearchRecipesUseCase {
+
     override suspend operator fun invoke(query: String): Flow<PagingData<RecipeItem>> {
         val trimmedQuery = query.trim()
         return repository.searchRecipesPaginated(trimmedQuery)

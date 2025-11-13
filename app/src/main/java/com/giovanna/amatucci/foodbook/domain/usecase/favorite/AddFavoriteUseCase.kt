@@ -1,7 +1,6 @@
 package com.giovanna.amatucci.foodbook.domain.usecase.favorite
 
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
-import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 import com.giovanna.amatucci.foodbook.domain.repository.FavoriteRepository
 
 interface AddFavoriteUseCase {

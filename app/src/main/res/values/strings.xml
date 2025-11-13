@@ -4,53 +4,74 @@
     <!-- ===================================================================== -->
     <!-- Common / Shared Strings                                               -->
     <!-- ===================================================================== -->
-    <string name="common_error_generic">Ocorreu um erro desconhecido. Por favor, tente novamente.</string>
-    <string name="common_button_back">Voltar</string>
-    <string name="common_button_retry">Tentar Novamente</string>
+    <string name="common_error_generic">An unknown error occurred. Please try again.</string>
+    <string name="common_button_back">Back</string>
+    <string name="common_button_retry">Retry</string>
+    <string name="common_button_confirm">Confirm</string>
+    <string name="common_button_cancel">Cancel</string>
 
 
     <!-- ===================================================================== -->
     <!-- Search Screen                                                         -->
     <!-- ===================================================================== -->
-    <string name="search_screen_title">Buscar Receitas</string>
-    <string name="search_field_placeholder">Digite um prato ou ingrediente</string>
-    <string name="search_button_text">Buscar</string>
-    <string name="search_back_description">Voltar</string>
-    <string name="search_close_description">Fechar e limpar busca</string>
-    <string name="search_access_item_description">Acessar Item.</string>
-    <string name="search_idle_message">Pronto para buscar sua próxima receita!</string>
-    <string name="search_empty_message">Nenhuma receita encontrada para \"%1$s\"</string>
-    <string name="search_error_message_loading_failed">Falha ao carregar receitas.</string>
-    <string name="search_error_api">Falha na API.</string>
+    <string name="search_screen_title">Search Recipes</string>
+    <string name="search_field_placeholder">Type a dish or ingredient</string>
+    <string name="search_button_text">Search</string>
+    <string name="search_back_description">Back</string>
+    <string name="search_close_description">Close and clear search</string>
+    <string name="search_history_icon_description">History Icon</string>
+    <string name="search_no_history">No search history</string>
+    <string name="search_clear_history">Clear history</string>
+    <string name="search_access_item_description">View recipe details</string>
+    <string name="search_idle_message">Ready to find your next recipe!</string>
+    <string name="search_empty_message">No recipes found for \"%1$s\"</string>
+    <string name="search_error_message_loading_failed">Failed to load recipes.</string>
+    <string name="search_error_api">API Failure.</string>
+    <string name="recent_searches">Recent searches</string>
+    <string name="remove_recent_search">Remove from recent searches</string>
+    <string name="clear_search">Clear search</string>
 
 
     <!-- ===================================================================== -->
     <!-- Details Screen                                                        -->
     <!-- ===================================================================== -->
-    <string name="details_screen_title_default">Detalhes</string>
-    <string name="details_section_title_ingredients">Ingredientes</string>
-    <string name="details_section_title_instructions">Instruções</string>
-    <string name="details_error_message_loading_failed">Falha ao carregar detalhes da receita.</string>
-    <string name="details_error_message_no_ingredients">Nenhum ingrediente encontrado.</string>
-    <string name="details_error_message_no_instructions">Nenhuma instrução encontrada.</string>
-    <string name="details_error_message_no_recipe">Nenhuma receita encontrada.</string>
-    <string name="details_error_invalid_id">ID inválido.</string>
-    <string name="details_error_api_failure">Falha na API.</string>
+    <string name="details_screen_title_default">Details</string>
+    <string name="details_section_title_ingredients">Ingredients</string>
+    <string name="details_section_title_instructions">Instructions</string>
+    <string name="details_stats_cook_time">Cook Time</string>
+    <string name="details_stats_servings">Servings</string>
+    <string name="details_stats_prep_time">Preparation Time</string>
+    <string name="details_error_message_loading_failed">Failed to load recipe details.</string>
+    <string name="details_error_message_no_ingredients">No ingredients found.</string>
+    <string name="details_error_message_no_instructions">No instructions found.</string>
+    <string name="details_error_message_no_recipe">No recipe found.</string>
+    <string name="details_error_invalid_id">Invalid ID.</string>
+    <string name="details_error_api_failure">API Failure.</string>
+    <string name="details_no_images">No images available.</string>
 
 
     <!-- ===================================================================== -->
-    <!-- Favorite Screen                                                   -->
+    <!-- Favorite Screen                                                       -->
     <!-- ===================================================================== -->
-    <string name="favorites_screen_title">Favoritos</string>
-    <string name="favorites_empty_message">Nenhuma receita encontrada.</string>
+    <string name="favorites_screen_title">Favorites</string>
+    <string name="favorites_description">Toggle Favorite</string>
+    <string name="favorites_search_placeholder">Search Favorites</string>
+    <string name="favorites_empty_message">No favorite recipes found.</string>
+    <string name="favorites_empty_search_message">No favorite recipes found for\"%1$s\"</string>
+    <string name="favorites_delete_all_description">Delete all favorites</string>
+    <string name="favorites_dialog_title">Confirm Deletion</string>
+    <string name="favorites_dialog_text">Are you sure you want to delete all your favorites? This action cannot be undone.</string>
 
     <!-- ===================================================================== -->
-    <!-- Auth Screen                                                      -->
+    <!-- Main Screen                                                       -->
     <!-- ===================================================================== -->
-    <string name="auth_error_with_code">Erro %1$d: %2$s</string>
-    <string name="auth_error_unknown">Erro desconhecido ao buscar token</string>
+    <string name="main_screen_navigation_bar">Navigation</string>
 
 
-
+    <!-- ===================================================================== -->
+    <!-- Auth Screen                                                           -->
+    <!-- ===================================================================== -->
+    <string name="auth_error_with_code">Error %1$d: %2$s</string>
+    <string name="auth_error_unknown">Unknown error while fetching token</string>
 
 </resources>

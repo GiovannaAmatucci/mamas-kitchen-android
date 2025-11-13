@@ -1,6 +1,5 @@
 package com.giovanna.amatucci.foodbook.presentation.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,39 +21,39 @@ import coil.compose.AsyncImage
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 
-
 @Composable
-fun RecipeListItem(recipe: RecipeItem, onClick: () -> Unit) {
+fun RecipeCard(recipe: RecipeItem, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(250.dp)
             .padding(4.dp),
         onClick = onClick,
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = modifier.fillMaxSize()) {
             AsyncImage(
-                model = recipe.imageUrl,
+                model = recipe.imageUrl ?: R.drawable.food_no_image,
                 contentDescription = stringResource(
-                    R.string.details_section_title_instructions,
-                    recipe.name?: ""
+                    R.string.details_section_title_instructions, recipe.name ?: ""
                 ),
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxWidth().height(150.dp)
+                modifier = modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
                     .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
             )
-
             Column(
-                modifier = Modifier.fillMaxWidth().fillMaxSize()
-                    .background(MaterialTheme.colorScheme.surface),
+                modifier = modifier
+                    .fillMaxWidth()
+                    .fillMaxSize(),
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Center
             ) {
                 SectionTitle(
-                    title = recipe.name?:""
+                    title = recipe.name ?: ""
                 )
             }
         }

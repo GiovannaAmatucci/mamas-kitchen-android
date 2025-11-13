@@ -33,7 +33,7 @@ fun AuthScreen(
     if (currentState is AuthUiState.Authenticated && currentState.navigateToHome) {
         LaunchedEffect(currentState) {
             onNavigateToHome()
-            viewModel.onEvent(AuthEvent.OnNavigationHandled)
+            viewModel.onEvent(AuthEvent.NavigationCompleted)
         }
     }
     Box(
@@ -47,7 +47,7 @@ fun AuthScreen(
             is AuthUiState.AuthenticationFailed -> {
                 AuthenticationFailedContent(
                     errorText = state.errorMessage.toString(),
-                    onRetry = { viewModel.onEvent(AuthEvent.OnTokenRequest) })
+                    onRetry = { viewModel.onEvent(AuthEvent.RequestToken) })
             }
         }
     }

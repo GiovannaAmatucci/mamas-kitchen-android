@@ -14,8 +14,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FoodBookTheme {
-                val navController = rememberNavController()
-                AppNavHost(navController = navController)
+                AppNavHost(navController = rememberNavController())
             }
         }
     }
