@@ -1,50 +1,64 @@
 package com.giovanna.amatucci.foodbook.presentation.favorites
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.presentation.components.EmptyMessage
-import com.giovanna.amatucci.foodbook.presentation.components.LoadingIndicator
+import com.giovanna.amatucci.foodbook.presentation.components.PagingStateHandler
 import com.giovanna.amatucci.foodbook.presentation.components.RecipeList
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun FavoriteScreen(
-    onNavigateToRecipe: (recipeId: String) -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: FavoritesViewModel = koinViewModel()
+    uiState: FavoritesUiState,
+    onNavigateToRecipe: (recipeId: String) -> Unit, onEvent: (FavoriteEvent) -> Unit
 ) {
-    val recipes = viewModel.favoriteRecipes.collectAsLazyPagingItems()
+    val recipes = uiState.recipes.collectAsLazyPagingItems()
 
-    Box(
-        modifier = modifier.fillMaxSize()
-    ) {
-        recipes.loadState.refresh.let { state ->
-            when (state) {
-
-                is LoadState.Loading -> {
-                    LoadingIndicator()
-                }
-
-                is LoadState.Error -> {
-                    EmptyMessage(message = stringResource(R.string.favorites_empty_message))
-                }
-
-                is LoadState.NotLoading -> {
-                    if (recipes.itemCount == 0) {
-                        EmptyMessage(message = stringResource(R.string.favorites_empty_message))
-                    } else {
-                        RecipeList(
-                            recipes = recipes, onRecipeClick = onNavigateToRecipe
-                        )
-                    }
-                }
+    PagingStateHandler(
+        pagingItems = recipes, emptyContent = {
+            val message = if (uiState.searchQuery.isBlank()) {
+                stringResource(R.string.favorites_empty_message)
+            } else {
+                stringResource(R.string.favorites_empty_search_message, uiState.searchQuery)
             }
+            EmptyMessage(message = message)
+        }) { loadedRecipes ->
+        RecipeList(
+            recipes = loadedRecipes, onRecipeClick = onNavigateToRecipe
+        )
+    }
+    uiState.showConfirmDeleteAllDialog.let { state ->
+        if (state) {
+            DeleteAllFavoritesDialog(
+                onConfirm = { onEvent(FavoriteEvent.ConfirmDeleteAll) },
+                onDismiss = { onEvent(FavoriteEvent.DismissDeleteAllConfirmation) })
         }
     }
+}
+
+@Composable
+private fun DeleteAllFavoritesDialog(
+    onConfirm: () -> Unit, onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.favorites_dialog_title)) },
+        text = { Text(stringResource(R.string.favorites_dialog_text)) },
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text(stringResource(R.string.common_button_confirm))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.common_button_cancel))
+            }
+        },
+        shape = MaterialTheme.shapes.medium
+    )
 }
