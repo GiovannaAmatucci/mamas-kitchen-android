@@ -103,7 +103,7 @@ val databaseModule = module {
 val repositoryModule = module {
     single<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
     single<TokenRepository> { TokenRepositoryImpl(get(), get(), get()) }
-    single<RecipeRepository> { RecipeRepositoryImpl(get(), get(), get(), get()) }
+    single<RecipeRepository> { RecipeRepositoryImpl(get(), get(), get()) }
     single<FavoriteRepository> { FavoriteRepositoryImpl(get(), get(), get()) }
     single<SearchRepository> { SearchRepositoryImpl(get(), get()) }
 }
