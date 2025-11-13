@@ -11,7 +11,6 @@ import com.giovanna.amatucci.foodbook.data.local.model.SearchEntity
 interface SearchDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSearch(search: SearchEntity)
-
     @Query("SELECT * FROM searchEntity")
     suspend fun getSearchHistory(): SearchEntity?
 }

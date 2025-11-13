@@ -1,6 +1,5 @@
-package com.giovanna.amatucci.foodbook.presentation.components
+package com.giovanna.amatucci.foodbook.presentation.main
 
-// IMPORT AQUI
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.icons.Icons
@@ -34,7 +33,6 @@ internal sealed class MainScreenTab(
 fun BottomNavigationBar(
     pagerState: PagerState, onTabClick: (Int) -> Unit
 ) {
-
     val tabs = listOf(
         MainScreenTab.Search, MainScreenTab.Favorites
     )
@@ -43,8 +41,12 @@ fun BottomNavigationBar(
             val isSelected = pagerState.currentPage == index
 
             NavigationBarItem(
-                label = { Text(text = stringResource(id = tab.titleResId)) },
-                icon = { Icon(imageVector = tab.icon, contentDescription = "") },
+                label = { Text(text = stringResource(id = tab.titleResId)) }, icon = {
+                    Icon(
+                        imageVector = tab.icon,
+                        contentDescription = stringResource(R.string.main_screen_navigation_bar)
+                    )
+                },
                 selected = isSelected,
                 onClick = {
                     onTabClick(index)
