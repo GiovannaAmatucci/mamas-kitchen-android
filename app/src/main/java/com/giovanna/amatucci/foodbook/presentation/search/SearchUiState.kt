@@ -3,7 +3,6 @@ package com.giovanna.amatucci.foodbook.presentation.search
 import androidx.paging.PagingData
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 
 data class SearchUiState(

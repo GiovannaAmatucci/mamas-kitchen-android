@@ -10,8 +10,6 @@ import com.giovanna.amatucci.foodbook.di.util.constants.LogMessages
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
-import io.ktor.client.statement.request
-import io.ktor.http.isSuccess
 
 interface FatSecretRecipeApi {
     suspend fun searchRecipes(
