@@ -1,0 +1,211 @@
+package com.giovanna.amatucci.foodbook.presentation.details.content
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.People
+import androidx.compose.material.icons.outlined.Timer
+import androidx.compose.material.icons.outlined.Whatshot
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import com.giovanna.amatucci.foodbook.R
+import com.giovanna.amatucci.foodbook.domain.model.DirectionInfo
+import com.giovanna.amatucci.foodbook.domain.model.IngredientInfo
+import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
+import com.giovanna.amatucci.foodbook.presentation.components.DetailsStatItem
+import com.giovanna.amatucci.foodbook.presentation.components.EmptyMessage
+import com.giovanna.amatucci.foodbook.presentation.components.LoadingIndicator
+import com.giovanna.amatucci.foodbook.presentation.components.RecipeDetailsImage
+import com.giovanna.amatucci.foodbook.presentation.components.SectionTitle
+import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsStatus
+import com.giovanna.amatucci.foodbook.ui.theme.Dimens
+import com.giovanna.amatucci.foodbook.ui.theme.rememberScrimColor
+
+@Composable
+fun DetailsContent(
+    modifier: Modifier,
+    status: DetailsStatus,
+    recipe: RecipeDetails?,
+    onImageDisplayed: (String?) -> Unit = {}
+) {
+    when (status) {
+        DetailsStatus.Loading -> LoadingIndicator()
+        DetailsStatus.Error -> EmptyMessage(message = stringResource(R.string.details_error_message_loading_failed))
+        DetailsStatus.Success -> {
+            recipe?.let {
+                val scrimColor = rememberScrimColor()
+                Box(
+                    modifier = modifier
+                        .fillMaxSize()
+                        .background(scrimColor)
+                ) {
+                    DetailsList(
+                        recipe = it,
+                        modifier = Modifier.fillMaxSize(),
+                        onImageDisplayed = onImageDisplayed,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DetailsList(
+    recipe: RecipeDetails, modifier: Modifier, onImageDisplayed: (String?) -> Unit
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize()
+    ) {
+        item {
+            RecipeDetailsImage(
+                images = recipe.imageUrls ?: emptyList(), onImageDisplayed = onImageDisplayed
+            )
+        }
+        item {
+            DetailsHeader(recipe = recipe)
+        }
+
+        item {
+            DetailsRow(recipe = recipe)
+            Spacer(modifier = Modifier.height(Dimens.PaddingMedium))
+        }
+
+        item {
+            SectionTitle(
+                stringResource(R.string.details_section_title_ingredients),
+                modifier = Modifier.padding(horizontal = Dimens.PaddingMedium)
+            )
+        }
+        items(
+            items = recipe.ingredients,
+            key = { ingredient -> ingredient.description }) { ingredient ->
+            DetailsIngredientItem(ingredient = ingredient)
+            Spacer(modifier = Modifier.height(Dimens.PaddingSmall))
+        }
+        item {
+            SectionTitle(
+                stringResource(R.string.details_section_title_instructions),
+                modifier = Modifier.padding(horizontal = Dimens.PaddingMedium)
+            )
+            Spacer(modifier = Modifier.height(Dimens.PaddingSmall))
+        }
+        items(
+            items = recipe.directions, key = { direction -> direction.number }) { directions ->
+            DetailsInstructionItem(instruction = directions)
+            Spacer(modifier = Modifier.height(Dimens.PaddingSmall))
+        }
+        item {
+            Spacer(modifier = Modifier.height(Dimens.PaddingMedium))
+        }
+    }
+}
+
+@Composable
+private fun DetailsHeader(recipe: RecipeDetails) {
+    Column(modifier = Modifier.padding(Dimens.PaddingMedium)) {
+        Text(
+            text = recipe.name ?: "",
+            style = MaterialTheme.typography.headlineLarge,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        Spacer(modifier = Modifier.height(Dimens.PaddingSmall))
+        Text(
+            text = recipe.description ?: "",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        Spacer(modifier = Modifier.height(Dimens.PaddingMedium))
+    }
+}
+
+@Composable
+private fun DetailsRow(recipe: RecipeDetails) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = Dimens.PaddingSmall)
+            .padding(horizontal = Dimens.PaddingMedium),
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        recipe.preparationTime?.let {
+            DetailsStatItem(
+                icon = Icons.Outlined.Timer,
+                label = stringResource(R.string.details_stats_prep_time),
+                value = it
+            )
+        }
+        recipe.cookingTime?.let {
+            DetailsStatItem(
+                icon = Icons.Outlined.Whatshot,
+                label = stringResource(R.string.details_stats_cook_time),
+                value = it
+            )
+        }
+        recipe.servings?.let {
+            DetailsStatItem(
+                icon = Icons.Outlined.People,
+                label = stringResource(R.string.details_stats_servings),
+                value = it
+            )
+        }
+    }
+}
+
+
+
+@Composable
+private fun DetailsIngredientItem(ingredient: IngredientInfo) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = Dimens.PaddingMedium)
+    ) {
+        Text(
+            text = "• ${ingredient.description}",
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier,
+            color = MaterialTheme.colorScheme.onSurface,
+            lineHeight = MaterialTheme.typography.bodyLarge.lineHeight
+        )
+    }
+}
+
+@Composable
+private fun DetailsInstructionItem(instruction: DirectionInfo) {
+    Row(
+        modifier = Modifier.padding(start = Dimens.PaddingMedium),
+    ) {
+        Text(
+            text = "${instruction.number}.",
+            style = MaterialTheme.typography.bodyLarge,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        Spacer(modifier = Modifier.width(Dimens.PaddingSmall))
+        Text(
+            text = instruction.description,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier,
+            color = MaterialTheme.colorScheme.onSurface,
+            lineHeight = MaterialTheme.typography.bodyLarge.lineHeight
+        )
+    }
+}

@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.search
+package com.giovanna.amatucci.foodbook.presentation.search.content
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,12 +11,13 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 import com.giovanna.amatucci.foodbook.presentation.components.EmptyMessage
-import com.giovanna.amatucci.foodbook.presentation.components.PagingStateHandler
 import com.giovanna.amatucci.foodbook.presentation.components.RecipeList
+import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchUiState
+import com.giovanna.amatucci.foodbook.ui.theme.PagingStateHandler
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(
+fun SearchRouteContent(
     onNavigateToRecipe: (id: String) -> Unit, state: SearchUiState
 ) {
     val uiState = state.recipes.collectAsLazyPagingItems()

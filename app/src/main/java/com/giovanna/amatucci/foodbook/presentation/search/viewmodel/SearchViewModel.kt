@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.search
+package com.giovanna.amatucci.foodbook.presentation.search.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +8,8 @@ import com.giovanna.amatucci.foodbook.domain.usecase.search.ClearSearchHistoryUs
 import com.giovanna.amatucci.foodbook.domain.usecase.search.GetSearchQueriesUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.search.SaveSearchQueryUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.search.SearchRecipesUseCase
+import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchEvent
+import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchUiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +17,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SearchViewModel(
@@ -70,7 +71,7 @@ class SearchViewModel(
                 if (query.isBlank()) {
                     _uiState.update {
                         it.copy(
-                            recipes = flowOf(PagingData.empty())
+                            recipes = flowOf(PagingData.Companion.empty())
                         )
                     }
                 } else {

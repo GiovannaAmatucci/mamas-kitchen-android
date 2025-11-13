@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.search
+package com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state
 
 import androidx.paging.PagingData
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem

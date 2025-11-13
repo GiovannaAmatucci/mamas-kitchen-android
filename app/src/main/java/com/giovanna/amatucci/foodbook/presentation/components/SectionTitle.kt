@@ -1,5 +1,6 @@
 package com.giovanna.amatucci.foodbook.presentation.components
 
+
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -15,8 +16,9 @@ fun SectionTitle(title: String, modifier: Modifier = Modifier) {
         text = title,
         style = MaterialTheme.typography.titleLarge,
         overflow = TextOverflow.Ellipsis,
-        maxLines = 2,
+        maxLines = 1,
         textAlign = TextAlign.Start,
-        modifier = modifier.padding(Dimens.PaddingSmall)
+        modifier = modifier.padding(Dimens.PaddingSmall),
+        color = MaterialTheme.colorScheme.onSurface
     )
 }
