@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.authentication
+package com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,6 +7,8 @@ import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
 import com.giovanna.amatucci.foodbook.di.util.constants.UiText
 import com.giovanna.amatucci.foodbook.domain.usecase.auth.CheckAuthenticationStatusUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.auth.FetchAndSaveTokenUseCase
+import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthEvent
+import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

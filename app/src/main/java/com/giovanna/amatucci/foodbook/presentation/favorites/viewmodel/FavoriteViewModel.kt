@@ -1,10 +1,12 @@
-package com.giovanna.amatucci.foodbook.presentation.favorites
+package com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.giovanna.amatucci.foodbook.domain.usecase.favorite.DeleteAllFavoritesUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.favorite.GetFavoritesUseCase
+import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoriteEvent
+import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesUiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.authentication
+package com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state
 
 import com.giovanna.amatucci.foodbook.di.util.constants.UiText
 sealed interface AuthUiState {

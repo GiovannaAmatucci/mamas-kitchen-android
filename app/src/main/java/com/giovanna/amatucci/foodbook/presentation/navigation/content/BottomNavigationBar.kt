@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.main
+package com.giovanna.amatucci.foodbook.presentation.navigation.content
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.PagerState
@@ -16,25 +16,24 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.giovanna.amatucci.foodbook.R
 
-internal sealed class MainScreenTab(
+internal sealed class MainScreenNavTab(
     val titleResId: Int, val icon: ImageVector
 ) {
-    data object Search : MainScreenTab(
+    data object Search : MainScreenNavTab(
         titleResId = R.string.search_screen_title, icon = Icons.Default.Search
     )
 
-    data object Favorites : MainScreenTab(
+    data object Favorites : MainScreenNavTab(
         titleResId = R.string.favorites_screen_title, icon = Icons.Default.Favorite
     )
 }
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BottomNavigationBar(
     pagerState: PagerState, onTabClick: (Int) -> Unit
 ) {
     val tabs = listOf(
-        MainScreenTab.Search, MainScreenTab.Favorites
+        MainScreenNavTab.Search, MainScreenNavTab.Favorites
     )
     NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
         tabs.forEachIndexed { index, tab ->

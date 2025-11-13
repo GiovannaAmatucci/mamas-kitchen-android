@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.main
+package com.giovanna.amatucci.foodbook.presentation.navigation.content
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.HorizontalPager
@@ -10,12 +10,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.giovanna.amatucci.foodbook.presentation.favorites.FavoriteScreen
-import com.giovanna.amatucci.foodbook.presentation.favorites.FavoritesTopBar
-import com.giovanna.amatucci.foodbook.presentation.favorites.FavoritesViewModel
-import com.giovanna.amatucci.foodbook.presentation.search.SearchScreen
-import com.giovanna.amatucci.foodbook.presentation.search.SearchTopBar
-import com.giovanna.amatucci.foodbook.presentation.search.SearchViewModel
+import com.giovanna.amatucci.foodbook.presentation.favorites.content.FavoriteRouteContent
+import com.giovanna.amatucci.foodbook.presentation.favorites.content.FavoritesTopBar
+import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.FavoritesViewModel
+import com.giovanna.amatucci.foodbook.presentation.search.content.SearchRouteContent
+import com.giovanna.amatucci.foodbook.presentation.search.content.SearchTopBar
+import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.SearchViewModel
 import kotlinx.coroutines.launch
 
 private enum class MainTab { Search, Favorites }
@@ -67,12 +67,12 @@ fun MainScreen(
         ) { pageIndex ->
             when (pageIndex) {
                 0 -> {
-                    SearchScreen(
+                    SearchRouteContent(
                         onNavigateToRecipe = onNavigateToRecipe, state = searchUiState
                     )
                 }
                 1 -> {
-                    FavoriteScreen(
+                    FavoriteRouteContent(
                         onNavigateToRecipe = onNavigateToRecipe,
                         uiState = favoritesUiState,
                         onEvent = { favoriteViewModel.onEvent(it) }

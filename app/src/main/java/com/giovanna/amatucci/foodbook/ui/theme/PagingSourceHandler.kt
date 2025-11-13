@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.components
+package com.giovanna.amatucci.foodbook.ui.theme
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +8,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.giovanna.amatucci.foodbook.R
+import com.giovanna.amatucci.foodbook.presentation.components.EmptyMessage
+import com.giovanna.amatucci.foodbook.presentation.components.LoadingIndicator
 
 /**
  * Um componente genérico que lida com os estados comuns de um LazyPagingItems.

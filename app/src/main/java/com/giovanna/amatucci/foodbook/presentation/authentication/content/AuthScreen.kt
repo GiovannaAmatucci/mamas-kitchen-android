@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.authentication
+package com.giovanna.amatucci.foodbook.presentation.authentication.content
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +20,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.giovanna.amatucci.foodbook.R
+import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.AuthViewModel
+import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthEvent
+import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthUiState
 import com.giovanna.amatucci.foodbook.presentation.components.LoadingIndicator
 import org.koin.compose.viewmodel.koinViewModel
 

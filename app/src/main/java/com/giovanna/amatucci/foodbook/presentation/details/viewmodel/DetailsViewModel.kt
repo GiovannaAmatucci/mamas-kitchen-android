@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.details
+package com.giovanna.amatucci.foodbook.presentation.details.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -11,6 +11,9 @@ import com.giovanna.amatucci.foodbook.domain.usecase.details.GetRecipeDetailsUse
 import com.giovanna.amatucci.foodbook.domain.usecase.favorite.AddFavoriteUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.favorite.IsFavoriteUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.favorite.RemoveFavoriteUseCase
+import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsEvent
+import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsStatus
+import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsUiState
 import com.giovanna.amatucci.foodbook.presentation.navigation.DetailsScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -75,7 +78,6 @@ class DetailsViewModel(
             }
         }
     }
-
     private fun observeFavoriteStatus(recipeId: String) {
         isFavoriteUseCase(recipeId).onEach { isFavorite ->
             _uiState.update { it.copy(isFavorite = isFavorite) }
@@ -84,8 +86,12 @@ class DetailsViewModel(
 
     private fun toggleFavorite() = viewModelScope.launch {
         val currentRecipe = _uiState.value.recipe ?: return@launch
+        val recipeId = currentRecipe.id
+        if (recipeId.isNullOrBlank()) {
+            return@launch
+        }
         if (_uiState.value.isFavorite == true) {
-            removeFavoriteUseCase(currentRecipe.id ?: "")
+            removeFavoriteUseCase(recipeId)
         } else {
             addFavoriteUseCase(currentRecipe)
         }

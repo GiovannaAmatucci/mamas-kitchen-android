@@ -41,5 +41,14 @@ object Dimens {
     val IconSizeMedium = 24.dp
     val ImageSizeLarge = 200.dp
 
+    val ImageSizeSmall = 150.dp
+
+    val RecipeCardHeight = 250.dp
+
+
     val AppBarHeight = 56.dp
+
+    val BlurRadius = 30.dp
+
+    val PagerIndicatorSpacing = 12.dp
 }

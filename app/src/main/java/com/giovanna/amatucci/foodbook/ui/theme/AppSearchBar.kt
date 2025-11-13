@@ -1,54 +1,58 @@
-package com.giovanna.amatucci.foodbook.presentation.components
+package com.giovanna.amatucci.foodbook.ui.theme
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarColors
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchNavTopAppBar(
+fun AppSearchBar(
     query: String,
     isActive: Boolean,
-    placeholder: Int,
+    @StringRes placeholder: Int,
     expandable: Boolean = true,
     onQueryChange: (String) -> Unit,
     onSearch: (String) -> Unit = {},
     onActiveChange: (Boolean) -> Unit = {},
+    shape: Shape = MaterialTheme.shapes.medium,
+    colors: SearchBarColors = SearchBarDefaults.colors(
+        containerColor = MaterialTheme.colorScheme.surface,
+        dividerColor = MaterialTheme.colorScheme.onSurfaceVariant
+    ),
     trailingIcon: @Composable () -> Unit = {},
     leadingIcon: @Composable () -> Unit = {},
     content: @Composable (ColumnScope.() -> Unit) = {}
 ) {
-    val barIsActive = expandable && isActive
-    val onBarActiveChange: (Boolean) -> Unit = if (expandable) onActiveChange else { _ -> }
-    val modifier = if (isActive && expandable) Modifier.fillMaxWidth()
-    else Modifier
+    val modifier = Modifier
         .fillMaxWidth()
-        .padding(all = 12.dp)
+        .then(
+            if (isActive && expandable) Modifier
+            else Modifier.padding(all = Dimens.PaddingMedium)
+        )
 
     SearchBar(
         modifier = modifier,
         query = query,
         onQueryChange = onQueryChange,
         onSearch = onSearch,
-        active = barIsActive,
-        onActiveChange = onBarActiveChange,
+        active = expandable && isActive,
+        onActiveChange = if (expandable) onActiveChange else { _ -> },
         placeholder = { Text(stringResource(placeholder)) },
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
-        shape = MaterialTheme.shapes.medium,
-        colors = SearchBarDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            dividerColor = MaterialTheme.colorScheme.onSurfaceVariant
-        ),
+        shape = shape,
+        colors = colors,
         content = content
     )
 }

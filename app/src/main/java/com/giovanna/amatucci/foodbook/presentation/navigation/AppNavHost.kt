@@ -5,11 +5,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.giovanna.amatucci.foodbook.presentation.authentication.AuthScreen
-import com.giovanna.amatucci.foodbook.presentation.details.DetailsScreen
-import com.giovanna.amatucci.foodbook.presentation.favorites.FavoritesViewModel
-import com.giovanna.amatucci.foodbook.presentation.main.MainScreen
-import com.giovanna.amatucci.foodbook.presentation.search.SearchViewModel
+import com.giovanna.amatucci.foodbook.presentation.authentication.content.AuthScreen
+import com.giovanna.amatucci.foodbook.presentation.details.content.DetailsScreen
+import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.FavoritesViewModel
+import com.giovanna.amatucci.foodbook.presentation.navigation.content.MainScreen
+import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.SearchViewModel
 import org.koin.androidx.compose.koinViewModel
 
 

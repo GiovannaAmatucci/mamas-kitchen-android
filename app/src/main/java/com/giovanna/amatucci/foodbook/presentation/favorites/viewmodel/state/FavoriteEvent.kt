@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.favorites
+package com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state
 
 sealed interface FavoriteEvent {
     data class UpdateSearchQuery(val query: String) : FavoriteEvent

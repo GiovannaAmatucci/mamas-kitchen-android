@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.details
+package com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state
 
 sealed interface DetailsEvent {
     data object ToggleFavorite : DetailsEvent

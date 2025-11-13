@@ -14,12 +14,14 @@ import com.giovanna.amatucci.foodbook.data.remote.network.NetworkHttpClientImpl
 import com.giovanna.amatucci.foodbook.data.repository.AuthRepositoryImpl
 import com.giovanna.amatucci.foodbook.data.repository.FavoriteRepositoryImpl
 import com.giovanna.amatucci.foodbook.data.repository.RecipeRepositoryImpl
+import com.giovanna.amatucci.foodbook.data.repository.SearchRepositoryImpl
 import com.giovanna.amatucci.foodbook.data.repository.TokenRepositoryImpl
 import com.giovanna.amatucci.foodbook.di.util.LogWriter
 import com.giovanna.amatucci.foodbook.di.util.TimberLogWriter
 import com.giovanna.amatucci.foodbook.domain.repository.AuthRepository
 import com.giovanna.amatucci.foodbook.domain.repository.FavoriteRepository
 import com.giovanna.amatucci.foodbook.domain.repository.RecipeRepository
+import com.giovanna.amatucci.foodbook.domain.repository.SearchRepository
 import com.giovanna.amatucci.foodbook.domain.repository.TokenRepository
 import com.giovanna.amatucci.foodbook.domain.usecase.auth.CheckAuthenticationStatusUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.auth.CheckAuthenticationStatusUseCaseImpl
@@ -45,10 +47,10 @@ import com.giovanna.amatucci.foodbook.domain.usecase.search.SaveSearchQueryUseCa
 import com.giovanna.amatucci.foodbook.domain.usecase.search.SaveSearchQueryUseCaseImpl
 import com.giovanna.amatucci.foodbook.domain.usecase.search.SearchRecipesUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.search.SearchRecipesUseCaseImpl
-import com.giovanna.amatucci.foodbook.presentation.authentication.AuthViewModel
-import com.giovanna.amatucci.foodbook.presentation.details.DetailsViewModel
-import com.giovanna.amatucci.foodbook.presentation.favorites.FavoritesViewModel
-import com.giovanna.amatucci.foodbook.presentation.search.SearchViewModel
+import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.AuthViewModel
+import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.DetailsViewModel
+import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.FavoritesViewModel
+import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.SearchViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -103,6 +105,7 @@ val repositoryModule = module {
     single<TokenRepository> { TokenRepositoryImpl(get(), get(), get()) }
     single<RecipeRepository> { RecipeRepositoryImpl(get(), get(), get(), get()) }
     single<FavoriteRepository> { FavoriteRepositoryImpl(get(), get(), get()) }
+    single<SearchRepository> { SearchRepositoryImpl(get(), get()) }
 }
 
 /**

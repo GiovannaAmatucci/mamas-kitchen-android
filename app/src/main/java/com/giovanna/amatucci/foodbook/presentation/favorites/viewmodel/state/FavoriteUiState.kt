@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.favorites
+package com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state
 
 import androidx.paging.PagingData
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
