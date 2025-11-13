@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.Flow
 
 class RecipeRepositoryImpl(
     private val api: FatSecretRecipeApi,
-    private val dao: SearchDao,
     private val mapper: RecipeDataMapper,
     private val logWriter: LogWriter
 ) : RecipeRepository {
