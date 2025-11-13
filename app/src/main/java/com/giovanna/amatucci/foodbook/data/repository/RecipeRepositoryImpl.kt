@@ -3,7 +3,6 @@ package com.giovanna.amatucci.foodbook.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.giovanna.amatucci.foodbook.data.local.db.SearchDao
 import com.giovanna.amatucci.foodbook.data.paging.RecipePagingSource
 import com.giovanna.amatucci.foodbook.data.remote.api.FatSecretRecipeApi
 import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipeDataMapper
@@ -14,7 +13,6 @@ import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 import com.giovanna.amatucci.foodbook.domain.repository.RecipeRepository
 import kotlinx.coroutines.flow.Flow
-
 
 class RecipeRepositoryImpl(
     private val api: FatSecretRecipeApi,
