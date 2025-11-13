@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.favorites
+package com.giovanna.amatucci.foodbook.presentation.favorites.content
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
@@ -9,11 +9,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.presentation.components.EmptyMessage
-import com.giovanna.amatucci.foodbook.presentation.components.PagingStateHandler
 import com.giovanna.amatucci.foodbook.presentation.components.RecipeList
+import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoriteEvent
+import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesUiState
+import com.giovanna.amatucci.foodbook.ui.theme.PagingStateHandler
 
 @Composable
-fun FavoriteScreen(
+fun FavoriteRouteContent(
     uiState: FavoritesUiState,
     onNavigateToRecipe: (recipeId: String) -> Unit, onEvent: (FavoriteEvent) -> Unit
 ) {

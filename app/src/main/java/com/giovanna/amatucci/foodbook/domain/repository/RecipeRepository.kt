@@ -14,9 +14,5 @@ interface RecipeRepository {
 
     suspend fun getRecipeDetails(recipeId: String): ResultWrapper<RecipeDetails>
 
-    suspend fun saveSearchQuery(query: String)
-    suspend fun getSearchQueries(): List<String>
-
-    suspend fun clearSearchHistory()
 }
 

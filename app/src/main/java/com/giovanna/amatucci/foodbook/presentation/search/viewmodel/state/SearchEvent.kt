@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.search
+package com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state
 
 sealed interface SearchEvent {
     data class UpdateSearchQuery(val query: String) : SearchEvent

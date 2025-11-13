@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.details
+package com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state
 
 sealed interface DetailsStatus {
     data object Loading : DetailsStatus
