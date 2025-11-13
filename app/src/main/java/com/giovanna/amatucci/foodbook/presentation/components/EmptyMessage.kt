@@ -9,14 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 
 @Composable
 fun EmptyMessage(message: String, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(Dimens.PaddingMedium),
         contentAlignment = Alignment.Center
     ) {
         Text(

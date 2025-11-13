@@ -134,6 +134,8 @@ dependencies {
 
     // ---------- 🖼️ Image Loading ----------
     implementation(libs.coil.compose)
+    implementation(libs.androidx.palette)
+
 
     // ---------- 🧪 Testing (Local) ----------
     testImplementation(libs.junit)

@@ -3,8 +3,6 @@ package com.giovanna.amatucci.foodbook.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.giovanna.amatucci.foodbook.data.local.db.SearchDao
-import com.giovanna.amatucci.foodbook.data.local.model.SearchEntity
 import com.giovanna.amatucci.foodbook.data.paging.RecipePagingSource
 import com.giovanna.amatucci.foodbook.data.remote.api.FatSecretRecipeApi
 import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipeDataMapper
@@ -16,10 +14,8 @@ import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 import com.giovanna.amatucci.foodbook.domain.repository.RecipeRepository
 import kotlinx.coroutines.flow.Flow
 
-
 class RecipeRepositoryImpl(
     private val api: FatSecretRecipeApi,
-    private val dao: SearchDao,
     private val mapper: RecipeDataMapper,
     private val logWriter: LogWriter
 ) : RecipeRepository {
@@ -75,33 +71,6 @@ class RecipeRepositoryImpl(
                 }
             }
         }
-    }
-    override suspend fun saveSearchQuery(query: String) {
-        if (query.isNotBlank()) {
-            val currentHistory = dao.getSearchHistory()
-            val oldQueries = currentHistory?.queries?.toMutableList() ?: mutableListOf()
-            oldQueries.remove(query)
-            oldQueries.add(0, query)
-            val newQueries = oldQueries.take(10)
-            val newHistory = SearchEntity(id = currentHistory?.id ?: 0, queries = newQueries)
-            dao.insertSearch(newHistory)
-        }
-    }
-
-    override suspend fun getSearchQueries(): List<String> {
-        val currentHistory = dao.getSearchHistory()
-        if (currentHistory?.queries.isNullOrEmpty()) {
-            return emptyList()
-        }
-        return currentHistory.queries
-    }
-
-    override suspend fun clearSearchHistory() {
-        val currentHistory = dao.getSearchHistory()
-        val emptyHistory = SearchEntity(
-            id = currentHistory?.id ?: 0, queries = emptyList()
-        )
-        dao.insertSearch(emptyHistory)
     }
 }
 

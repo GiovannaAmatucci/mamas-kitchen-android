@@ -1,6 +1,6 @@
 [versions]
 # 🧱 Core & Build
-agp = "8.13.0"
+agp = "8.13.1"
 kotlin = "2.2.20"
 ksp = "2.3.0"
 secretsGradlePlugin = "2.0.1"
@@ -12,16 +12,17 @@ activity = "1.11.0"
 appCompat = "1.7.1"
 
 # 🎨 Jetpack Compose
-composeBom = "2025.10.01"
-navigationCompose = "2.9.5"
+composeBom = "2025.11.00"
+navigationCompose = "2.9.6"
 
 # 🌐 Networking
-ktor = "3.3.1"
+ktor = "3.3.2"
 kotlinxSerialization = "1.9.0"
 coroutines = "1.10.2"
 
 # 🖼️ Image Loading
 coil = "2.7.0"
+palette = "1.0.0"
 
 # 🧪 Testing
 junit = "4.13.2"
@@ -96,6 +97,7 @@ ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 
 # ---------- 🖼️ Image Loading ----------
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+androidx-palette = { group = "androidx.palette", name = "palette-ktx", version.ref = "palette" }
 
 # ---------- 🧪 Testing ----------
 junit = { group = "junit", name = "junit", version.ref = "junit" }

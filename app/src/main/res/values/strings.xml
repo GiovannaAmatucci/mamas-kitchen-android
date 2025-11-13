@@ -14,7 +14,7 @@
     <!-- ===================================================================== -->
     <!-- Search Screen                                                         -->
     <!-- ===================================================================== -->
-    <string name="search_screen_title">Search Recipes</string>
+    <string name="search_screen_title">Search</string>
     <string name="search_field_placeholder">Type a dish or ingredient</string>
     <string name="search_button_text">Search</string>
     <string name="search_back_description">Back</string>
