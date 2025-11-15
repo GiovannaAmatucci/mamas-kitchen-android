@@ -71,7 +71,8 @@ class SearchViewModel(
                 if (query.isBlank()) {
                     _uiState.update {
                         it.copy(
-                            recipes = flowOf(PagingData.Companion.empty())
+                            submittedQuery = "",
+                            recipes = flowOf(PagingData.empty())
                         )
                     }
                 } else {

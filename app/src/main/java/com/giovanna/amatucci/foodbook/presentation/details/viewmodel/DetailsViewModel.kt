@@ -34,8 +34,7 @@ class DetailsViewModel(
     val uiState = _uiState.asStateFlow()
 
     init {
-        val navArgs: DetailsScreen = savedStateHandle.toRoute()
-        val recipeId = navArgs.recipeId
+        val recipeId: String = savedStateHandle.get<String>("recipeId") ?: ""
 
         if (recipeId.isNotBlank()) {
             getRecipeDetails(recipeId)
