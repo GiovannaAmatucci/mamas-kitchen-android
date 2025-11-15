@@ -6,7 +6,7 @@ import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.presentation.components.FavoriteLeadingIcon
 import com.giovanna.amatucci.foodbook.presentation.components.FavoriteTrailingIcon
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoriteEvent
-import com.giovanna.amatucci.foodbook.ui.theme.AppSearchBar
+import com.giovanna.amatucci.foodbook.presentation.components.AppSearchBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

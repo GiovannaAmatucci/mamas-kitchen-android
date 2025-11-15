@@ -145,6 +145,7 @@ dependencies {
     testImplementation(libs.paging.test)
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.androidx.test.coreKtx)
+    testImplementation(libs.androidx.paging.common.ktx)
 
     // --- Instrumentation Tests (Android) --- 🧪
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -156,6 +157,7 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.android.leakcanary)
+
 
     // --- Logging (Timber) ---
     implementation(libs.timber)
@@ -174,5 +176,6 @@ dependencies {
     // --- Paging ---
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
+
 
 }

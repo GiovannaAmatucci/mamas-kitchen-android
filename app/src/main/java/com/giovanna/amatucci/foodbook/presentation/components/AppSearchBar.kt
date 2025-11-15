@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.ui.theme
+package com.giovanna.amatucci.foodbook.presentation.components
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.ColumnScope
@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
+import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

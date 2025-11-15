@@ -84,7 +84,7 @@ private fun DetailsList(
 
         item {
             DetailsRow(recipe = recipe)
-            Spacer(modifier = Modifier.height(Dimens.PaddingMedium))
+            Spacer(modifier = Modifier.padding(Dimens.PaddingMedium))
         }
 
         item {
@@ -120,18 +120,22 @@ private fun DetailsList(
 @Composable
 private fun DetailsHeader(recipe: RecipeDetails) {
     Column(modifier = Modifier.padding(Dimens.PaddingMedium)) {
-        Text(
-            text = recipe.name ?: "",
-            style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-        Spacer(modifier = Modifier.height(Dimens.PaddingSmall))
-        Text(
-            text = recipe.description ?: "",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-        Spacer(modifier = Modifier.height(Dimens.PaddingMedium))
+        recipe.name?.let { name ->
+            Text(
+                text = name,
+                style = MaterialTheme.typography.headlineLarge,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(Dimens.PaddingSmall))
+        }
+        recipe.description?.let { description ->
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(Dimens.PaddingMedium))
+        }
     }
 }
 
@@ -191,7 +195,7 @@ private fun DetailsIngredientItem(ingredient: IngredientInfo) {
 @Composable
 private fun DetailsInstructionItem(instruction: DirectionInfo) {
     Row(
-        modifier = Modifier.padding(start = Dimens.PaddingMedium),
+        modifier = Modifier.padding(horizontal = Dimens.PaddingLarge),
     ) {
         Text(
             text = "${instruction.number}.",

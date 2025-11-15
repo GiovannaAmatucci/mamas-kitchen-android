@@ -39,7 +39,7 @@ fun MainScreen(
                 0 -> {
                     SearchTopBar(
                         query = searchUiState.searchQuery,
-                        isActive = searchUiState.isActive,
+                        state = searchUiState,
                         history = history,
                         onEvent = { searchViewModel.onEvent(it) })
                 }

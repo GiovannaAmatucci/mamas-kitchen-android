@@ -56,7 +56,7 @@ fun RecipeCard(recipe: RecipeItem, onClick: () -> Unit, modifier: Modifier = Mod
                     text = recipe.name ?: "",
                     style = MaterialTheme.typography.titleMedium,
                     overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
+                    maxLines = 2,
                     textAlign = TextAlign.Center,
                     modifier = modifier.padding(Dimens.PaddingSmall),
                 )

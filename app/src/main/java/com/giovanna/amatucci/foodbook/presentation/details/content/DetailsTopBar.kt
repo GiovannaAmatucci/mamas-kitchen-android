@@ -27,6 +27,7 @@ fun DetailsTopBar(
     state: DetailsUiState,
     modifier: Modifier = Modifier,
 ) {
+    val isFavorite = state.isFavorite == true
     Row(
         modifier = modifier, verticalAlignment = Alignment.CenterVertically
     ) {
@@ -42,8 +43,8 @@ fun DetailsTopBar(
         IconButton(onClick = { onEvent(DetailsEvent.ToggleFavorite) }) {
             Icon(
                 contentDescription = stringResource(R.string.favorites_description),
-                imageVector = if (state.isFavorite == true) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                tint = if (state.isFavorite == true) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

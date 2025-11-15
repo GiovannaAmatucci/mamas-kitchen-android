@@ -56,7 +56,7 @@ object LogMessages {
 
 
     // --- PAGING SOURCE (RecipePagingSource) ---
-    const val PAGING_LOAD_API_ERROR = "Erro de API no PagingSource. Código: %d, Mensagem: %s"
+    const val PAGING_LOAD_API_ERROR = "Erro de API no PagingSource. Código: %s, Mensagem: %s"
     const val PAGING_LOAD_API_EXCEPTION = "Exceção da API no PagingSource: %s"
     const val PAGING_LOAD_UNKNOWN_ERROR = "Erro inesperado no PagingSource.load: %s"
 
