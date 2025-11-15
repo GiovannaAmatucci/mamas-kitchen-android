@@ -1,7 +1,8 @@
-package com.giovanna.amatucci.foodbook.ui.theme
+package com.giovanna.amatucci.foodbook.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,7 +25,7 @@ import com.giovanna.amatucci.foodbook.R
 @Composable
 fun BlurredImageBackground(
     imageUrl: String?,
-    modifier: Modifier = Modifier, blurRadius: Dp = 20.dp, content: @Composable () -> Unit
+    modifier: Modifier = Modifier, blurRadius: Dp = 20.dp, content: @Composable BoxScope.() -> Unit
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         if (imageUrl != null) {

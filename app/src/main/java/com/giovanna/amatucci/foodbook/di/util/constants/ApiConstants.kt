@@ -30,3 +30,10 @@ object ApiConstants {
         const val BASIC = "basic"
     }
 }
+
+object RepositoryConstants {
+    const val FATSECRET_STARTING_PAGE_INDEX = 1
+    const val OLD_QUERY_ADD_INDEX = 0
+    const val NEW_QUERY_TAKE = 10
+
+}

@@ -56,7 +56,7 @@ object LogMessages {
 
 
     // --- PAGING SOURCE (RecipePagingSource) ---
-    const val PAGING_LOAD_API_ERROR = "Erro de API no PagingSource. Código: %d, Mensagem: %s"
+    const val PAGING_LOAD_API_ERROR = "Erro de API no PagingSource. Código: %s, Mensagem: %s"
     const val PAGING_LOAD_API_EXCEPTION = "Exceção da API no PagingSource: %s"
     const val PAGING_LOAD_UNKNOWN_ERROR = "Erro inesperado no PagingSource.load: %s"
 
@@ -69,7 +69,6 @@ object LogMessages {
     const val REPO_DETAILS_API_EXCEPTION = "Exceção da API ao buscar detalhes: %s"
     const val REPO_DETAILS_MAPPER_FAILURE =
         "Sucesso da API, mas falha ao mapear DTO -> Domain. Causa: %s"
-
 
 
     const val REPO_FAVORITE_ADD_START = "Adicionando favorito ao repositório. ID: %s"

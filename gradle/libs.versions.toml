@@ -108,6 +108,7 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 test-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 test-turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 paging-test = { module = "androidx.paging:paging-common" }
+androidx-paging-common-ktx = { module = "androidx.paging:paging-common-ktx", version.ref = "paging" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 koin-test = { module = "io.insert-koin:koin-test" }
 androidx-test-coreKtx = { module = "androidx.test:core-ktx", version.ref = "testCoreKtx" }
@@ -120,7 +121,7 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
-room-paging = {module = "androidx.room:room-paging", version.ref = "room"}
+room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
 
 
 # Security
@@ -131,6 +132,7 @@ security-crypto = { module = "androidx.security:security-crypto", version.ref = 
 # Paging
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

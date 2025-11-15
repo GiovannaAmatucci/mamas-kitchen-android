@@ -42,9 +42,9 @@ jobs:
           FATSECRET_CLIENT_SECRET: ${{ secrets.FATSECRET_CLIENT_SECRET }}
           DB_PASSPHRASE: ${{ secrets.DB_PASSPHRASE }}
         run: |
-            echo "FATSECRET_CLIENT_ID=$FATSECRET_CLIENT_ID" > key.properties
-            echo "FATSECRET_CLIENT_SECRET=$FATSECRET_CLIENT_SECRET" >> key.properties
-            echo "DB_PASSPHRASE=$DB_PASSPHRASE" >> key.properties
+          echo "FATSECRET_CLIENT_ID=$FATSECRET_CLIENT_ID" > key.properties
+          echo "FATSECRET_CLIENT_SECRET=$FATSECRET_CLIENT_SECRET" >> key.properties
+          echo "DB_PASSPHRASE=$DB_PASSPHRASE" >> key.properties
 
       - name: Building with Gradle
         run: ./gradlew build

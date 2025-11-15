@@ -14,6 +14,7 @@ class FoodBookApplication : Application() {
         setupKoin()
         setupTimber()
     }
+
     private fun setupTimber() {
         if (BuildConfig.DEBUG_MODE) {
             Timber.plant(Timber.DebugTree())

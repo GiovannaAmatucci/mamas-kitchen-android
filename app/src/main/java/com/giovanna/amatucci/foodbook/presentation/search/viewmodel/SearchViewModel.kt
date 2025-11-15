@@ -31,6 +31,7 @@ class SearchViewModel(
 
     private val _searchHistory = MutableStateFlow<List<String>>(emptyList())
     val searchHistory: StateFlow<List<String>> = _searchHistory.asStateFlow()
+
     init {
         getSearchHistory()
     }
@@ -71,7 +72,8 @@ class SearchViewModel(
                 if (query.isBlank()) {
                     _uiState.update {
                         it.copy(
-                            recipes = flowOf(PagingData.Companion.empty())
+                            submittedQuery = "",
+                            recipes = flowOf(PagingData.empty())
                         )
                     }
                 } else {

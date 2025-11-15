@@ -17,13 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.AuthViewModel
 import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthEvent
 import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthUiState
 import com.giovanna.amatucci.foodbook.presentation.components.LoadingIndicator
+import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -62,14 +62,14 @@ private fun AuthenticationFailedContent(
     errorText: String, onRetry: () -> Unit, modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier.padding(Dimens.PaddingMedium),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Text(
             text = errorText, color = MaterialTheme.colorScheme.error, textAlign = TextAlign.Center
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(Dimens.PaddingMedium))
         Button(onClick = onRetry) {
             Text(stringResource(R.string.common_button_retry))
         }

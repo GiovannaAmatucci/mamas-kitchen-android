@@ -1,4 +1,5 @@
 package com.giovanna.amatucci.foodbook.presentation.navigation
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
@@ -48,15 +49,15 @@ fun AppNavHost(
 
             MainScreen(
                 searchViewModel = searchViewModel, favoriteViewModel = favoriteViewModel,
-                    onNavigateToRecipe = { recipeId ->
-                        navController.navigate(DetailsScreen(recipeId = recipeId))
-                    }
-                )
-            }
-            composable<DetailsScreen> {
-                DetailsScreen(
-                    onNavigateBack = { navController.popBackStack() },
-                )
-            }
+                onNavigateToRecipe = { recipeId ->
+                    navController.navigate(DetailsScreen(recipeId = recipeId))
+                }
+            )
+        }
+        composable<DetailsScreen> {
+            DetailsScreen(
+                onNavigateBack = { navController.popBackStack() },
+            )
         }
     }
+}

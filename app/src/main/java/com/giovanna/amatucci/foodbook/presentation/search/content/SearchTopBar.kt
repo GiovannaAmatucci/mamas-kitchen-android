@@ -18,27 +18,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.giovanna.amatucci.foodbook.R
+import com.giovanna.amatucci.foodbook.presentation.components.AppSearchBar
 import com.giovanna.amatucci.foodbook.presentation.components.SearchLeadingIcon
 import com.giovanna.amatucci.foodbook.presentation.components.SearchTrailingIcon
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchEvent
-import com.giovanna.amatucci.foodbook.ui.theme.AppSearchBar
+import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchUiState
 import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchTopBar(
-    query: String, isActive: Boolean, onEvent: (SearchEvent) -> Unit, history: List<String>
+    query: String, state: SearchUiState, onEvent: (SearchEvent) -> Unit, history: List<String>
 ) {
     AppSearchBar(
-        query = query,
-        isActive = isActive,
+        query = query, isActive = state.isActive,
         placeholder = R.string.search_screen_title,
         onQueryChange = { onEvent(SearchEvent.UpdateSearchQuery(it)) },
         onSearch = { onEvent(SearchEvent.SubmitSearch(it)) },
         onActiveChange = { onEvent(SearchEvent.ActiveChanged(it)) },
         leadingIcon = {
             SearchLeadingIcon(
-                isActive = isActive, onActiveChange = { onEvent(SearchEvent.ActiveChanged(it)) })
+                isActive = state.isActive,
+                onActiveChange = { onEvent(SearchEvent.ActiveChanged(it)) })
         },
         trailingIcon = {
             SearchTrailingIcon(

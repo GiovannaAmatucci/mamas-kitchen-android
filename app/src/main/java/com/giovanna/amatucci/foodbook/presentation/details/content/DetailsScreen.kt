@@ -11,8 +11,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.giovanna.amatucci.foodbook.presentation.components.BlurredImageBackground
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.DetailsViewModel
-import com.giovanna.amatucci.foodbook.ui.theme.BlurredImageBackground
 import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 import org.koin.androidx.compose.koinViewModel
 

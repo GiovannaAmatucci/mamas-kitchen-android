@@ -11,6 +11,8 @@ import com.giovanna.amatucci.foodbook.data.remote.api.FatSecretRecipeApiImpl
 import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipeDataMapper
 import com.giovanna.amatucci.foodbook.data.remote.network.NetworkHttpClient
 import com.giovanna.amatucci.foodbook.data.remote.network.NetworkHttpClientImpl
+import com.giovanna.amatucci.foodbook.data.remote.network.TokenHttpClient
+import com.giovanna.amatucci.foodbook.data.remote.network.TokenHttpClientImpl
 import com.giovanna.amatucci.foodbook.data.repository.AuthRepositoryImpl
 import com.giovanna.amatucci.foodbook.data.repository.FavoriteRepositoryImpl
 import com.giovanna.amatucci.foodbook.data.repository.RecipeRepositoryImpl
@@ -75,7 +77,10 @@ val networkModule = module {
             isDebug = BuildConfig.DEBUG_MODE, token = get(), auth = get(), logWriter = get()
         )
     }
-    single<AuthApi> { AuthApiImpl(logWriter = get(), tokenUrl = BuildConfig.TOKEN_URL) }
+    single<TokenHttpClient> {
+        TokenHttpClientImpl(baseUrl = BuildConfig.TOKEN_URL)
+    }
+    single<AuthApi> { AuthApiImpl(logWriter = get(), get()) }
     single<FatSecretRecipeApi> { FatSecretRecipeApiImpl(client = get(), logWriter = get()) }
     single { RecipeDataMapper() }
 }
@@ -118,11 +123,11 @@ val domainModule = module {
     factory<SaveSearchQueryUseCase> { SaveSearchQueryUseCaseImpl(repository = get()) }
     factory<GetSearchQueriesUseCase> { GetSearchQueriesUseCaseImpl(repository = get()) }
     factory<SearchRecipesUseCase> { SearchRecipesUseCaseImpl(repository = get()) }
-    factory<ClearSearchHistoryUseCase>{ ClearSearchHistoryUseCaseImpl(repository = get()) }
+    factory<ClearSearchHistoryUseCase> { ClearSearchHistoryUseCaseImpl(repository = get()) }
     factory<AddFavoriteUseCase> { AddFavoriteUseCaseImpl(repository = get()) }
     factory<GetFavoritesUseCase> { GetFavoritesUseCaseImpl(repository = get()) }
     factory<RemoveFavoriteUseCase> { RemoveFavoriteUseCaseImpl(repository = get()) }
-    factory<DeleteAllFavoritesUseCase>{ DeleteAllFavoritesUseCaseImpl(repository = get()) }
+    factory<DeleteAllFavoritesUseCase> { DeleteAllFavoritesUseCaseImpl(repository = get()) }
     factory<IsFavoriteUseCase> { IsFavoriteUseCaseImpl(repository = get()) }
 }
 

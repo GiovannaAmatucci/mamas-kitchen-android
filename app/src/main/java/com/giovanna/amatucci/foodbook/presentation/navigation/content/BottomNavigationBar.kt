@@ -27,6 +27,7 @@ internal sealed class MainScreenNavTab(
         titleResId = R.string.favorites_screen_title, icon = Icons.Default.Favorite
     )
 }
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BottomNavigationBar(

@@ -41,8 +41,8 @@ class RecipeDataMapper {
         description = recipeDto?.recipeDescription ?: "",
         imageUrls = recipeDto?.recipeImages?.recipeImage,
         preparationTime = recipeDto?.preparationTimeMin ?: "",
-        cookingTime = recipeDto?.cookingTimeMin?: "",
-        servings = recipeDto?.numberOfServings?: "",
+        cookingTime = recipeDto?.cookingTimeMin ?: "",
+        servings = recipeDto?.numberOfServings ?: "",
         ingredients = recipeDto?.ingredients?.ingredient!!.map { ingredientDtoToDomain(it) },
         directions = recipeDto.directions?.direction!!.map { directionDtoToDomain(it) },
         categories = recipeDto.recipeCategories?.recipeCategory?.map { it.recipeCategoryName })
