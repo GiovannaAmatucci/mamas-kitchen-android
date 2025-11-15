@@ -7,9 +7,9 @@ import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipeDataMapper
 import com.giovanna.amatucci.foodbook.di.util.LogWriter
 import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
 import com.giovanna.amatucci.foodbook.di.util.constants.LogMessages
+import com.giovanna.amatucci.foodbook.di.util.constants.RepositoryConstants
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 
-private const val FATSECRET_STARTING_PAGE_INDEX = 1
 
 class RecipePagingSource(
     private val api: FatSecretRecipeApi,
@@ -21,7 +21,7 @@ class RecipePagingSource(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RecipeItem> {
-        val position = params.key ?: FATSECRET_STARTING_PAGE_INDEX
+        val position = params.key ?: RepositoryConstants.FATSECRET_STARTING_PAGE_INDEX
         val maxResults = params.loadSize
 
         return try {
@@ -35,7 +35,7 @@ class RecipePagingSource(
 
                         LoadResult.Page(
                             data = domainData,
-                            prevKey = if (position == FATSECRET_STARTING_PAGE_INDEX) null else position - 1,
+                            prevKey = if (position == RepositoryConstants.FATSECRET_STARTING_PAGE_INDEX) null else position - 1,
                             nextKey = nextKey
                         )
                     }

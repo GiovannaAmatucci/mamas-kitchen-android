@@ -36,10 +36,12 @@ class TokenRepositoryImpl(
                 )
                 dao.saveToken(entity)
                 logWriter.d(
-                    TAG, LogMessages.TOKEN_REPO_SAVE_SUCCESS.format(Date(expiresAt).toString())
+                    TAG, LogMessages.TOKEN_REPO_SAVE_SUCCESS.format(
+                        Date(expiresAt)
+                    )
                 )
             } catch (e: Exception) {
-                logWriter.e(TAG, LogMessages.TOKEN_REPO_SAVE_FAILURE.format(e.message))
+                logWriter.e(TAG, LogMessages.TOKEN_REPO_SAVE_FAILURE, e)
             }
         }
     }
@@ -78,7 +80,7 @@ class TokenRepositoryImpl(
                 dao.deleteToken()
                 logWriter.w(TAG, LogMessages.TOKEN_REPO_CLEAR)
             } catch (e: Exception) {
-                logWriter.e(TAG, LogMessages.TOKEN_REPO_CLEAR_FAILURE.format(e.message))
+                logWriter.e(TAG, LogMessages.TOKEN_REPO_DECRYPT_FAILURE, e)
             }
         }
     }

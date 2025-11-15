@@ -20,7 +20,8 @@ interface FatSecretRecipeApi {
 }
 
 class FatSecretRecipeApiImpl(
-    private val client: NetworkHttpClient, logWriter: LogWriter
+    private val client: NetworkHttpClient,
+    logWriter: LogWriter
 ) : BaseApi(logWriter), FatSecretRecipeApi {
     override val TAG: String = "FatSecretRecipeApi"
     override suspend fun searchRecipes(
