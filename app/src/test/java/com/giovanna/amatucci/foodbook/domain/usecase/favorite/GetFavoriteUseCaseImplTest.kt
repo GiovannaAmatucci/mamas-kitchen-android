@@ -23,6 +23,7 @@ class GetFavoriteUseCaseImplTest {
         MockKAnnotations.init(this)
         getFavoritesUseCase = GetFavoritesUseCaseImpl(repository)
     }
+
     @Test
     fun `GetFavoritesUseCase SHOULD call repository getFavorites`() = runTest {
         val query = "test"

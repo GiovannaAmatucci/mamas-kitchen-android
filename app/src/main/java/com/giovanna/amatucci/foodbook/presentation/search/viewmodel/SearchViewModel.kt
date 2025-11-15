@@ -31,6 +31,7 @@ class SearchViewModel(
 
     private val _searchHistory = MutableStateFlow<List<String>>(emptyList())
     val searchHistory: StateFlow<List<String>> = _searchHistory.asStateFlow()
+
     init {
         getSearchHistory()
     }

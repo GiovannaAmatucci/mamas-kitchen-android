@@ -11,5 +11,5 @@ data class FavoriteEntity(
     @ColumnInfo(name = "name") val name: String?,
     @ColumnInfo(name = "description") val description: String?,
     @ColumnInfo("image_url") val imageUrl: String?,
-    @ColumnInfo("date_favorites")val dateFavorites: Long = System.currentTimeMillis()
+    @ColumnInfo("date_favorites") val dateFavorites: Long = System.currentTimeMillis()
 )

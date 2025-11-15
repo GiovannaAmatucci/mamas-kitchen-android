@@ -41,6 +41,7 @@ class AuthViewModel(
             executeTokenFetch()
         }
     }
+
     private fun fetchToken() = viewModelScope.launch {
         if (_uiState.value is AuthUiState.Loading) return@launch
 

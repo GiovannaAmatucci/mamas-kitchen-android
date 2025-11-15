@@ -26,6 +26,7 @@ class AuthRepositoryImplTest {
 
     @get:Rule
     val mockkRule = MockKRule(this)
+
     @MockK
     private lateinit var authApi: AuthApi
 
@@ -50,76 +51,80 @@ class AuthRepositoryImplTest {
     }
 
     @Test
-    fun `fetchAndSaveToken - GIVEN API and DB work - THEN save token and return Success`() = runTest {
-        // ARRANGE
-        coEvery { authApi.getAccessToken() } returns apiSuccessResult
-        coEvery { tokenRepository.clearToken() } returns Unit
-        coEvery { tokenRepository.saveToken(mockTokenResponse) } returns Unit
+    fun `fetchAndSaveToken - GIVEN API and DB work - THEN save token and return Success`() =
+        runTest {
+            // ARRANGE
+            coEvery { authApi.getAccessToken() } returns apiSuccessResult
+            coEvery { tokenRepository.clearToken() } returns Unit
+            coEvery { tokenRepository.saveToken(mockTokenResponse) } returns Unit
 
-        // ACT
-        val result = authRepository.fetchAndSaveToken()
+            // ACT
+            val result = authRepository.fetchAndSaveToken()
 
-        // ASSERT
-        assertTrue("O resultado deveria ser Success", result is ResultWrapper.Success)
-        assertEquals(mockTokenResponse, (result as ResultWrapper.Success).data)
-        coVerifyOrder {
-            authApi.getAccessToken()
-            tokenRepository.clearToken()
-            tokenRepository.saveToken(mockTokenResponse)
+            // ASSERT
+            assertTrue("O resultado deveria ser Success", result is ResultWrapper.Success)
+            assertEquals(mockTokenResponse, (result as ResultWrapper.Success).data)
+            coVerifyOrder {
+                authApi.getAccessToken()
+                tokenRepository.clearToken()
+                tokenRepository.saveToken(mockTokenResponse)
+            }
         }
-    }
 
     @Test
-    fun `fetchAndSaveToken - GIVEN API returns Error - THEN returns Error and does NOT call the DB`() = runTest {
-        // ARRANGE
-        val apiErrorResult = ResultWrapper.Error("Unauthorized", 401)
-        coEvery { authApi.getAccessToken() } returns apiErrorResult
+    fun `fetchAndSaveToken - GIVEN API returns Error - THEN returns Error and does NOT call the DB`() =
+        runTest {
+            // ARRANGE
+            val apiErrorResult = ResultWrapper.Error("Unauthorized", 401)
+            coEvery { authApi.getAccessToken() } returns apiErrorResult
 
-        // ACT
-        val result = authRepository.fetchAndSaveToken()
+            // ACT
+            val result = authRepository.fetchAndSaveToken()
 
-        // ASSERT
-        assertTrue("O resultado deveria ser Error", result is ResultWrapper.Error)
-        assertEquals(401, (result as ResultWrapper.Error).code)
-        coVerify(exactly = 0) { tokenRepository.clearToken() }
-        coVerify(exactly = 0) { tokenRepository.saveToken(any()) }
-    }
-
-    @Test
-    fun `fetchAndSaveToken - GIVEN API returns Exception - THEN returns Exception and does NOT call the DB`() = runTest {
-        // ARRANGE
-        val apiException = IOException("No Network")
-        val apiExceptionResult = ResultWrapper.Exception(apiException)
-        coEvery { authApi.getAccessToken() } returns apiExceptionResult
-
-        // ACT
-        val result = authRepository.fetchAndSaveToken()
-
-        // ASSERT
-        assertTrue("O resultado deveria ser Exception", result is ResultWrapper.Exception)
-        assertEquals(apiException, (result as ResultWrapper.Exception).exception)
-
-        coVerify(exactly = 0) { tokenRepository.clearToken() }
-        coVerify(exactly = 0) { tokenRepository.saveToken(any()) }
-    }
-
-    @Test
-    fun `fetchAndSaveToken - API success given but database fails - then returns exception`() = runTest {
-        // ARRANGE
-        val dbException = SQLiteException("Database is read-only")
-        coEvery { authApi.getAccessToken() } returns apiSuccessResult
-        coEvery { tokenRepository.clearToken() } throws dbException
-
-        // ACT
-        val result = authRepository.fetchAndSaveToken()
-
-        // ASSERT
-        assertTrue("O resultado deveria ser Exception", result is ResultWrapper.Exception)
-        assertEquals(dbException, (result as ResultWrapper.Exception).exception)
-        coVerifyOrder {
-            authApi.getAccessToken()
-            tokenRepository.clearToken()
+            // ASSERT
+            assertTrue("O resultado deveria ser Error", result is ResultWrapper.Error)
+            assertEquals(401, (result as ResultWrapper.Error).code)
+            coVerify(exactly = 0) { tokenRepository.clearToken() }
+            coVerify(exactly = 0) { tokenRepository.saveToken(any()) }
         }
-        coVerify(exactly = 0) { tokenRepository.saveToken(any()) }
-    }
+
+    @Test
+    fun `fetchAndSaveToken - GIVEN API returns Exception - THEN returns Exception and does NOT call the DB`() =
+        runTest {
+            // ARRANGE
+            val apiException = IOException("No Network")
+            val apiExceptionResult = ResultWrapper.Exception(apiException)
+            coEvery { authApi.getAccessToken() } returns apiExceptionResult
+
+            // ACT
+            val result = authRepository.fetchAndSaveToken()
+
+            // ASSERT
+            assertTrue("O resultado deveria ser Exception", result is ResultWrapper.Exception)
+            assertEquals(apiException, (result as ResultWrapper.Exception).exception)
+
+            coVerify(exactly = 0) { tokenRepository.clearToken() }
+            coVerify(exactly = 0) { tokenRepository.saveToken(any()) }
+        }
+
+    @Test
+    fun `fetchAndSaveToken - API success given but database fails - then returns exception`() =
+        runTest {
+            // ARRANGE
+            val dbException = SQLiteException("Database is read-only")
+            coEvery { authApi.getAccessToken() } returns apiSuccessResult
+            coEvery { tokenRepository.clearToken() } throws dbException
+
+            // ACT
+            val result = authRepository.fetchAndSaveToken()
+
+            // ASSERT
+            assertTrue("O resultado deveria ser Exception", result is ResultWrapper.Exception)
+            assertEquals(dbException, (result as ResultWrapper.Exception).exception)
+            coVerifyOrder {
+                authApi.getAccessToken()
+                tokenRepository.clearToken()
+            }
+            coVerify(exactly = 0) { tokenRepository.saveToken(any()) }
+        }
 }

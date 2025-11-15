@@ -29,6 +29,7 @@ import org.junit.Test
 class FavoritesViewModelTest {
     @get:Rule
     val mainCoroutineRule = MainCoroutineRule()
+
     @MockK
     lateinit var getFavoritesUseCase: GetFavoritesUseCase
 

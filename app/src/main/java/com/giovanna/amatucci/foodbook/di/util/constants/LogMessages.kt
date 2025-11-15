@@ -71,7 +71,6 @@ object LogMessages {
         "Sucesso da API, mas falha ao mapear DTO -> Domain. Causa: %s"
 
 
-
     const val REPO_FAVORITE_ADD_START = "Adicionando favorito ao repositório. ID: %s"
     const val REPO_FAVORITE_REMOVE_START = "Removendo favorito do repositório. ID: %s"
 

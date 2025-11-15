@@ -65,39 +65,53 @@ class AuthApiImplTest {
     }
 
     @Test
-    fun `getAccessToken - GIVEN request successfully - THEN returns ResultWrapper Success`() = runTest {
-        // ARRANGE
-        val successJson = """
+    fun `getAccessToken - GIVEN request successfully - THEN returns ResultWrapper Success`() =
+        runTest {
+            // ARRANGE
+            val successJson = """
             {
                 "access_token": "fake-jwt-token-123",
                 "expires_in": 3600,
                 "token_type": "Bearer"
             }
         """.trimIndent()
-        val expectedResponse = json.decodeFromString<TokenResponse>(successJson)
+            val expectedResponse = json.decodeFromString<TokenResponse>(successJson)
 
-        val mockEngine = MockEngine {
-            respond(
-                content = ByteReadChannel(successJson),
-                status = HttpStatusCode.OK,
-                headers = headersOf(HttpHeaders.ContentType, "application/json")
+            val mockEngine = MockEngine {
+                respond(
+                    content = ByteReadChannel(successJson),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                )
+            }
+            val mockKtorClient = createMockKtorClient(mockEngine)
+            coEvery { mockHttpClientProvider() } returns mockKtorClient
+
+            // ACT
+            val result = authApi.getAccessToken()
+
+            // ASSERT
+            assertTrue(
+                "O resultado deveria ser ResultWrapper.Success",
+                result is ResultWrapper.Success
             )
+            val successResult = result as ResultWrapper.Success
+            assertEquals(expectedResponse, successResult.data)
+
+            verify(exactly = 1) {
+                mockLogWriter.d(
+                    eq("AuthApi"),
+                    eq(LogMessages.AUTH_TOKEN_REQUEST)
+                )
+            }
+            verify(exactly = 1) {
+                mockLogWriter.d(
+                    eq("AuthApi"),
+                    eq(LogMessages.AUTH_TOKEN_SUCCESS)
+                )
+            }
+            verify(exactly = 0) { mockLogWriter.e(any(), any(), any()) }
         }
-        val mockKtorClient = createMockKtorClient(mockEngine)
-        coEvery { mockHttpClientProvider() } returns mockKtorClient
-
-        // ACT
-        val result = authApi.getAccessToken()
-
-        // ASSERT
-        assertTrue("O resultado deveria ser ResultWrapper.Success", result is ResultWrapper.Success)
-        val successResult = result as ResultWrapper.Success
-        assertEquals(expectedResponse, successResult.data)
-
-        verify(exactly = 1) { mockLogWriter.d(eq("AuthApi"), eq(LogMessages.AUTH_TOKEN_REQUEST)) }
-        verify(exactly = 1) { mockLogWriter.d(eq("AuthApi"), eq(LogMessages.AUTH_TOKEN_SUCCESS)) }
-        verify(exactly = 0) { mockLogWriter.e(any(), any(), any()) }
-    }
 
     @Test
     fun `getAccessToken - GIVEN server error (401) - Then returns ResultWrapper Error`() = runTest {
@@ -120,22 +134,31 @@ class AuthApiImplTest {
     }
 
     @Test
-    fun `getAccessToken - GIVEN generic exception (IOException) - THEN returns ResultWrapper Exception`() = runTest {
-        // ARRANGE
-        val networkException = IOException("No internet")
+    fun `getAccessToken - GIVEN generic exception (IOException) - THEN returns ResultWrapper Exception`() =
+        runTest {
+            // ARRANGE
+            val networkException = IOException("No internet")
 
-        coEvery { mockHttpClientProvider() } throws networkException
+            coEvery { mockHttpClientProvider() } throws networkException
 
-        // ACT
-        val result = authApi.getAccessToken()
+            // ACT
+            val result = authApi.getAccessToken()
 
-        // ASSERT
-        assertTrue("O resultado deveria ser ResultWrapper.Exception", result is ResultWrapper.Exception)
-        val exceptionResult = result as ResultWrapper.Exception
+            // ASSERT
+            assertTrue(
+                "O resultado deveria ser ResultWrapper.Exception",
+                result is ResultWrapper.Exception
+            )
+            val exceptionResult = result as ResultWrapper.Exception
 
-        assertEquals(networkException.message, exceptionResult.exception.message)
+            assertEquals(networkException.message, exceptionResult.exception.message)
 
-        verify(exactly = 1) { mockLogWriter.d(eq("AuthApi"), eq(LogMessages.AUTH_TOKEN_REQUEST)) }
-        verify(exactly = 1) { mockLogWriter.e(eq("AuthApi"), any(), eq(networkException)) }
-    }
+            verify(exactly = 1) {
+                mockLogWriter.d(
+                    eq("AuthApi"),
+                    eq(LogMessages.AUTH_TOKEN_REQUEST)
+                )
+            }
+            verify(exactly = 1) { mockLogWriter.e(eq("AuthApi"), any(), eq(networkException)) }
+        }
 }

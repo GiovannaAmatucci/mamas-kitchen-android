@@ -29,6 +29,7 @@ class AuthApiImpl(private val logWriter: LogWriter, private val client: TokenHtt
     companion object {
         private const val TAG = "AuthApi"
     }
+
     override suspend fun getAccessToken(
     ): ResultWrapper<TokenResponse> {
         logWriter.d(TAG, LogMessages.AUTH_TOKEN_REQUEST)

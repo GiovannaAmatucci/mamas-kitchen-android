@@ -123,11 +123,11 @@ val domainModule = module {
     factory<SaveSearchQueryUseCase> { SaveSearchQueryUseCaseImpl(repository = get()) }
     factory<GetSearchQueriesUseCase> { GetSearchQueriesUseCaseImpl(repository = get()) }
     factory<SearchRecipesUseCase> { SearchRecipesUseCaseImpl(repository = get()) }
-    factory<ClearSearchHistoryUseCase>{ ClearSearchHistoryUseCaseImpl(repository = get()) }
+    factory<ClearSearchHistoryUseCase> { ClearSearchHistoryUseCaseImpl(repository = get()) }
     factory<AddFavoriteUseCase> { AddFavoriteUseCaseImpl(repository = get()) }
     factory<GetFavoritesUseCase> { GetFavoritesUseCaseImpl(repository = get()) }
     factory<RemoveFavoriteUseCase> { RemoveFavoriteUseCaseImpl(repository = get()) }
-    factory<DeleteAllFavoritesUseCase>{ DeleteAllFavoritesUseCaseImpl(repository = get()) }
+    factory<DeleteAllFavoritesUseCase> { DeleteAllFavoritesUseCaseImpl(repository = get()) }
     factory<IsFavoriteUseCase> { IsFavoriteUseCaseImpl(repository = get()) }
 }
 

@@ -174,7 +174,6 @@ private fun DetailsRow(recipe: RecipeDetails) {
 }
 
 
-
 @Composable
 private fun DetailsIngredientItem(ingredient: IngredientInfo) {
     Box(

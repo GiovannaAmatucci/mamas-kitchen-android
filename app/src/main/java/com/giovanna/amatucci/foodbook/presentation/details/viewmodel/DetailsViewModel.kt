@@ -3,7 +3,6 @@ package com.giovanna.amatucci.foodbook.presentation.details.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
 import com.giovanna.amatucci.foodbook.di.util.constants.UiText
@@ -14,7 +13,6 @@ import com.giovanna.amatucci.foodbook.domain.usecase.favorite.RemoveFavoriteUseC
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsEvent
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsStatus
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsUiState
-import com.giovanna.amatucci.foodbook.presentation.navigation.DetailsScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -54,11 +52,12 @@ class DetailsViewModel(
             DetailsEvent.ToggleFavorite -> toggleFavorite()
         }
     }
+
     private fun getRecipeDetails(recipeId: String) {
         viewModelScope.launch {
             _uiState.update { it.copy(status = DetailsStatus.Loading) }
             getRecipeDetailsUseCase(recipeId).let { result ->
-                when(result) {
+                when (result) {
                     is ResultWrapper.Success -> {
                         _uiState.update {
                             it.copy(status = DetailsStatus.Success, recipe = result.data)
@@ -77,6 +76,7 @@ class DetailsViewModel(
             }
         }
     }
+
     private fun observeFavoriteStatus(recipeId: String) {
         isFavoriteUseCase(recipeId).onEach { isFavorite ->
             _uiState.update { it.copy(isFavorite = isFavorite) }

@@ -71,6 +71,7 @@ fun MainScreen(
                         onNavigateToRecipe = onNavigateToRecipe, state = searchUiState
                     )
                 }
+
                 1 -> {
                     FavoriteRouteContent(
                         onNavigateToRecipe = onNavigateToRecipe,

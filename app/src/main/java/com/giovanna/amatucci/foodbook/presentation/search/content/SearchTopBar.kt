@@ -18,11 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.giovanna.amatucci.foodbook.R
+import com.giovanna.amatucci.foodbook.presentation.components.AppSearchBar
 import com.giovanna.amatucci.foodbook.presentation.components.SearchLeadingIcon
 import com.giovanna.amatucci.foodbook.presentation.components.SearchTrailingIcon
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchEvent
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchUiState
-import com.giovanna.amatucci.foodbook.presentation.components.AppSearchBar
 import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 
 @OptIn(ExperimentalMaterial3Api::class)
