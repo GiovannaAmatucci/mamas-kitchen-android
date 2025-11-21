@@ -23,7 +23,7 @@ import com.giovanna.amatucci.foodbook.R
  * @param content O conteúdo que será exibido sobre o background desfocado.
  */
 @Composable
-fun BlurredImageBackground(
+fun BlurredImageComposable(
     imageUrl: String?,
     modifier: Modifier = Modifier, blurRadius: Dp = 20.dp, content: @Composable BoxScope.() -> Unit
 ) {

@@ -1,6 +1,6 @@
-package com.giovanna.amatucci.foodbook.domain.usecase.favorite
+package com.giovanna.amatucci.foodbook.domain.usecase.favorites
 
-import com.giovanna.amatucci.foodbook.domain.repository.FavoriteRepository
+import com.giovanna.amatucci.foodbook.domain.repository.FavoritesRepository
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -14,7 +14,7 @@ import org.junit.Test
 class DeleteAllFavoritesUseCaseImplTest {
 
     @MockK
-    lateinit var repository: FavoriteRepository
+    lateinit var repository: FavoritesRepository
     private lateinit var deleteAllFavoritesUseCase: DeleteAllFavoritesUseCase
 
     @Before

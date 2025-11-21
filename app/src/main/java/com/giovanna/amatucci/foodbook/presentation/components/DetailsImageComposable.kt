@@ -9,38 +9,49 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import coil.compose.AsyncImage
 import com.giovanna.amatucci.foodbook.R
-import com.giovanna.amatucci.foodbook.di.util.constants.UiConstants
 import com.giovanna.amatucci.foodbook.ui.theme.Dimens
+import com.giovanna.amatucci.foodbook.util.constants.UiConstants
 
 @Composable
-fun RecipeDetailsImage(
+fun DetailsImageComposable(
     images: List<String>, onImageDisplayed: (String?) -> Unit
 ) {
-    val fadeOutBrush = Brush.verticalGradient(
-        UiConstants.GRADIENT_FADE_START_PERCENT to Color.Black,
-        UiConstants.GRADIENT_COLOR_TRANSPARENT to Color.Transparent
-    )
-    val fadeOutModifier =
+    val fadeOutBrush = remember {
+        Brush.verticalGradient(
+            UiConstants.RECIPE_DETAILS_IMAGE_GRADIENT_FADE_START_PERCENT to Color.Black,
+            UiConstants.RECIPE_DETAILS_IMAGE_GRADIENT_COLOR_TRANSPARENT to Color.Transparent
+        )
+    }
+
+    val fadeOutModifier = remember(fadeOutBrush) {
         Modifier
-            .graphicsLayer(alpha = UiConstants.GRAPHICS_LAYER_ALPHA_HACK)
+            .graphicsLayer(
+                alpha = UiConstants.RECIPE_DETAILS_IMAGE_GRAPHICS_LAYER_ALPHA_HACK,
+                compositingStrategy = CompositingStrategy.Offscreen
+            )
             .drawWithContent {
                 drawContent()
                 drawRect(
-                    brush = fadeOutBrush, blendMode = BlendMode.DstIn
+                    brush = fadeOutBrush,
+                    blendMode = BlendMode.DstIn
                 )
             }
+    }
+
     if (images.isNotEmpty()) {
         val pagerState = rememberPagerState(pageCount = { images.size })
         LaunchedEffect(pagerState.currentPage) {
@@ -61,9 +72,9 @@ fun RecipeDetailsImage(
                 )
             }
 
-            if (pagerState.pageCount > 1) {
+            if (pagerState.pageCount > UiConstants.RECIPE_DETAILS_PAGE_COUNT_MIN) {
                 Spacer(modifier = Modifier.height(Dimens.PagerIndicatorSpacing))
-                PagerIndicator(
+                PagerIndicatorComposable(
                     pageCount = pagerState.pageCount, currentPage = pagerState.currentPage
                 )
             }

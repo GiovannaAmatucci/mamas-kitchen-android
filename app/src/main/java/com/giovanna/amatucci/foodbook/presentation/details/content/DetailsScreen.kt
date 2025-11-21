@@ -11,7 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.giovanna.amatucci.foodbook.presentation.components.BlurredImageBackground
+import com.giovanna.amatucci.foodbook.presentation.components.BlurredImageComposable
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.DetailsViewModel
 import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 import org.koin.androidx.compose.koinViewModel
@@ -26,7 +26,8 @@ fun DetailsScreen(
     var currentMainImageUrl by remember(state.recipe) {
         mutableStateOf(state.recipe?.imageUrls?.firstOrNull())
     }
-    BlurredImageBackground(
+
+    BlurredImageComposable(
         imageUrl = currentMainImageUrl,
         blurRadius = Dimens.BlurRadius,
         modifier = Modifier.fillMaxSize()
@@ -37,7 +38,7 @@ fun DetailsScreen(
             DetailsContent(
                 modifier = Modifier,
                 status = state.status,
-                recipe = state.recipe,
+                recipe = state.recipe, onEvent = { viewModel.onEvent(it) },
                 onImageDisplayed = { imageUrl ->
                     currentMainImageUrl = imageUrl
                 })

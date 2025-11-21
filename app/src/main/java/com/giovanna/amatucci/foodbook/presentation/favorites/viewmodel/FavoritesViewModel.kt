@@ -3,9 +3,9 @@ package com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.giovanna.amatucci.foodbook.domain.usecase.favorite.DeleteAllFavoritesUseCase
-import com.giovanna.amatucci.foodbook.domain.usecase.favorite.GetFavoritesUseCase
-import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoriteEvent
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.DeleteAllFavoritesUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetFavoritesUseCase
+import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesEvent
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesUiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -39,33 +39,33 @@ class FavoritesViewModel(
         _uiState.update { it.copy(recipes = recipesFlow) }
     }
 
-    fun onEvent(event: FavoriteEvent) {
+    fun onEvent(event: FavoritesEvent) {
         when (event) {
-            is FavoriteEvent.UpdateSearchQuery -> {
+            is FavoritesEvent.UpdateSearchQuery -> {
                 _uiState.update { it.copy(searchQuery = event.query) }
             }
 
-            is FavoriteEvent.ShowDeleteAllConfirmation -> {
+            is FavoritesEvent.ShowDeleteAllConfirmation -> {
                 _uiState.update { it.copy(showConfirmDeleteAllDialog = true) }
             }
 
-            is FavoriteEvent.DismissDeleteAllConfirmation -> {
+            is FavoritesEvent.DismissDeleteAllConfirmation -> {
                 _uiState.update { it.copy(showConfirmDeleteAllDialog = false) }
             }
 
-            is FavoriteEvent.ConfirmDeleteAll -> {
+            is FavoritesEvent.ConfirmDeleteAll -> {
                 viewModelScope.launch {
                     deleteAllFavoritesUseCase()
                     _uiState.update { it.copy(showConfirmDeleteAllDialog = false) }
                 }
             }
 
-            is FavoriteEvent.SubmitSearch -> {
+            is FavoritesEvent.SubmitSearch -> {
                 _uiState.update { it.copy(searchQuery = event.query) }
 
             }
 
-            is FavoriteEvent.ClearSearchQuery -> {
+            is FavoritesEvent.ClearSearchQuery -> {
                 _uiState.update { it.copy(searchQuery = "") }
             }
         }

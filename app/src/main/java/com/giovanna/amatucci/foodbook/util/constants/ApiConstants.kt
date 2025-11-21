@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.di.util.constants
+package com.giovanna.amatucci.foodbook.util.constants
 
 object ApiConstants {
 
@@ -32,8 +32,10 @@ object ApiConstants {
 }
 
 object RepositoryConstants {
-    const val FATSECRET_STARTING_PAGE_INDEX = 1
-    const val OLD_QUERY_ADD_INDEX = 0
+    const val RECIPE_FATSECRET_STARTING_PAGE_INDEX = 1
+    const val SEARCH_OLD_QUERY_ADD_INDEX = 0
     const val NEW_QUERY_TAKE = 10
+
+    const val FAVORITE_PAGE_SIZE = 20
 
 }

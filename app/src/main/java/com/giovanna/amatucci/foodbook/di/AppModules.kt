@@ -14,14 +14,12 @@ import com.giovanna.amatucci.foodbook.data.remote.network.NetworkHttpClientImpl
 import com.giovanna.amatucci.foodbook.data.remote.network.TokenHttpClient
 import com.giovanna.amatucci.foodbook.data.remote.network.TokenHttpClientImpl
 import com.giovanna.amatucci.foodbook.data.repository.AuthRepositoryImpl
-import com.giovanna.amatucci.foodbook.data.repository.FavoriteRepositoryImpl
+import com.giovanna.amatucci.foodbook.data.repository.FavoritesRepositoryImpl
 import com.giovanna.amatucci.foodbook.data.repository.RecipeRepositoryImpl
 import com.giovanna.amatucci.foodbook.data.repository.SearchRepositoryImpl
 import com.giovanna.amatucci.foodbook.data.repository.TokenRepositoryImpl
-import com.giovanna.amatucci.foodbook.di.util.LogWriter
-import com.giovanna.amatucci.foodbook.di.util.TimberLogWriter
 import com.giovanna.amatucci.foodbook.domain.repository.AuthRepository
-import com.giovanna.amatucci.foodbook.domain.repository.FavoriteRepository
+import com.giovanna.amatucci.foodbook.domain.repository.FavoritesRepository
 import com.giovanna.amatucci.foodbook.domain.repository.RecipeRepository
 import com.giovanna.amatucci.foodbook.domain.repository.SearchRepository
 import com.giovanna.amatucci.foodbook.domain.repository.TokenRepository
@@ -31,16 +29,18 @@ import com.giovanna.amatucci.foodbook.domain.usecase.auth.FetchAndSaveTokenUseCa
 import com.giovanna.amatucci.foodbook.domain.usecase.auth.FetchAndSaveTokenUseCaseImpl
 import com.giovanna.amatucci.foodbook.domain.usecase.details.GetRecipeDetailsUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.details.GetRecipeDetailsUseCaseImpl
-import com.giovanna.amatucci.foodbook.domain.usecase.favorite.AddFavoriteUseCase
-import com.giovanna.amatucci.foodbook.domain.usecase.favorite.AddFavoriteUseCaseImpl
-import com.giovanna.amatucci.foodbook.domain.usecase.favorite.DeleteAllFavoritesUseCase
-import com.giovanna.amatucci.foodbook.domain.usecase.favorite.DeleteAllFavoritesUseCaseImpl
-import com.giovanna.amatucci.foodbook.domain.usecase.favorite.GetFavoritesUseCase
-import com.giovanna.amatucci.foodbook.domain.usecase.favorite.GetFavoritesUseCaseImpl
-import com.giovanna.amatucci.foodbook.domain.usecase.favorite.IsFavoriteUseCase
-import com.giovanna.amatucci.foodbook.domain.usecase.favorite.IsFavoriteUseCaseImpl
-import com.giovanna.amatucci.foodbook.domain.usecase.favorite.RemoveFavoriteUseCase
-import com.giovanna.amatucci.foodbook.domain.usecase.favorite.RemoveFavoriteUseCaseImpl
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.AddFavoritesUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.AddFavoritesUseCaseImpl
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.DeleteAllFavoritesUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.DeleteAllFavoritesUseCaseImpl
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetFavoritesDetailsUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetFavoritesDetailsUseCaseImpl
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetFavoritesUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetFavoritesUseCaseImpl
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.IsFavoritesUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.IsFavoritesUseCaseImpl
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.RemoveFavoritesUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.RemoveFavoritesUseCaseImpl
 import com.giovanna.amatucci.foodbook.domain.usecase.search.ClearSearchHistoryUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.search.ClearSearchHistoryUseCaseImpl
 import com.giovanna.amatucci.foodbook.domain.usecase.search.GetSearchQueriesUseCase
@@ -53,6 +53,8 @@ import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.Auth
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.DetailsViewModel
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.FavoritesViewModel
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.SearchViewModel
+import com.giovanna.amatucci.foodbook.util.LogWriter
+import com.giovanna.amatucci.foodbook.util.TimberLogWriter
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -71,6 +73,7 @@ val coreModule = module {
 val networkModule = module {
     single<NetworkHttpClient>(createdAtStart = true) {
         NetworkHttpClientImpl(
+            contextNet = androidContext(),
             baseHostUrl = BuildConfig.BASE_URL,
             requestTimeout = BuildConfig.REQUEST_TIMEOUT,
             connectTimeout = BuildConfig.CONNECT_TIMEOUT,
@@ -109,7 +112,7 @@ val repositoryModule = module {
     single<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
     single<TokenRepository> { TokenRepositoryImpl(get(), get(), get()) }
     single<RecipeRepository> { RecipeRepositoryImpl(get(), get(), get()) }
-    single<FavoriteRepository> { FavoriteRepositoryImpl(get(), get(), get()) }
+    single<FavoritesRepository> { FavoritesRepositoryImpl(get(), get(), get()) }
     single<SearchRepository> { SearchRepositoryImpl(get(), get()) }
 }
 
@@ -120,15 +123,17 @@ val domainModule = module {
     factory<CheckAuthenticationStatusUseCase> { CheckAuthenticationStatusUseCaseImpl(get()) }
     factory<FetchAndSaveTokenUseCase> { FetchAndSaveTokenUseCaseImpl(get()) }
     factory<GetRecipeDetailsUseCase> { GetRecipeDetailsUseCaseImpl(repository = get()) }
+    factory<AddFavoritesUseCase> { AddFavoritesUseCaseImpl(repository = get()) }
+    factory<DeleteAllFavoritesUseCase> { DeleteAllFavoritesUseCaseImpl(repository = get()) }
+    factory<GetFavoritesDetailsUseCase> { GetFavoritesDetailsUseCaseImpl(repository = get()) }
+    factory<GetFavoritesUseCase> { GetFavoritesUseCaseImpl(repository = get()) }
+    factory<RemoveFavoritesUseCase> { RemoveFavoritesUseCaseImpl(repository = get()) }
+    factory<IsFavoritesUseCase> { IsFavoritesUseCaseImpl(repository = get()) }
     factory<SaveSearchQueryUseCase> { SaveSearchQueryUseCaseImpl(repository = get()) }
     factory<GetSearchQueriesUseCase> { GetSearchQueriesUseCaseImpl(repository = get()) }
     factory<SearchRecipesUseCase> { SearchRecipesUseCaseImpl(repository = get()) }
     factory<ClearSearchHistoryUseCase> { ClearSearchHistoryUseCaseImpl(repository = get()) }
-    factory<AddFavoriteUseCase> { AddFavoriteUseCaseImpl(repository = get()) }
-    factory<GetFavoritesUseCase> { GetFavoritesUseCaseImpl(repository = get()) }
-    factory<RemoveFavoriteUseCase> { RemoveFavoriteUseCaseImpl(repository = get()) }
-    factory<DeleteAllFavoritesUseCase> { DeleteAllFavoritesUseCaseImpl(repository = get()) }
-    factory<IsFavoriteUseCase> { IsFavoriteUseCaseImpl(repository = get()) }
+
 }
 
 /**
@@ -137,7 +142,7 @@ val domainModule = module {
 val viewModelModule = module {
     viewModel { AuthViewModel(get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }
-    viewModel { DetailsViewModel(get(), get(), get(), get(), get()) }
+    viewModel { DetailsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { FavoritesViewModel(get(), get()) }
 }
 

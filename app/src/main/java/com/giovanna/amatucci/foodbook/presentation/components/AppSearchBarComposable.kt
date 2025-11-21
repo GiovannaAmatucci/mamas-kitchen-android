@@ -18,7 +18,7 @@ import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppSearchBar(
+fun AppSearchBarComposable(
     query: String,
     isActive: Boolean,
     @StringRes placeholder: Int,

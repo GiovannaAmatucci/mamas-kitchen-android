@@ -2,11 +2,11 @@ package com.giovanna.amatucci.foodbook.data.repository
 
 import com.giovanna.amatucci.foodbook.data.remote.api.AuthApi
 import com.giovanna.amatucci.foodbook.data.remote.model.TokenResponse
-import com.giovanna.amatucci.foodbook.di.util.LogWriter
-import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
-import com.giovanna.amatucci.foodbook.di.util.constants.LogMessages
 import com.giovanna.amatucci.foodbook.domain.repository.AuthRepository
 import com.giovanna.amatucci.foodbook.domain.repository.TokenRepository
+import com.giovanna.amatucci.foodbook.util.LogWriter
+import com.giovanna.amatucci.foodbook.util.ResultWrapper
+import com.giovanna.amatucci.foodbook.util.constants.LogMessages
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -40,15 +40,8 @@ class AuthRepositoryImpl(
                         }
                     }
 
-                    is ResultWrapper.Error -> {
-                        logWriter.e(TAG, message = LogMessages.AUTH_TOKEN_FAILURE)
-                        apiResult
-                    }
-
-                    is ResultWrapper.Exception -> {
-                        logWriter.e(
-                            TAG, LogMessages.AUTH_TOKEN_FAILURE.format(apiResult.exception.message)
-                        )
+                    is ResultWrapper.Error, is ResultWrapper.Exception -> {
+                        logWriter.e(TAG, message = LogMessages.AUTH_TOKEN_FAILURE.format(apiResult.toString()))
                         apiResult
                     }
                 }

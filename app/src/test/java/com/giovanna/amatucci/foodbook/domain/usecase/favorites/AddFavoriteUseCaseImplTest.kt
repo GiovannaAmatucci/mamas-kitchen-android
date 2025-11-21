@@ -1,7 +1,7 @@
-package com.giovanna.amatucci.foodbook.domain.usecase.favorite
+package com.giovanna.amatucci.foodbook.domain.usecase.favorites
 
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
-import com.giovanna.amatucci.foodbook.domain.repository.FavoriteRepository
+import com.giovanna.amatucci.foodbook.domain.repository.FavoritesRepository
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -16,13 +16,13 @@ import org.junit.Test
 class AddFavoriteUseCaseImplTest {
 
     @MockK
-    lateinit var repository: FavoriteRepository
-    private lateinit var addFavoriteUseCase: AddFavoriteUseCase
+    lateinit var repository: FavoritesRepository
+    private lateinit var addFavoritesUseCase: AddFavoritesUseCase
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        addFavoriteUseCase = AddFavoriteUseCaseImpl(repository)
+        addFavoritesUseCase = AddFavoritesUseCaseImpl(repository)
     }
 
     @Test
@@ -30,7 +30,7 @@ class AddFavoriteUseCaseImplTest {
         val mockRecipe = mockk<RecipeDetails>()
         coEvery { repository.addFavorite(mockRecipe) } just Runs
 
-        addFavoriteUseCase(mockRecipe)
+        addFavoritesUseCase(mockRecipe)
 
         coVerify(exactly = 1) { repository.addFavorite(mockRecipe) }
     }

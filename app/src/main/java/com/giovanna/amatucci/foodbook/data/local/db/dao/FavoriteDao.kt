@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.data.local.db
+package com.giovanna.amatucci.foodbook.data.local.db.dao
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
@@ -10,8 +10,10 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FavoriteDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Query("SELECT * FROM favorite_recipes WHERE recipe_id = :recipeId LIMIT 1")
+    suspend fun getFavoriteById(recipeId: String): FavoriteEntity?
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavorite(recipe: FavoriteEntity)
 
     @Query("DELETE FROM favorite_recipes WHERE recipe_id = :recipeId")

@@ -1,8 +1,9 @@
 package com.giovanna.amatucci.foodbook.data.remote.api
 
-import com.giovanna.amatucci.foodbook.di.util.LogWriter
-import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
-import com.giovanna.amatucci.foodbook.di.util.constants.LogMessages
+import com.giovanna.amatucci.foodbook.util.LogWriter
+import com.giovanna.amatucci.foodbook.util.NoConnectivityException
+import com.giovanna.amatucci.foodbook.util.ResultWrapper
+import com.giovanna.amatucci.foodbook.util.constants.LogMessages
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.serialization.ContentConvertException
@@ -20,7 +21,10 @@ abstract class BaseApi(
         return try {
             ResultWrapper.Success(apiCall())
 
-        } catch (e: ClientRequestException) {
+        } catch (e: NoConnectivityException) {
+            ResultWrapper.Error(e.message.orEmpty())
+        }
+        catch (e: ClientRequestException) {
             val msg = LogMessages.API_ERROR_CLIENT.format(e.response.status)
             logWriter.e(TAG, msg, e)
             ResultWrapper.Error(msg, e.response.status.value)

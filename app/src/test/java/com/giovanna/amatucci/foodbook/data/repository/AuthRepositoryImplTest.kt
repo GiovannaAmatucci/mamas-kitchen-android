@@ -4,9 +4,9 @@ package com.giovanna.amatucci.foodbook.data.repository
 import android.database.sqlite.SQLiteException
 import com.giovanna.amatucci.foodbook.data.remote.api.AuthApi
 import com.giovanna.amatucci.foodbook.data.remote.model.TokenResponse
-import com.giovanna.amatucci.foodbook.di.util.LogWriter
-import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
 import com.giovanna.amatucci.foodbook.domain.repository.TokenRepository
+import com.giovanna.amatucci.foodbook.util.LogWriter
+import com.giovanna.amatucci.foodbook.util.ResultWrapper
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifyOrder

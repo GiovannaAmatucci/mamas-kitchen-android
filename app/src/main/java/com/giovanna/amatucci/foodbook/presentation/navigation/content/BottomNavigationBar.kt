@@ -44,7 +44,7 @@ fun BottomNavigationBar(
                 label = { Text(text = stringResource(id = tab.titleResId)) }, icon = {
                     Icon(
                         imageVector = tab.icon,
-                        contentDescription = stringResource(R.string.main_screen_navigation_bar)
+                        contentDescription = stringResource(R.string.navigation_main_screen_navigation_bar)
                     )
                 },
                 selected = isSelected,

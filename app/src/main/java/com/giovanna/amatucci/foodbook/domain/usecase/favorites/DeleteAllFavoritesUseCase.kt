@@ -1,6 +1,6 @@
-package com.giovanna.amatucci.foodbook.domain.usecase.favorite
+package com.giovanna.amatucci.foodbook.domain.usecase.favorites
 
-import com.giovanna.amatucci.foodbook.domain.repository.FavoriteRepository
+import com.giovanna.amatucci.foodbook.domain.repository.FavoritesRepository
 
 interface DeleteAllFavoritesUseCase {
     suspend operator fun invoke()
@@ -8,7 +8,7 @@ interface DeleteAllFavoritesUseCase {
 
 
 class DeleteAllFavoritesUseCaseImpl(
-    private val repository: FavoriteRepository
+    private val repository: FavoritesRepository
 ) : DeleteAllFavoritesUseCase {
     override suspend operator fun invoke() = repository.deleteAllFavorites()
 }

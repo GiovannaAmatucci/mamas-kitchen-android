@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.data.local.db
+package com.giovanna.amatucci.foodbook.data.local.db.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -8,7 +8,7 @@ import com.giovanna.amatucci.foodbook.data.local.model.TokenEntity
 
 @Dao
 interface AccessTokenDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun saveToken(token: TokenEntity)
 
     @Query("SELECT * FROM access_tokens WHERE id = :id LIMIT 1")

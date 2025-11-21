@@ -9,7 +9,7 @@ import androidx.navigation.compose.navigation
 import com.giovanna.amatucci.foodbook.presentation.authentication.content.AuthScreen
 import com.giovanna.amatucci.foodbook.presentation.details.content.DetailsScreen
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.FavoritesViewModel
-import com.giovanna.amatucci.foodbook.presentation.navigation.content.MainScreen
+import com.giovanna.amatucci.foodbook.presentation.navigation.content.MainRoute
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.SearchViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -47,7 +47,7 @@ fun AppNavHost(
                 viewModelStoreOwner = mainGraphEntry
             )
 
-            MainScreen(
+            MainRoute(
                 searchViewModel = searchViewModel, favoriteViewModel = favoriteViewModel,
                 onNavigateToRecipe = { recipeId ->
                     navController.navigate(DetailsScreen(recipeId = recipeId))
