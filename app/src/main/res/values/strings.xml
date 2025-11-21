@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FoodBook</string>
+    <string name="app_name">Mama`s Kitchen</string>
 
     <!-- ===================================================================== -->
     <!-- Common / Shared Strings                                               -->
@@ -9,10 +9,13 @@
     <string name="common_button_retry">Retry</string>
     <string name="common_button_confirm">Confirm</string>
     <string name="common_button_cancel">Cancel</string>
+    <string name="common_button_try_again">Try Again</string>
+    <string name="error_no_internet">No internet connection.</string>
+
 
 
     <!-- ===================================================================== -->
-    <!-- Search Screen                                                         -->
+    <!-- Search                                                      -->
     <!-- ===================================================================== -->
     <string name="search_screen_title">Search</string>
     <string name="search_field_placeholder">Type a dish or ingredient</string>
@@ -27,13 +30,14 @@
     <string name="search_empty_message">No recipes found for \"%1$s\"</string>
     <string name="search_error_message_loading_failed">Failed to load recipes.</string>
     <string name="search_error_api">API Failure.</string>
-    <string name="recent_searches">Recent searches</string>
-    <string name="remove_recent_search">Remove from recent searches</string>
-    <string name="clear_search">Clear search</string>
+    <string name="search_error_saving_history">Error saving history.</string>
+    <string name="search_recent_searches">Recent searches</string>
+    <string name="search_remove_recent_search">Remove from recent searches</string>
+    <string name="search_clear_search">Clear search</string>
 
 
     <!-- ===================================================================== -->
-    <!-- Details Screen                                                        -->
+    <!-- Details                                                       -->
     <!-- ===================================================================== -->
     <string name="details_screen_title_default">Details</string>
     <string name="details_section_title_ingredients">Ingredients</string>
@@ -51,7 +55,7 @@
 
 
     <!-- ===================================================================== -->
-    <!-- Favorite Screen                                                       -->
+    <!-- Favorite                                                      -->
     <!-- ===================================================================== -->
     <string name="favorites_screen_title">Favorites</string>
     <string name="favorites_description">Toggle Favorite</string>
@@ -63,9 +67,11 @@
     <string name="favorites_dialog_text">Are you sure you want to delete all your favorites? This action cannot be undone.</string>
 
     <!-- ===================================================================== -->
-    <!-- Main Screen                                                       -->
+    <!-- Navigation                                                      -->
     <!-- ===================================================================== -->
-    <string name="main_screen_navigation_bar">Navigation</string>
+    <string name="navigation_main_screen_navigation_bar">Navigation</string>
+    <string name="navigation_mamas_kitchen_content_description_logo">Mama\'s Kitchen Logo</string>
+    <string name="navigation_mamas_kitchen_content_description">Mama\'s Kitchen</string>
 
 
     <!-- ===================================================================== -->
