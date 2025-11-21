@@ -6,12 +6,12 @@ import androidx.paging.PagingData
 import com.giovanna.amatucci.foodbook.data.paging.RecipePagingSource
 import com.giovanna.amatucci.foodbook.data.remote.api.FatSecretRecipeApi
 import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipeDataMapper
-import com.giovanna.amatucci.foodbook.di.util.LogWriter
-import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
-import com.giovanna.amatucci.foodbook.di.util.constants.LogMessages
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 import com.giovanna.amatucci.foodbook.domain.repository.RecipeRepository
+import com.giovanna.amatucci.foodbook.util.LogWriter
+import com.giovanna.amatucci.foodbook.util.ResultWrapper
+import com.giovanna.amatucci.foodbook.util.constants.LogMessages
 import kotlinx.coroutines.flow.Flow
 
 class RecipeRepositoryImpl(
@@ -43,10 +43,8 @@ class RecipeRepositoryImpl(
                     try {
                         val recipeDto = apiResult.data.recipe
                         val recipeDetails = mapper.recipeDetailDtoToDomain(recipeDto)
-
                         logWriter.d(TAG, LogMessages.REPO_DETAILS_SUCCESS.format(recipeDetails.id))
                         ResultWrapper.Success(recipeDetails)
-
                     } catch (e: Exception) {
                         logWriter.e(TAG, LogMessages.REPO_DETAILS_MAPPER_FAILURE.format(e.message))
                         ResultWrapper.Exception(e)

@@ -9,19 +9,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.presentation.components.EmptyMessage
+import com.giovanna.amatucci.foodbook.presentation.components.PagingStateComposable
 import com.giovanna.amatucci.foodbook.presentation.components.RecipeList
-import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoriteEvent
+import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesEvent
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesUiState
-import com.giovanna.amatucci.foodbook.ui.theme.PagingStateHandler
 
 @Composable
-fun FavoriteRouteContent(
+fun FavoritesRouteContent(
     uiState: FavoritesUiState,
-    onNavigateToRecipe: (recipeId: String) -> Unit, onEvent: (FavoriteEvent) -> Unit
+    onNavigateToRecipe: (recipeId: String) -> Unit,
+    onEvent: (FavoritesEvent) -> Unit
 ) {
     val recipes = uiState.recipes.collectAsLazyPagingItems()
 
-    PagingStateHandler(
+    PagingStateComposable(
         pagingItems = recipes, emptyContent = {
             val message = if (uiState.searchQuery.isBlank()) {
                 stringResource(R.string.favorites_empty_message)
@@ -37,8 +38,8 @@ fun FavoriteRouteContent(
     uiState.showConfirmDeleteAllDialog.let { state ->
         if (state) {
             DeleteAllFavoritesDialog(
-                onConfirm = { onEvent(FavoriteEvent.ConfirmDeleteAll) },
-                onDismiss = { onEvent(FavoriteEvent.DismissDeleteAllConfirmation) })
+                onConfirm = { onEvent(FavoritesEvent.ConfirmDeleteAll) },
+                onDismiss = { onEvent(FavoritesEvent.DismissDeleteAllConfirmation) })
         }
     }
 }

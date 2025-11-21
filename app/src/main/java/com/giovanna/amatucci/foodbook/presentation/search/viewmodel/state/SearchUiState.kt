@@ -9,5 +9,6 @@ data class SearchUiState(
     val searchQuery: String = "",
     val submittedQuery: String = "",
     val isActive: Boolean = false,
-    val recipes: Flow<PagingData<RecipeItem>> = flowOf(PagingData.empty())
+    val recipes: Flow<PagingData<RecipeItem>> = flowOf(PagingData.empty()),
+    val searchHistory: List<String> = emptyList()
 )
