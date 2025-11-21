@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.di.util
+package com.giovanna.amatucci.foodbook.util
 
 import timber.log.Timber
 

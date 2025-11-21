@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.di.util
+package com.giovanna.amatucci.foodbook.util
 
 sealed class ResultWrapper<out T> {
     data class Success<T>(val data: T) : ResultWrapper<T>()

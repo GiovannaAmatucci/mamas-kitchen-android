@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import coil.compose.AsyncImage
@@ -24,7 +23,9 @@ import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 
 @Composable
-fun RecipeCard(recipe: RecipeItem, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun RecipeCard(
+    recipe: RecipeItem, onClick: () -> Unit, modifier: Modifier = Modifier
+) {
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -37,10 +38,7 @@ fun RecipeCard(recipe: RecipeItem, onClick: () -> Unit, modifier: Modifier = Mod
     ) {
         Column(modifier = modifier.fillMaxSize()) {
             AsyncImage(
-                model = recipe.imageUrl ?: R.drawable.food_no_image,
-                contentDescription = stringResource(
-                    R.string.details_section_title_instructions, recipe.name ?: 0
-                ),
+                model = recipe.imageUrl ?: R.drawable.food_no_image, contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = modifier
                     .fillMaxWidth()
@@ -48,9 +46,7 @@ fun RecipeCard(recipe: RecipeItem, onClick: () -> Unit, modifier: Modifier = Mod
                     .clip(RoundedCornerShape(topStart = Dimens.PaddingSmall, Dimens.PaddingSmall))
             )
             Column(
-                modifier = modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center
+                modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = recipe.name ?: "",

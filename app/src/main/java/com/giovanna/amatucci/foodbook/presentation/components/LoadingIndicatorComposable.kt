@@ -8,7 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun LoadingIndicator() {
+fun LoadingIndicatorComposable() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center

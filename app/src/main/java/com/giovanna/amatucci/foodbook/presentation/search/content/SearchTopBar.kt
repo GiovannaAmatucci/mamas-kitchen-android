@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.giovanna.amatucci.foodbook.R
-import com.giovanna.amatucci.foodbook.presentation.components.AppSearchBar
+import com.giovanna.amatucci.foodbook.presentation.components.AppSearchBarComposable
 import com.giovanna.amatucci.foodbook.presentation.components.SearchLeadingIcon
 import com.giovanna.amatucci.foodbook.presentation.components.SearchTrailingIcon
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchEvent
@@ -28,10 +28,10 @@ import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchTopBar(
-    query: String, state: SearchUiState, onEvent: (SearchEvent) -> Unit, history: List<String>
+    state: SearchUiState, onEvent: (SearchEvent) -> Unit
 ) {
-    AppSearchBar(
-        query = query, isActive = state.isActive,
+    AppSearchBarComposable(
+        query = state.searchQuery, isActive = state.isActive,
         placeholder = R.string.search_screen_title,
         onQueryChange = { onEvent(SearchEvent.UpdateSearchQuery(it)) },
         onSearch = { onEvent(SearchEvent.SubmitSearch(it)) },
@@ -43,14 +43,15 @@ fun SearchTopBar(
         },
         trailingIcon = {
             SearchTrailingIcon(
-                query = query, onClearClick = { onEvent(SearchEvent.ClearSearchQuery) })
+                query = state.searchQuery, onClearClick = { onEvent(SearchEvent.ClearSearchQuery) })
         },
         content = {
             LazyColumn(
                 modifier = Modifier
             ) {
                 items(
-                    items = history, key = { historyItem -> historyItem }) { historyItem ->
+                    items = state.searchHistory,
+                    key = { historyItem -> historyItem }) { historyItem ->
                     ListItem(headlineContent = { Text(historyItem) }, leadingContent = {
                         Icon(
                             Icons.Default.History,

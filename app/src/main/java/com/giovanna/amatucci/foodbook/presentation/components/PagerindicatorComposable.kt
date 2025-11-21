@@ -12,17 +12,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.giovanna.amatucci.foodbook.ui.theme.Dimens
+import com.giovanna.amatucci.foodbook.util.constants.UiConstants
 
 @Composable
-fun PagerIndicator(pageCount: Int, currentPage: Int) {
+fun PagerIndicatorComposable(pageCount: Int, currentPage: Int) {
     Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(UiConstants.PAGER_INDICATOR_SPACE.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         repeat(pageCount) { iteration ->
             val color = if (currentPage == iteration) MaterialTheme.colorScheme.primary
             else MaterialTheme.colorScheme.onSurface.copy(
-                alpha = 0.2f
+                alpha = UiConstants.PAGER_INDICATOR_SURFACE_ALPHA
             )
             Box(
                 modifier = Modifier

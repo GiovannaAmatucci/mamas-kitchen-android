@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.data.local.db
+package com.giovanna.amatucci.foodbook.data.local.db.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

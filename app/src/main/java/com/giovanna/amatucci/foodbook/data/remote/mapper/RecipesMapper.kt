@@ -24,7 +24,14 @@ class RecipeDataMapper {
         recipeId = recipeDomain.id.toString(),
         name = recipeDomain.name,
         description = recipeDomain.description,
-        imageUrl = recipeDomain.imageUrls?.first()
+        imageUrl = recipeDomain.imageUrls?.first(),
+        imageUrls = recipeDomain.imageUrls,
+        preparationTime = recipeDomain.preparationTime,
+        cookingTime = recipeDomain.cookingTime,
+        servings = recipeDomain.servings,
+        ingredients = recipeDomain.ingredients.map { Ingredient(ingredientDescription = it.description, foodName = it.foodName) },
+        directions = recipeDomain.directions.map { Direction(directionDescription = it.description, directionNumber = it.number) },
+        categories = recipeDomain.categories
     )
 
     fun favoriteEntityToDomain(entity: FavoriteEntity): RecipeItem = RecipeItem(
@@ -33,7 +40,18 @@ class RecipeDataMapper {
         description = entity.description,
         imageUrl = entity.imageUrl
     )
-
+    fun favoriteEntityToDetailsDomain(entity: FavoriteEntity): RecipeDetails = RecipeDetails(
+        id = entity.recipeId,
+        name = entity.name,
+        description = entity.description,
+        imageUrls = entity.imageUrls,
+        preparationTime = entity.preparationTime,
+        cookingTime = entity.cookingTime,
+        servings = entity.servings,
+        ingredients = entity.ingredients?.map { IngredientInfo(it.foodName, it.ingredientDescription) } ?: emptyList(),
+        directions = entity.directions?.map { DirectionInfo(it.directionNumber, it.directionDescription) } ?: emptyList(),
+        categories = entity.categories
+    )
 
     fun recipeDetailDtoToDomain(recipeDto: Recipe?): RecipeDetails = RecipeDetails(
         id = recipeDto?.recipeId ?: "",
@@ -51,8 +69,6 @@ class RecipeDataMapper {
     private fun ingredientDtoToDomain(ingredientDto: Ingredient): IngredientInfo = IngredientInfo(
         description = ingredientDto.ingredientDescription, foodName = ingredientDto.foodName
     )
-
-
     private fun directionDtoToDomain(directionDto: Direction): DirectionInfo = DirectionInfo(
         number = directionDto.directionNumber, description = directionDto.directionDescription
     )

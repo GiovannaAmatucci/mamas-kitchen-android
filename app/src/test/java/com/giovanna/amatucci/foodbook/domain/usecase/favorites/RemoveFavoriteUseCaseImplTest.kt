@@ -1,6 +1,6 @@
-package com.giovanna.amatucci.foodbook.domain.usecase.favorite
+package com.giovanna.amatucci.foodbook.domain.usecase.favorites
 
-import com.giovanna.amatucci.foodbook.domain.repository.FavoriteRepository
+import com.giovanna.amatucci.foodbook.domain.repository.FavoritesRepository
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -13,13 +13,13 @@ import org.junit.Test
 
 class RemoveFavoriteUseCaseImplTest {
     @MockK
-    lateinit var repository: FavoriteRepository
-    private lateinit var removeFavoriteUseCase: RemoveFavoriteUseCase
+    lateinit var repository: FavoritesRepository
+    private lateinit var removeFavoritesUseCase: RemoveFavoritesUseCase
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        removeFavoriteUseCase = RemoveFavoriteUseCaseImpl(repository)
+        removeFavoritesUseCase = RemoveFavoritesUseCaseImpl(repository)
     }
 
     @Test
@@ -27,7 +27,7 @@ class RemoveFavoriteUseCaseImplTest {
         val recipeId = "123"
         coEvery { repository.removeFavorite(recipeId) } just Runs
 
-        removeFavoriteUseCase(recipeId)
+        removeFavoritesUseCase(recipeId)
 
         coVerify(exactly = 1) { repository.removeFavorite(recipeId) }
     }
@@ -38,7 +38,7 @@ class RemoveFavoriteUseCaseImplTest {
         runTest {
             coEvery { repository.removeFavorite("null") } just Runs
 
-            removeFavoriteUseCase(null)
+            removeFavoritesUseCase(null)
 
             coVerify(exactly = 1) { repository.removeFavorite("null") }
         }

@@ -1,8 +1,8 @@
 package com.giovanna.amatucci.foodbook.domain.usecase.details
 
-import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
 import com.giovanna.amatucci.foodbook.domain.repository.RecipeRepository
+import com.giovanna.amatucci.foodbook.util.ResultWrapper
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify

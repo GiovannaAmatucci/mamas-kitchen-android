@@ -1,8 +1,8 @@
-package com.giovanna.amatucci.foodbook.domain.usecase.favorite
+package com.giovanna.amatucci.foodbook.domain.usecase.favorites
 
 import androidx.paging.PagingData
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
-import com.giovanna.amatucci.foodbook.domain.repository.FavoriteRepository
+import com.giovanna.amatucci.foodbook.domain.repository.FavoritesRepository
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -15,7 +15,7 @@ import org.junit.Test
 
 class GetFavoriteUseCaseImplTest {
     @MockK
-    lateinit var repository: FavoriteRepository
+    lateinit var repository: FavoritesRepository
     private lateinit var getFavoritesUseCase: GetFavoritesUseCase
 
     @Before

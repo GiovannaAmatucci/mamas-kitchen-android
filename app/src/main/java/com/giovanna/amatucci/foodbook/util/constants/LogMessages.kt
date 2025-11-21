@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.di.util.constants
+package com.giovanna.amatucci.foodbook.util.constants
 
 object LogMessages {
 
@@ -21,7 +21,6 @@ object LogMessages {
     const val TOKEN_REPO_DECRYPT_FAILURE =
         "Falha ao descriptografar token. Chave pode ter sido invalidada. Causa: %s"
     const val TOKEN_REPO_CLEAR = "Limpando token do repositório."
-    const val TOKEN_REPO_CLEAR_FAILURE = "Falha ao limpar token do DB. Causa: %s"
 
 
     // --- CLIENTE KTOR (Plugin de Auth) ---
@@ -80,5 +79,9 @@ object LogMessages {
     const val GET_QUERIES_FAILURE = "Falha ao obter o histórico de buscas"
     const val CLEAR_HISTORY_FAILURE = "Falha ao limpar o histórico de buscas"
 
+
+    // ---VIEW MODEL (SearchViewModel) ---
+    const val SEARCH_SAVE_QUERY_FAILED = "Falha ao salvar o histórico de busca"
+    const val SEARCH_ERROR_API = "Falha na API ao buscar receitas"
 
 }

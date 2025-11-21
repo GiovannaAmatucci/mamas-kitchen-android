@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.di.util.constants
+package com.giovanna.amatucci.foodbook.util.constants
 
 import android.security.keystore.KeyProperties
 

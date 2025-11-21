@@ -112,7 +112,14 @@ class RecipeDataMapperTest {
     @Test
     fun `favoriteEntityToDomain SHOULD map correctly`() {
         val entity = FavoriteEntity(
-            recipeId = "123", name = "Burger", description = "Juicy", imageUrl = "img_url"
+            recipeId = "123", name = "Burger", description = "Juicy", imageUrl = "img_url",
+            imageUrls = listOf("img1", "img2"),
+            preparationTime = "10",
+            cookingTime = "20",
+            servings = "2",
+            ingredients = emptyList(),
+            directions = emptyList(),
+            categories = emptyList()
         )
 
         val result = mapper.favoriteEntityToDomain(entity)
@@ -236,7 +243,7 @@ class RecipeDataMapperTest {
             preparationTimeMin = "",
             cookingTimeMin = "",
             numberOfServings = "",
-            ingredients = null, // causes !!
+            ingredients = null,
             directions = Directions(direction = listOf()),
             recipeCategories = RecipeCategories(recipeCategory = listOf())
         )
@@ -255,7 +262,7 @@ class RecipeDataMapperTest {
             cookingTimeMin = "",
             numberOfServings = "",
             ingredients = Ingredients(ingredient = listOf()),
-            directions = null, // causes !!
+            directions = null,
             recipeCategories = RecipeCategories(recipeCategory = listOf())
         )
 

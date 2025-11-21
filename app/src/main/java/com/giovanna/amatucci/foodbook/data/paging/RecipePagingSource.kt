@@ -4,11 +4,11 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.giovanna.amatucci.foodbook.data.remote.api.FatSecretRecipeApi
 import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipeDataMapper
-import com.giovanna.amatucci.foodbook.di.util.LogWriter
-import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
-import com.giovanna.amatucci.foodbook.di.util.constants.LogMessages
-import com.giovanna.amatucci.foodbook.di.util.constants.RepositoryConstants
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
+import com.giovanna.amatucci.foodbook.util.LogWriter
+import com.giovanna.amatucci.foodbook.util.ResultWrapper
+import com.giovanna.amatucci.foodbook.util.constants.LogMessages
+import com.giovanna.amatucci.foodbook.util.constants.RepositoryConstants
 
 
 class RecipePagingSource(
@@ -21,7 +21,7 @@ class RecipePagingSource(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RecipeItem> {
-        val position = params.key ?: RepositoryConstants.FATSECRET_STARTING_PAGE_INDEX
+        val position = params.key ?: RepositoryConstants.RECIPE_FATSECRET_STARTING_PAGE_INDEX
         val maxResults = params.loadSize
 
         return try {
@@ -35,7 +35,7 @@ class RecipePagingSource(
 
                         LoadResult.Page(
                             data = domainData,
-                            prevKey = if (position == RepositoryConstants.FATSECRET_STARTING_PAGE_INDEX) null else position - 1,
+                            prevKey = if (position == RepositoryConstants.RECIPE_FATSECRET_STARTING_PAGE_INDEX) null else position - 1,
                             nextKey = nextKey
                         )
                     }

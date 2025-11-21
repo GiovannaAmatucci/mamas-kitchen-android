@@ -1,6 +1,6 @@
-package com.giovanna.amatucci.foodbook.domain.usecase.favorite
+package com.giovanna.amatucci.foodbook.domain.usecase.favorites
 
-import com.giovanna.amatucci.foodbook.domain.repository.FavoriteRepository
+import com.giovanna.amatucci.foodbook.domain.repository.FavoritesRepository
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -16,13 +16,13 @@ import org.junit.Test
 class IsFavoriteUseCaseImplTest {
 
     @MockK
-    lateinit var repository: FavoriteRepository
-    private lateinit var isFavoriteUseCase: IsFavoriteUseCase
+    lateinit var repository: FavoritesRepository
+    private lateinit var isFavoritesUseCase: IsFavoritesUseCase
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        isFavoriteUseCase = IsFavoriteUseCaseImpl(repository)
+        isFavoritesUseCase = IsFavoritesUseCaseImpl(repository)
     }
 
     @Test
@@ -31,7 +31,7 @@ class IsFavoriteUseCaseImplTest {
         val expectedFlow = flowOf(true)
         every { repository.isFavorite(recipeId) } returns expectedFlow
 
-        val resultFlow = isFavoriteUseCase(recipeId)
+        val resultFlow = isFavoritesUseCase(recipeId)
         val result = resultFlow.first()
 
         assertEquals(expectedFlow, resultFlow)
