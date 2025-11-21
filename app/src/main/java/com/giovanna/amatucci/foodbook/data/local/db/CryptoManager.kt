@@ -2,7 +2,7 @@ package com.giovanna.amatucci.foodbook.data.local.db
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import com.giovanna.amatucci.foodbook.di.util.constants.KeyStoreConstants
+import com.giovanna.amatucci.foodbook.util.constants.KeyStoreConstants
 import io.ktor.utils.io.charsets.Charset
 import java.security.KeyStore
 import javax.crypto.Cipher

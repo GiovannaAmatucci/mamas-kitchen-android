@@ -1,12 +1,12 @@
 package com.giovanna.amatucci.foodbook.data.repository
 
 import androidx.paging.PagingSource
-import com.giovanna.amatucci.foodbook.data.local.db.FavoriteDao
+import com.giovanna.amatucci.foodbook.data.local.db.dao.FavoriteDao
 import com.giovanna.amatucci.foodbook.data.local.model.FavoriteEntity
 import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipeDataMapper
-import com.giovanna.amatucci.foodbook.di.util.LogWriter
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
-import com.giovanna.amatucci.foodbook.domain.repository.FavoriteRepository
+import com.giovanna.amatucci.foodbook.domain.repository.FavoritesRepository
+import com.giovanna.amatucci.foodbook.util.LogWriter
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -41,7 +41,7 @@ class FavoriteRepositoryImplTest {
     @MockK(relaxUnitFun = true)
     private lateinit var logWriter: LogWriter
 
-    private lateinit var repository: FavoriteRepository
+    private lateinit var repository: FavoritesRepository
 
     private val mockRecipeDetails = RecipeDetails(
         id = "123",
@@ -61,12 +61,19 @@ class FavoriteRepositoryImplTest {
         name = "Chicken Test",
         description = "A test recipe",
         imageUrl = "http://example.com/img.jpg",
-        dateFavorites = 0L
+        dateFavorites = 0L,
+        preparationTime = "10 min",
+        cookingTime = "20 min",
+        servings = "4",
+        ingredients = emptyList(),
+        directions = emptyList(),
+        categories = emptyList(),
+        imageUrls = listOf("http://example.com/img.jpg")
     )
 
     @Before
     fun setUp() {
-        repository = FavoriteRepositoryImpl(mapper, favoriteDao, logWriter)
+        repository = FavoritesRepositoryImpl(mapper, favoriteDao, logWriter)
     }
 
     @Test

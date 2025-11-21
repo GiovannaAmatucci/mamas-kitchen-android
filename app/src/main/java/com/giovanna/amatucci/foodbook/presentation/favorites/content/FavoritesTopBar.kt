@@ -3,27 +3,28 @@ package com.giovanna.amatucci.foodbook.presentation.favorites.content
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import com.giovanna.amatucci.foodbook.R
-import com.giovanna.amatucci.foodbook.presentation.components.AppSearchBar
+import com.giovanna.amatucci.foodbook.presentation.components.AppSearchBarComposable
 import com.giovanna.amatucci.foodbook.presentation.components.FavoriteLeadingIcon
 import com.giovanna.amatucci.foodbook.presentation.components.FavoriteTrailingIcon
-import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoriteEvent
+import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesEvent
+import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoritesTopBar(
-    query: String,
-    onEvent: (FavoriteEvent) -> Unit,
+    state: FavoritesUiState,
+    onEvent: (FavoritesEvent) -> Unit,
 ) {
-    AppSearchBar(
-        query = query,
-        onQueryChange = { onEvent(FavoriteEvent.UpdateSearchQuery(it)) },
-        onSearch = { onEvent(FavoriteEvent.SubmitSearch(it)) },
+    AppSearchBarComposable(
+        query = state.searchQuery,
+        onQueryChange = { onEvent(FavoritesEvent.UpdateSearchQuery(it)) },
+        onSearch = { onEvent(FavoritesEvent.SubmitSearch(it)) },
         isActive = true,
         expandable = false,
         placeholder = R.string.favorites_search_placeholder,
         trailingIcon = {
             FavoriteTrailingIcon(
-                onDeleteAllClick = { onEvent(FavoriteEvent.ShowDeleteAllConfirmation) })
+                onDeleteAllClick = { onEvent(FavoritesEvent.ShowDeleteAllConfirmation) })
         },
         leadingIcon = { FavoriteLeadingIcon() })
 }

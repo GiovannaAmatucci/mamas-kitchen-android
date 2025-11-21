@@ -4,9 +4,9 @@ import com.giovanna.amatucci.foodbook.data.remote.api.FatSecretRecipeApi
 import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipeDataMapper
 import com.giovanna.amatucci.foodbook.data.remote.model.recipe.Recipe
 import com.giovanna.amatucci.foodbook.data.remote.model.recipe.RecipeResponse
-import com.giovanna.amatucci.foodbook.di.util.LogWriter
-import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
+import com.giovanna.amatucci.foodbook.util.LogWriter
+import com.giovanna.amatucci.foodbook.util.ResultWrapper
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

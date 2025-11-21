@@ -10,10 +10,12 @@ coreKtx = "1.17.0"
 lifecycle = "2.9.4"
 activity = "1.11.0"
 appCompat = "1.7.1"
+splashScreen = "1.0.1"
 
 # 🎨 Jetpack Compose
 composeBom = "2025.11.00"
 navigationCompose = "2.9.6"
+material3 = "1.2.1"
 
 # 🌐 Networking
 ktor = "3.3.2"
@@ -59,6 +61,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashScreen" }
 
 # ---------- 💉 Dependency Injection (Koin) ----------
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin" }
@@ -75,7 +78,7 @@ androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 
 # ---------- 🗺️ Navigation ----------

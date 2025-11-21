@@ -3,10 +3,10 @@ package com.giovanna.amatucci.foodbook.data.remote.api
 import com.giovanna.amatucci.foodbook.data.remote.model.recipe.RecipeResponse
 import com.giovanna.amatucci.foodbook.data.remote.model.search.SearchResponse
 import com.giovanna.amatucci.foodbook.data.remote.network.NetworkHttpClient
-import com.giovanna.amatucci.foodbook.di.util.LogWriter
-import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
-import com.giovanna.amatucci.foodbook.di.util.constants.ApiConstants
-import com.giovanna.amatucci.foodbook.di.util.constants.LogMessages
+import com.giovanna.amatucci.foodbook.util.LogWriter
+import com.giovanna.amatucci.foodbook.util.ResultWrapper
+import com.giovanna.amatucci.foodbook.util.constants.ApiConstants
+import com.giovanna.amatucci.foodbook.util.constants.LogMessages
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
@@ -24,6 +24,7 @@ class FatSecretRecipeApiImpl(
     logWriter: LogWriter
 ) : BaseApi(logWriter), FatSecretRecipeApi {
     override val TAG: String = "FatSecretRecipeApi"
+
     override suspend fun searchRecipes(
         expression: String, pageNumber: Int, maxResult: Int
     ): ResultWrapper<SearchResponse> {

@@ -2,9 +2,9 @@ package com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel
 
 import androidx.paging.PagingData
 import com.giovanna.amatucci.foodbook.MainCoroutineRule
-import com.giovanna.amatucci.foodbook.domain.usecase.favorite.DeleteAllFavoritesUseCase
-import com.giovanna.amatucci.foodbook.domain.usecase.favorite.GetFavoritesUseCase
-import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoriteEvent
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.DeleteAllFavoritesUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetFavoritesUseCase
+import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesEvent
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -65,7 +65,7 @@ class FavoritesViewModelTest {
             val job = launch { viewModel.uiState.value.recipes.collect {} }
             mainCoroutineRule.testDispatcher.scheduler.advanceTimeBy(301L)
             verify(exactly = 1) { getFavoritesUseCase("") }
-            viewModel.onEvent(FavoriteEvent.UpdateSearchQuery(newQuery))
+            viewModel.onEvent(FavoritesEvent.UpdateSearchQuery(newQuery))
             assertEquals(newQuery, viewModel.uiState.value.searchQuery)
             mainCoroutineRule.testDispatcher.scheduler.advanceTimeBy(301L)
             verify(exactly = 1) { getFavoritesUseCase(newQuery) }
@@ -80,7 +80,7 @@ class FavoritesViewModelTest {
         val job = launch { viewModel.uiState.value.recipes.collect {} }
         mainCoroutineRule.testDispatcher.scheduler.advanceTimeBy(301L)
         verify(exactly = 1) { getFavoritesUseCase("") }
-        viewModel.onEvent(FavoriteEvent.SubmitSearch(newQuery))
+        viewModel.onEvent(FavoritesEvent.SubmitSearch(newQuery))
         assertEquals(newQuery, viewModel.uiState.value.searchQuery)
 
         mainCoroutineRule.testDispatcher.scheduler.advanceTimeBy(301L)
@@ -93,7 +93,7 @@ class FavoritesViewModelTest {
         val job = launch { viewModel.uiState.value.recipes.collect {} }
         mainCoroutineRule.testDispatcher.scheduler.advanceTimeBy(301L)
         verify(exactly = 1) { getFavoritesUseCase("") }
-        viewModel.onEvent(FavoriteEvent.UpdateSearchQuery(""))
+        viewModel.onEvent(FavoritesEvent.UpdateSearchQuery(""))
         mainCoroutineRule.testDispatcher.scheduler.advanceTimeBy(301L)
         verify(exactly = 1) { getFavoritesUseCase("") }
         job.cancel()
@@ -104,10 +104,10 @@ class FavoritesViewModelTest {
         val job = launch { viewModel.uiState.value.recipes.collect {} }
         mainCoroutineRule.testDispatcher.scheduler.advanceTimeBy(301L)
         verify(exactly = 1) { getFavoritesUseCase("") }
-        viewModel.onEvent(FavoriteEvent.UpdateSearchQuery("beef"))
+        viewModel.onEvent(FavoritesEvent.UpdateSearchQuery("beef"))
         mainCoroutineRule.testDispatcher.scheduler.advanceTimeBy(301L)
         verify(exactly = 1) { getFavoritesUseCase("beef") }
-        viewModel.onEvent(FavoriteEvent.ClearSearchQuery)
+        viewModel.onEvent(FavoritesEvent.ClearSearchQuery)
         mainCoroutineRule.testDispatcher.scheduler.advanceTimeBy(301L)
         verify(exactly = 2) { getFavoritesUseCase("") }
         job.cancel()
@@ -115,24 +115,24 @@ class FavoritesViewModelTest {
 
     @Test
     fun `onEvent ShowDeleteAllConfirmation SHOULD update dialog state to true`() {
-        viewModel.onEvent(FavoriteEvent.ShowDeleteAllConfirmation)
+        viewModel.onEvent(FavoritesEvent.ShowDeleteAllConfirmation)
         assertTrue(viewModel.uiState.value.showConfirmDeleteAllDialog)
     }
 
     @Test
     fun `onEvent DismissDeleteAllConfirmation SHOULD update dialog state to false`() {
-        viewModel.onEvent(FavoriteEvent.ShowDeleteAllConfirmation)
+        viewModel.onEvent(FavoritesEvent.ShowDeleteAllConfirmation)
         assertTrue(viewModel.uiState.value.showConfirmDeleteAllDialog)
 
-        viewModel.onEvent(FavoriteEvent.DismissDeleteAllConfirmation)
+        viewModel.onEvent(FavoritesEvent.DismissDeleteAllConfirmation)
         assertFalse(viewModel.uiState.value.showConfirmDeleteAllDialog)
     }
 
     @Test
     fun `onEvent ConfirmDeleteAll SHOULD call use case and dismiss dialog`() = runTest {
-        viewModel.onEvent(FavoriteEvent.ShowDeleteAllConfirmation)
+        viewModel.onEvent(FavoritesEvent.ShowDeleteAllConfirmation)
         assertTrue(viewModel.uiState.value.showConfirmDeleteAllDialog)
-        viewModel.onEvent(FavoriteEvent.ConfirmDeleteAll)
+        viewModel.onEvent(FavoritesEvent.ConfirmDeleteAll)
         mainCoroutineRule.testDispatcher.scheduler.advanceUntilIdle()
         coVerify(exactly = 1) { deleteAllFavoritesUseCase() }
         assertFalse(viewModel.uiState.value.showConfirmDeleteAllDialog)
@@ -143,7 +143,7 @@ class FavoritesViewModelTest {
         val job = launch { viewModel.uiState.value.recipes.collect {} }
         mainCoroutineRule.testDispatcher.scheduler.advanceTimeBy(301L)
         verify(exactly = 1) { getFavoritesUseCase("") }
-        viewModel.onEvent(FavoriteEvent.SubmitSearch(""))
+        viewModel.onEvent(FavoritesEvent.SubmitSearch(""))
         mainCoroutineRule.testDispatcher.scheduler.advanceTimeBy(301L)
         verify(exactly = 1) { getFavoritesUseCase("") }
 
@@ -155,7 +155,7 @@ class FavoritesViewModelTest {
         val job = launch { viewModel.uiState.value.recipes.collect {} }
         mainCoroutineRule.testDispatcher.scheduler.advanceTimeBy(301L)
         verify(exactly = 1) { getFavoritesUseCase("") }
-        viewModel.onEvent(FavoriteEvent.ClearSearchQuery)
+        viewModel.onEvent(FavoritesEvent.ClearSearchQuery)
         mainCoroutineRule.testDispatcher.scheduler.advanceTimeBy(301L)
         verify(exactly = 1) { getFavoritesUseCase("") }
 

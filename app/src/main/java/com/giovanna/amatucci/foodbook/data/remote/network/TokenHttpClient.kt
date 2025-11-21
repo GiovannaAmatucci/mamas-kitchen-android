@@ -20,7 +20,7 @@ interface TokenHttpClient {
 }
 
 class TokenHttpClientImpl(private val baseUrl: String) : TokenHttpClient {
-    override operator fun invoke() = HttpClient(Android) {
+    override operator fun invoke(): HttpClient = HttpClient(Android) {
         install(ContentNegotiation) {
             json(Json {
                 prettyPrint = true

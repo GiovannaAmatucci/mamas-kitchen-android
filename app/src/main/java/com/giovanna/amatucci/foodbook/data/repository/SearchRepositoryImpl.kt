@@ -1,11 +1,11 @@
 package com.giovanna.amatucci.foodbook.data.repository
 
-import com.giovanna.amatucci.foodbook.data.local.db.SearchDao
+import com.giovanna.amatucci.foodbook.data.local.db.dao.SearchDao
 import com.giovanna.amatucci.foodbook.data.local.model.SearchEntity
-import com.giovanna.amatucci.foodbook.di.util.LogWriter
-import com.giovanna.amatucci.foodbook.di.util.constants.LogMessages
-import com.giovanna.amatucci.foodbook.di.util.constants.RepositoryConstants
 import com.giovanna.amatucci.foodbook.domain.repository.SearchRepository
+import com.giovanna.amatucci.foodbook.util.LogWriter
+import com.giovanna.amatucci.foodbook.util.constants.LogMessages
+import com.giovanna.amatucci.foodbook.util.constants.RepositoryConstants
 
 class SearchRepositoryImpl(
     private val dao: SearchDao, private val logWriter: LogWriter
@@ -19,7 +19,7 @@ class SearchRepositoryImpl(
                 val currentHistory = dao.getSearchHistory()
                 val oldQueries = currentHistory?.queries?.toMutableList() ?: mutableListOf()
                 oldQueries.remove(query)
-                oldQueries.add(RepositoryConstants.OLD_QUERY_ADD_INDEX, query)
+                oldQueries.add(RepositoryConstants.SEARCH_OLD_QUERY_ADD_INDEX, query)
                 val newQueries = oldQueries.take(RepositoryConstants.NEW_QUERY_TAKE)
                 val newHistory = SearchEntity(id = currentHistory?.id ?: 0, queries = newQueries)
                 dao.insertSearch(newHistory)

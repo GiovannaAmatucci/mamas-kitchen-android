@@ -1,12 +1,12 @@
 package com.giovanna.amatucci.foodbook.data.repository
 
-import com.giovanna.amatucci.foodbook.data.local.db.AccessTokenDao
 import com.giovanna.amatucci.foodbook.data.local.db.CryptographyManager
+import com.giovanna.amatucci.foodbook.data.local.db.dao.AccessTokenDao
 import com.giovanna.amatucci.foodbook.data.local.model.TokenEntity
 import com.giovanna.amatucci.foodbook.data.remote.model.TokenResponse
-import com.giovanna.amatucci.foodbook.di.util.LogWriter
-import com.giovanna.amatucci.foodbook.di.util.constants.LogMessages
 import com.giovanna.amatucci.foodbook.domain.repository.TokenRepository
+import com.giovanna.amatucci.foodbook.util.LogWriter
+import com.giovanna.amatucci.foodbook.util.constants.LogMessages
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.Date
@@ -27,7 +27,8 @@ class TokenRepositoryImpl(
             try {
                 val token = response.accessToken ?: return@withContext
                 val (iv, encryptedToken) = cryptoManager.encrypt(token)
-                val expiresInMillis = response.expiresIn
+                val expiresInMillis = response.expiresIn * 1000L
+
                 val expiresAt = System.currentTimeMillis() + expiresInMillis
                 val entity = TokenEntity(
                     encryptedAccessToken = encryptedToken,

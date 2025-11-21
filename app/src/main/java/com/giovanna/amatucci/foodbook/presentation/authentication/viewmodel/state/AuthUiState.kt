@@ -1,13 +1,15 @@
 package com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state
 
-import com.giovanna.amatucci.foodbook.di.util.constants.UiText
+import com.giovanna.amatucci.foodbook.util.constants.UiText
 
-sealed interface AuthUiState {
-    data object Idle : AuthUiState
-    data object Loading : AuthUiState
-    data class Authenticated(
-        val navigateToHome: Boolean = false
-    ) : AuthUiState
-
-    data class AuthenticationFailed(val errorMessage: UiText) : AuthUiState
+sealed interface AuthStatus {
+    data object Loading : AuthStatus
+    data object Success : AuthStatus
+    data object Error : AuthStatus
 }
+
+data class AuthState(
+    val status: AuthStatus = AuthStatus.Loading,
+    val navigateToHome: Boolean = false,
+    val error: UiText? = null
+)

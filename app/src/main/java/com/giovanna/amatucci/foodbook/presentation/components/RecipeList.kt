@@ -6,14 +6,14 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.paging.compose.LazyPagingItems
-import com.giovanna.amatucci.foodbook.di.util.constants.UiConstants
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 import com.giovanna.amatucci.foodbook.ui.theme.Dimens
+import com.giovanna.amatucci.foodbook.util.constants.UiConstants
 
 @Composable
 fun RecipeList(recipes: LazyPagingItems<RecipeItem>, onRecipeClick: (String) -> Unit) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(UiConstants.GRID_CELLS_FIXED),
+        columns = GridCells.Fixed(UiConstants.RECIPE_LIST_GRID_CELLS_FIXED),
         contentPadding = PaddingValues(Dimens.PaddingSmall),
         horizontalArrangement = Arrangement.spacedBy(Dimens.PaddingSmall),
         verticalArrangement = Arrangement.spacedBy(Dimens.PaddingSmall)

@@ -2,9 +2,9 @@ package com.giovanna.amatucci.foodbook.data.remote.api
 
 import com.giovanna.amatucci.foodbook.data.remote.model.TokenResponse
 import com.giovanna.amatucci.foodbook.data.remote.network.TokenHttpClient
-import com.giovanna.amatucci.foodbook.di.util.LogWriter
-import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
-import com.giovanna.amatucci.foodbook.di.util.constants.LogMessages
+import com.giovanna.amatucci.foodbook.util.LogWriter
+import com.giovanna.amatucci.foodbook.util.ResultWrapper
+import com.giovanna.amatucci.foodbook.util.constants.LogMessages
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond

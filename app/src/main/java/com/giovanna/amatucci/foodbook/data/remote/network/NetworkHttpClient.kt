@@ -1,10 +1,13 @@
 package com.giovanna.amatucci.foodbook.data.remote.network
 
-import com.giovanna.amatucci.foodbook.di.util.LogWriter
-import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
-import com.giovanna.amatucci.foodbook.di.util.constants.LogMessages
+import android.content.Context
 import com.giovanna.amatucci.foodbook.domain.repository.AuthRepository
 import com.giovanna.amatucci.foodbook.domain.repository.TokenRepository
+import com.giovanna.amatucci.foodbook.util.LogWriter
+import com.giovanna.amatucci.foodbook.util.NoConnectivityException
+import com.giovanna.amatucci.foodbook.util.ResultWrapper
+import com.giovanna.amatucci.foodbook.util.constants.LogMessages
+import com.giovanna.amatucci.foodbook.util.isInternetAvailable
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.HttpTimeout
@@ -30,6 +33,7 @@ interface NetworkHttpClient {
 }
 
 class NetworkHttpClientImpl(
+    private val contextNet: Context,
     private val baseHostUrl: String,
     private val requestTimeout: Long,
     private val connectTimeout: Long,
@@ -60,64 +64,70 @@ class NetworkHttpClientImpl(
         }
     }
 
-    override fun invoke(): HttpClient = HttpClient(Android) {
-        install(ContentNegotiation) {
-            json(Json {
-                isLenient = true
-                ignoreUnknownKeys = true
-                explicitNulls = false
-            })
-        }
-        defaultRequest {
-            contentType(ContentType.Application.Json)
-            url {
-                protocol = URLProtocol.HTTPS
-                host = baseHostUrl
-            }
-        }
-        install(Auth) {
-            bearer {
-                loadTokens {
-                    mutex.withLock {
-                        logWriter.d(TAG, LogMessages.KTOR_LOAD_START)
-                        val validToken = token.getValidAccessToken()
-
-                        if (validToken != null) {
-                            logWriter.d(TAG, LogMessages.KTOR_LOAD_SUCCESS)
-                            return@withLock BearerTokens(validToken, "")
-                        }
-
-                        logWriter.w(TAG, LogMessages.KTOR_LOAD_FAILURE)
-                        return@withLock fetchAndSaveNewToken()
+    override fun invoke(): HttpClient {
+        return if (!contextNet.isInternetAvailable()) {
+            throw NoConnectivityException()
+        } else {
+            HttpClient(Android) {
+                install(ContentNegotiation) {
+                    json(Json {
+                        isLenient = true
+                        ignoreUnknownKeys = true
+                        explicitNulls = false
+                    })
+                }
+                defaultRequest {
+                    contentType(ContentType.Application.Json)
+                    url {
+                        protocol = URLProtocol.HTTPS
+                        host = baseHostUrl
                     }
                 }
-                refreshTokens {
-                    mutex.withLock {
-                        logWriter.w(TAG, LogMessages.KTOR_REFRESH_START)
-                        val currentTokenInDb = token.getValidAccessToken()
-                        val oldTokenThatFailed = oldTokens?.accessToken
+                install(Auth) {
+                    bearer {
+                        loadTokens {
+                            mutex.withLock {
+                                logWriter.d(TAG, LogMessages.KTOR_LOAD_START)
+                                val validToken = token.getValidAccessToken()
 
-                        if (oldTokenThatFailed != currentTokenInDb && currentTokenInDb != null) {
-                            logWriter.d(TAG, LogMessages.KTOR_REFRESH_MUTEX_WAIT)
-                            return@withLock BearerTokens(currentTokenInDb, "")
+                                if (validToken != null) {
+                                    logWriter.d(TAG, LogMessages.KTOR_LOAD_SUCCESS)
+                                    return@withLock BearerTokens(validToken, "")
+                                }
+
+                                logWriter.w(TAG, LogMessages.KTOR_LOAD_FAILURE)
+                                return@withLock fetchAndSaveNewToken()
+                            }
                         }
-                        return@withLock fetchAndSaveNewToken()
+                        refreshTokens {
+                            mutex.withLock {
+                                logWriter.w(TAG, LogMessages.KTOR_REFRESH_START)
+                                val currentTokenInDb = token.getValidAccessToken()
+                                val oldTokenThatFailed = oldTokens?.accessToken
+
+                                if (oldTokenThatFailed != currentTokenInDb && currentTokenInDb != null) {
+                                    logWriter.d(TAG, LogMessages.KTOR_REFRESH_MUTEX_WAIT)
+                                    return@withLock BearerTokens(currentTokenInDb, "")
+                                }
+                                return@withLock fetchAndSaveNewToken()
+                            }
+                        }
                     }
                 }
-            }
-        }
 
-        install(HttpTimeout) {
-            requestTimeoutMillis = requestTimeout
-            connectTimeoutMillis = connectTimeout
-            socketTimeoutMillis = connectTimeout
-        }
+                install(HttpTimeout) {
+                    requestTimeoutMillis = requestTimeout
+                    connectTimeoutMillis = connectTimeout
+                    socketTimeoutMillis = connectTimeout
+                }
 
-        install(Logging) {
-            level = if (isDebug) LogLevel.ALL else LogLevel.NONE
-            logger = object : Logger {
-                override fun log(message: String) {
-                    if (isDebug) logWriter.d(TAG, message)
+                install(Logging) {
+                    level = if (isDebug) LogLevel.ALL else LogLevel.NONE
+                    logger = object : Logger {
+                        override fun log(message: String) {
+                            if (isDebug) logWriter.d(TAG, message)
+                        }
+                    }
                 }
             }
         }

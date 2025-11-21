@@ -29,32 +29,27 @@ class SearchViewModel(
     private val _uiState = MutableStateFlow(SearchUiState())
     val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
 
-    private val _searchHistory = MutableStateFlow<List<String>>(emptyList())
-    val searchHistory: StateFlow<List<String>> = _searchHistory.asStateFlow()
-
     init {
         getSearchHistory()
     }
 
+    private suspend fun refreshHistory() {
+        val history = getSearchQueriesUseCase()
+        _uiState.update { it.copy(searchHistory = history) }
+    }
     fun searchRecipe(query: String) {
         viewModelScope.launch {
             saveSearchQueryUseCase(query)
-            getSearchHistory()
-
+            refreshHistory()
             val newProductsFlow = searchRecipesUseCase(query).cachedIn(viewModelScope)
-
-            _uiState.update {
-                it.copy(
-                    recipes = newProductsFlow, isActive = false
-                )
-            }
+            _uiState.update { it.copy(recipes = newProductsFlow, isActive = false) }
         }
     }
 
     fun getSearchHistory() {
         viewModelScope.launch {
             val history = getSearchQueriesUseCase()
-            _searchHistory.value = history
+            _uiState.update { it.copy(searchHistory = history) }
         }
     }
 

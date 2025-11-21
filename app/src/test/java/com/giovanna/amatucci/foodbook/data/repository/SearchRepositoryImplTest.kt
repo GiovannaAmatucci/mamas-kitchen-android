@@ -1,9 +1,9 @@
 package com.giovanna.amatucci.foodbook.data.repository
 
 
-import com.giovanna.amatucci.foodbook.data.local.db.SearchDao
+import com.giovanna.amatucci.foodbook.data.local.db.dao.SearchDao
 import com.giovanna.amatucci.foodbook.data.local.model.SearchEntity
-import com.giovanna.amatucci.foodbook.di.util.LogWriter
+import com.giovanna.amatucci.foodbook.util.LogWriter
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery

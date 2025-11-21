@@ -4,17 +4,19 @@ import app.cash.turbine.test
 import com.giovanna.amatucci.foodbook.MainCoroutineRule
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.data.remote.model.TokenResponse
-import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
-import com.giovanna.amatucci.foodbook.di.util.constants.UiText
 import com.giovanna.amatucci.foodbook.domain.usecase.auth.CheckAuthenticationStatusUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.auth.FetchAndSaveTokenUseCase
 import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthEvent
-import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthUiState
+import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthStatus
+import com.giovanna.amatucci.foodbook.util.ResultWrapper
+import com.giovanna.amatucci.foodbook.util.constants.UiText
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -25,6 +27,7 @@ import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class AuthViewModelTest {
+
     @get:Rule
     val mockkRule = MockKRule(this)
 
@@ -39,9 +42,8 @@ class AuthViewModelTest {
 
     private lateinit var viewModel: AuthViewModel
 
-    private val mockTokenResponse = TokenResponse(
-        accessToken = "token", tokenType = "Bearer", expiresIn = 3600
-    )
+    private val mockTokenResponse =
+        TokenResponse(accessToken = "token", tokenType = "Bearer", expiresIn = 3600)
 
     @Before
     fun setUp() {
@@ -49,110 +51,146 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `init SHOULD move to Authenticated WHEN checkAuthStatusUseCase returns true`() = runTest {
-        coEvery { checkAuthStatusUseCase() } returns true
+    fun `init SHOULD set Success and navigateToHome WHEN checkAuth returns true`() = runTest {
+        coEvery { checkAuthStatusUseCase() } coAnswers { delay(10); true }
 
         viewModel = AuthViewModel(checkAuthStatusUseCase, fetchTokenUseCase)
 
         viewModel.uiState.test {
-            val successState = awaitItem() as AuthUiState.Authenticated
-            assertTrue(successState.navigateToHome)
-
-            cancelAndIgnoreRemainingEvents()
+            awaitItem()
+            val state = awaitItem()
+            assertEquals(AuthStatus.Success, state.status)
+            assertTrue(state.navigateToHome)
         }
     }
 
     @Test
-    fun `init SHOULD fetch token and move to Authenticated WHEN check returns false and fetch succeeds`() =
-        runTest {
-            coEvery { checkAuthStatusUseCase() } returns false
-            val successResult = ResultWrapper.Success(mockTokenResponse)
-            coEvery { fetchTokenUseCase() } returns successResult
-
-            viewModel = AuthViewModel(checkAuthStatusUseCase, fetchTokenUseCase)
-
-            viewModel.uiState.test {
-                val successState = awaitItem() as AuthUiState.Authenticated
-                assertTrue(successState.navigateToHome)
-
-                cancelAndIgnoreRemainingEvents()
-            }
-        }
-
-    @Test
-    fun `init should move to AuthenticationFailed when check returns false and fetch fails (Error)`() =
-        runTest {
-            coEvery { checkAuthStatusUseCase() } returns false
-            val errorResult = ResultWrapper.Error("Not Found", 401)
-            coEvery { fetchTokenUseCase() } returns errorResult
-
-            viewModel = AuthViewModel(checkAuthStatusUseCase, fetchTokenUseCase)
-
-            viewModel.uiState.test {
-                val errorState = awaitItem() as AuthUiState.AuthenticationFailed
-                assertTrue(errorState.errorMessage is UiText.StringResource)
-                assertEquals(
-                    R.string.auth_error_with_code,
-                    (errorState.errorMessage as UiText.StringResource).resId
-                )
-
-                cancelAndIgnoreRemainingEvents()
-            }
-        }
-
-    @Test
-    fun `init SHOULD move to AuthenticationFailed WHEN check returns false and fetch fails (Exception)`() =
-        runTest {
-            coEvery { checkAuthStatusUseCase() } returns false
-            val exception = RuntimeException("Network error")
-            val exceptionResult = ResultWrapper.Exception(exception)
-            coEvery { fetchTokenUseCase() } returns exceptionResult
-
-            viewModel = AuthViewModel(checkAuthStatusUseCase, fetchTokenUseCase)
-
-            viewModel.uiState.test {
-                val errorState = awaitItem() as AuthUiState.AuthenticationFailed
-                assertTrue(errorState.errorMessage is UiText.DynamicString)
-                assertEquals(
-                    "Network error", (errorState.errorMessage as UiText.DynamicString).value
-                )
-
-                cancelAndIgnoreRemainingEvents()
-            }
-        }
-
-    @Test
-    fun `onEvent RequestToken SHOULD fetch token and succeed`() = runTest {
+    fun `init SHOULD fetch token WHEN checkAuth returns false AND succeed`() = runTest {
         coEvery { checkAuthStatusUseCase() } returns false
-        coEvery { fetchTokenUseCase() } returns ResultWrapper.Error(
-            "Not Found", 404
-        )
+        coEvery { fetchTokenUseCase() } returns ResultWrapper.Success(mockTokenResponse)
 
         viewModel = AuthViewModel(checkAuthStatusUseCase, fetchTokenUseCase)
-        val successResult = ResultWrapper.Success(mockTokenResponse)
-        coEvery { fetchTokenUseCase() } returns successResult
 
         viewModel.uiState.test {
-            val initState = awaitItem()
-            assertTrue(initState is AuthUiState.AuthenticationFailed)
-            viewModel.onEvent(AuthEvent.RequestToken)
-            val successState = awaitItem() as AuthUiState.Authenticated
-            assertTrue(successState.navigateToHome)
+            val state = awaitItem()
+            if (state.status == AuthStatus.Success) {
+                assertTrue(state.navigateToHome)
+            } else {
+                val success = awaitItem()
+                assertEquals(AuthStatus.Success, success.status)
+                assertTrue(success.navigateToHome)
+            }
         }
     }
 
     @Test
-    fun `onEvent NavigationCompleted SHOULD update navigateToHome to false`() = runTest {
-        coEvery { checkAuthStatusUseCase() } returns true
+    fun `fetchToken SHOULD set Error state WHEN api returns Error`() = runTest {
+        coEvery { checkAuthStatusUseCase() } returns false
+        val errorMsg = "Erro 404"
+        coEvery { fetchTokenUseCase() } returns ResultWrapper.Error(errorMsg, 404)
 
         viewModel = AuthViewModel(checkAuthStatusUseCase, fetchTokenUseCase)
 
         viewModel.uiState.test {
-            val initState = awaitItem() as AuthUiState.Authenticated
-            assertTrue(initState.navigateToHome)
-            viewModel.onEvent(AuthEvent.NavigationCompleted)
-            val finalState = awaitItem() as AuthUiState.Authenticated
-            assertFalse(finalState.navigateToHome)
+            val state = awaitItem()
+            val errorState = if (state.status !is AuthStatus.Error) awaitItem() else state
+
+            assertTrue(errorState.status is AuthStatus.Error)
+            assertFalse(errorState.navigateToHome)
+            assertEquals(errorMsg, (errorState.error as UiText.DynamicString).value)
+        }
+    }
+
+    @Test
+    fun `fetchToken SHOULD set Error state WHEN api returns Exception with message`() = runTest {
+        coEvery { checkAuthStatusUseCase() } returns false
+        val exceptionMsg = "Sem internet"
+        coEvery { fetchTokenUseCase() } returns ResultWrapper.Exception(Exception(exceptionMsg))
+
+        viewModel = AuthViewModel(checkAuthStatusUseCase, fetchTokenUseCase)
+
+        viewModel.uiState.test {
+            val state = awaitItem()
+            val errorState = if (state.status !is AuthStatus.Error) awaitItem() else state
+
+            assertTrue(errorState.status is AuthStatus.Error)
+            assertEquals(exceptionMsg, (errorState.error as UiText.DynamicString).value)
+        }
+    }
+
+    @Test
+    fun `fetchToken SHOULD set Unknown Error WHEN api returns Exception without message`() =
+        runTest {
+            coEvery { checkAuthStatusUseCase() } returns false
+            coEvery { fetchTokenUseCase() } returns ResultWrapper.Exception(Exception())
+
+            viewModel = AuthViewModel(checkAuthStatusUseCase, fetchTokenUseCase)
+
+            viewModel.uiState.test {
+                val state = awaitItem()
+                val errorState = if (state.status !is AuthStatus.Error) awaitItem() else state
+
+                assertTrue(errorState.status is AuthStatus.Error)
+                kotlin.test.assertEquals(
+                    R.string.auth_error_unknown, (errorState.error as UiText.StringResource).resId
+                )
+            }
+        }
+
+    @Test
+    fun `onEvent RequestToken SHOULD NOT call usecase if already Loading`() = runTest {
+        coEvery { checkAuthStatusUseCase() } returns false
+        coEvery { fetchTokenUseCase() } coAnswers {
+            delay(500)
+            ResultWrapper.Success(mockTokenResponse)
+        }
+
+        viewModel = AuthViewModel(checkAuthStatusUseCase, fetchTokenUseCase)
+
+        viewModel.uiState.test {
+            val item = awaitItem()
+            if (item.status !is AuthStatus.Loading) awaitItem()
+        }
+
+        viewModel.onEvent(AuthEvent.RequestToken)
+
+        coVerify(exactly = 1) { fetchTokenUseCase() }
+    }
+
+    @Test
+    fun `onEvent NavigationCompleted SHOULD reset navigateToHome`() = runTest {
+        coEvery { checkAuthStatusUseCase() } returns true
+        viewModel = AuthViewModel(checkAuthStatusUseCase, fetchTokenUseCase)
+
+        viewModel.uiState.test {
+            val state = awaitItem()
+            val successState = if (!state.navigateToHome) awaitItem() else state
+            assertTrue(successState.navigateToHome)
+        }
+
+        viewModel.onEvent(AuthEvent.NavigationCompleted)
+
+        viewModel.uiState.test {
+            val state = awaitItem()
+            assertFalse(state.navigateToHome)
+        }
+    }
+
+    @Test
+    fun `onEvent RequestToken SHOULD call fetchToken when not loading`() = runTest {
+        coEvery { checkAuthStatusUseCase() } returns false
+        coEvery { fetchTokenUseCase() } returns ResultWrapper.Error("Fail", 400)
+
+        viewModel = AuthViewModel(checkAuthStatusUseCase, fetchTokenUseCase)
+        viewModel.uiState.test { cancelAndIgnoreRemainingEvents() }
+        coEvery { fetchTokenUseCase() } returns ResultWrapper.Success(mockTokenResponse)
+
+        viewModel.onEvent(AuthEvent.RequestToken)
+
+        viewModel.uiState.test {
+            val state = awaitItem()
+            val finalState = if (state.status is AuthStatus.Loading) awaitItem() else state
+            assertEquals(AuthStatus.Success, finalState.status)
         }
     }
 }

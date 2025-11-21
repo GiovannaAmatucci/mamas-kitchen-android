@@ -6,10 +6,10 @@ import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipeDataMapper
 import com.giovanna.amatucci.foodbook.data.remote.model.search.RecipeSearch
 import com.giovanna.amatucci.foodbook.data.remote.model.search.RecipesSearch
 import com.giovanna.amatucci.foodbook.data.remote.model.search.SearchResponse
-import com.giovanna.amatucci.foodbook.di.util.LogWriter
-import com.giovanna.amatucci.foodbook.di.util.ResultWrapper
-import com.giovanna.amatucci.foodbook.di.util.constants.RepositoryConstants
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
+import com.giovanna.amatucci.foodbook.util.LogWriter
+import com.giovanna.amatucci.foodbook.util.ResultWrapper
+import com.giovanna.amatucci.foodbook.util.constants.RepositoryConstants
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -98,7 +98,7 @@ class RecipePagingSourceTest {
         )
         coEvery {
             api.searchRecipes(
-                testQuery, RepositoryConstants.FATSECRET_STARTING_PAGE_INDEX, testLoadSize
+                testQuery, RepositoryConstants.RECIPE_FATSECRET_STARTING_PAGE_INDEX, testLoadSize
             )
         } returns mockApiSuccessResponse
 
@@ -109,13 +109,13 @@ class RecipePagingSourceTest {
         val expected = PagingSource.LoadResult.Page(
             data = listOf(mockRecipeItem),
             prevKey = null,
-            nextKey = RepositoryConstants.FATSECRET_STARTING_PAGE_INDEX + 1
+            nextKey = RepositoryConstants.RECIPE_FATSECRET_STARTING_PAGE_INDEX + 1
         )
 
         assertEquals(expected, result)
         coVerify(exactly = 1) {
             api.searchRecipes(
-                testQuery, RepositoryConstants.FATSECRET_STARTING_PAGE_INDEX, testLoadSize
+                testQuery, RepositoryConstants.RECIPE_FATSECRET_STARTING_PAGE_INDEX, testLoadSize
             )
         }
         verify(exactly = 1) { mapper.searchRecipeDtoToDomain(mockRecipeSearchDto) }
@@ -177,7 +177,7 @@ class RecipePagingSourceTest {
             // CORREÇÃO 2 e 3
             coEvery {
                 api.searchRecipes(
-                    testQuery, RepositoryConstants.FATSECRET_STARTING_PAGE_INDEX, testLoadSize
+                    testQuery, RepositoryConstants.RECIPE_FATSECRET_STARTING_PAGE_INDEX, testLoadSize
                 )
             } returns mockApiNullsResponse
 
