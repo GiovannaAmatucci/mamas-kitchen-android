@@ -26,6 +26,14 @@ import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 import com.giovanna.amatucci.foodbook.util.constants.UiConstants
 
+/**
+ * A component that displays a carousel of images for the recipe details.
+ * It applies a vertical fade-out gradient at the bottom of the image.
+ *
+ * @param images A list of image URLs to display.
+ * @param onImageDisplayed Callback invoked when an image becomes the current page.
+ *                         Returns null if there are no images.
+ */
 @Composable
 fun DetailsImageComposable(
     images: List<String>, onImageDisplayed: (String?) -> Unit
@@ -46,8 +54,7 @@ fun DetailsImageComposable(
             .drawWithContent {
                 drawContent()
                 drawRect(
-                    brush = fadeOutBrush,
-                    blendMode = BlendMode.DstIn
+                    brush = fadeOutBrush, blendMode = BlendMode.DstIn
                 )
             }
     }

@@ -14,13 +14,11 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.giovanna.amatucci.foodbook.R
 
-/**
- * Um Composable que usa uma imagem de uma URL como background desfocado para o seu conteúdo.
- *
- * @param imageUrl A URL da imagem a ser usada como background.
- * @param modifier O Modifier a ser aplicado ao Box que contém o background e o conteúdo.
- * @param blurRadius O raio do desfoque a ser aplicado à imagem de background.
- * @param content O conteúdo que será exibido sobre o background desfocado.
+/**•A Composable that uses an image from a URL as a blurred background for its content.
+ * @param imageUrl The URL of the image to be used as background.
+ * @param modifier The Modifier to be applied to the Box containing the background and content.
+ * @param blurRadius The blur radius to be applied to the background image.
+ * @param content The content to be displayed over the blurred background.
  */
 @Composable
 fun BlurredImageComposable(

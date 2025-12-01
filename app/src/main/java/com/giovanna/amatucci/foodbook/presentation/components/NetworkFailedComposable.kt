@@ -16,6 +16,14 @@ import androidx.compose.ui.text.style.TextAlign
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 
+/**
+ * A component displayed when a network error occurs (e.g., no internet connection).
+ * It shows an error message and a retry button.
+ *
+ * @param errorMessage The error message text to display.
+ * @param onRetry Callback triggered when the retry button is clicked.
+ * @param modifier Modifier to be applied to the root layout.
+ */
 @Composable
 fun NetworkFailedComposable(
     errorMessage: String, onRetry: () -> Unit, modifier: Modifier = Modifier

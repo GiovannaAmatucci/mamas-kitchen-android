@@ -61,14 +61,16 @@ import org.koin.dsl.module
 
 
 /**
- * Módulo para utilitários e serviços centrais da aplicação.
+ * Module for core application utilities and services.
+ * Provides singletons for logging and other foundational tools.
  */
 val coreModule = module {
     single<LogWriter> { TimberLogWriter() }
 }
 
 /**
- * Módulo para todas as dependências relacionadas à rede (Ktor, APIs, Mappers).
+ * Module for all network-related dependencies.
+ * Includes Ktor HttpClients (both standard and token-refresh handling), API implementations, and Mappers.
  */
 val networkModule = module {
     single<NetworkHttpClient>(createdAtStart = true) {
@@ -77,7 +79,10 @@ val networkModule = module {
             baseHostUrl = BuildConfig.BASE_URL,
             requestTimeout = BuildConfig.REQUEST_TIMEOUT,
             connectTimeout = BuildConfig.CONNECT_TIMEOUT,
-            isDebug = BuildConfig.DEBUG_MODE, token = get(), auth = get(), logWriter = get()
+            isDebug = BuildConfig.DEBUG_MODE,
+            token = get(),
+            auth = get(),
+            logWriter = get()
         )
     }
     single<TokenHttpClient> {
@@ -89,7 +94,8 @@ val networkModule = module {
 }
 
 /**
- * Módulo para todas as dependências de armazenamento local (Room, DataStore, Crypto).
+ * Module for local storage dependencies.
+ * Includes Room Database, DAOs, and Cryptography managers for secure storage.
  */
 val databaseModule = module {
     single { CryptographyManager() }
@@ -106,7 +112,8 @@ val databaseModule = module {
 }
 
 /**
- * Módulo que liga as interfaces dos repositórios às suas implementações.
+ * Module that binds Repository interfaces to their concrete implementations.
+ * Connects the Data layer to the Domain layer.
  */
 val repositoryModule = module {
     single<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
@@ -117,7 +124,8 @@ val repositoryModule = module {
 }
 
 /**
- * Módulo para os Casos de Uso (UseCases) da camada de domínio.
+ * Module for Domain Layer UseCases.
+ * Factories create new instances of UseCases as needed.
  */
 val domainModule = module {
     factory<CheckAuthenticationStatusUseCase> { CheckAuthenticationStatusUseCaseImpl(get()) }
@@ -137,7 +145,8 @@ val domainModule = module {
 }
 
 /**
- * Módulo para os ViewModels da camada de apresentação.
+ * Module for Presentation Layer ViewModels.
+ * Provides dependencies for UI Logic.
  */
 val viewModelModule = module {
     viewModel { AuthViewModel(get(), get()) }

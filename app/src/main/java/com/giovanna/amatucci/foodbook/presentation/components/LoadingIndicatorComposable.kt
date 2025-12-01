@@ -7,6 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
+/**
+ * A full-screen loading indicator component.
+ * It centers a [CircularProgressIndicator] within the available space.
+ */
 @Composable
 fun LoadingIndicatorComposable() {
     Box(

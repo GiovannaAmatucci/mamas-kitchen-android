@@ -22,6 +22,14 @@ import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 
+/**
+ * A card component representing a single recipe.
+ * Displays the recipe image and title.
+ *
+ * @param recipe The recipe data item to display.
+ * @param onClick Callback triggered when the card is clicked.
+ * @param modifier Modifier to be applied to the card.
+ */
 @Composable
 fun RecipeCard(
     recipe: RecipeItem, onClick: () -> Unit, modifier: Modifier = Modifier

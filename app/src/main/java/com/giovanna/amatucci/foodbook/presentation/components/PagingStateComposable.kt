@@ -11,15 +11,16 @@ import com.giovanna.amatucci.foodbook.R
 
 
 /**
- * Um componente genérico que lida com os estados comuns de um LazyPagingItems.
- * Exibe conteúdo para os estados de Carregamento, Erro e Lista Vazia.
+ * A generic component that handles common states of a [LazyPagingItems] list.
+ * Displays content for Loading, Error, and Empty list states.
  *
- * @param T O tipo de item na lista de paginação.
- * @param pagingItems O LazyPagingItems cujo estado será observado.
- * @param loadingContent O Composable a ser exibido durante o carregamento inicial.
- * @param errorContent O Composable a ser exibido em caso de erro.
- * @param emptyContent O Composable a ser exibido quando a lista carrega com sucesso, mas está vazia.
- * @param content O Composable principal a ser exibido quando há itens na lista.
+ * @param T The type of item in the paging list.
+ * @param pagingItems The [LazyPagingItems] to observe state from.
+ * @param modifier The modifier to be applied to the container.
+ * @param loadingContent Composable to display during initial loading.
+ * @param errorContent Composable to display when an error occurs. Receives an error message.
+ * @param emptyContent Composable to display when the list loads successfully but is empty.
+ * @param content The main Composable to display when there are items (Success state).
  */
 
 @Composable

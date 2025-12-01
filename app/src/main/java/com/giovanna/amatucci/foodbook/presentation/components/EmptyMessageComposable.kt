@@ -11,6 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 
+/**
+ * A centralized empty state component.
+ *
+ * @param message The message text to display.
+ * @param modifier Modifier for the container box.
+ */
 @Composable
 fun EmptyMessage(message: String, modifier: Modifier = Modifier) {
     Box(

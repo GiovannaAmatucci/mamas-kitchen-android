@@ -1,5 +1,7 @@
 package com.giovanna.amatucci.foodbook.util.constants
-
+/**
+ * Holds constant values related to API endpoints, parameters, and query keys.
+ */
 object ApiConstants {
 
     object Params {

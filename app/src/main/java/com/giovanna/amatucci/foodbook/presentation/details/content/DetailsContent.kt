@@ -40,6 +40,16 @@ import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.Detai
 import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 import com.giovanna.amatucci.foodbook.ui.theme.rememberScrimColor
 
+/**
+ * The main content container for the details screen.
+ * It handles switching between Loading, Error, and Success states.
+ *
+ * @param modifier The modifier to be applied to the container.
+ * @param status The current status of the UI (Loading, Success, Error).
+ * @param recipe The recipe details to display (only used when status is Success).
+ * @param onEvent Callback for UI events (e.g., retrying connection).
+ * @param onImageDisplayed Callback triggered when the main image changes (used for the blurred background).
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsContent(
@@ -74,6 +84,14 @@ fun DetailsContent(
         }
     }
 }
+
+/**
+ * The scrolling list displaying all recipe information.
+ *
+ * @param recipe The domain object containing all recipe details.
+ * @param modifier Modifier for the list.
+ * @param onImageDisplayed Callback to bubble up the current image URL.
+ */
 
 @Composable
 private fun DetailsList(
@@ -126,6 +144,11 @@ private fun DetailsList(
     }
 }
 
+
+/**
+ * Displays the recipe name and description.
+ */
+
 @Composable
 private fun DetailsHeader(recipe: RecipeDetails) {
     Column(modifier = Modifier.padding(Dimens.PaddingMedium)) {
@@ -148,6 +171,9 @@ private fun DetailsHeader(recipe: RecipeDetails) {
     }
 }
 
+/**
+ * A row displaying statistics: Prep time, Cook time, and Servings.
+ */
 @Composable
 private fun DetailsRow(recipe: RecipeDetails) {
     Row(
@@ -182,6 +208,14 @@ private fun DetailsRow(recipe: RecipeDetails) {
     }
 }
 
+/**
+ * A single statistic item with an icon, label, and value.
+ *
+ * @param icon The vector icon to display.
+ * @param contentDescription Accessibility description for the icon.
+ * @param label The label text (e.g., "Prep Time").
+ * @param value The value text (e.g., "10 min").
+ */
 @Composable
 private fun DetailsStatItem(
     icon: ImageVector, contentDescription: String? = null, label: String, value: String

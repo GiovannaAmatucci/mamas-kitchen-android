@@ -2,6 +2,9 @@ package com.giovanna.amatucci.foodbook.util.constants
 
 import android.security.keystore.KeyProperties
 
+/**
+ * Constants configuration for Android Keystore encryption/decryption.
+ */
 object KeyStoreConstants {
     const val KEY_STORE_ALIAS = "my_app_token_key_alias"
     const val ANDROID_KEYSTORE = "AndroidKeyStore"

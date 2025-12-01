@@ -1,5 +1,8 @@
 package com.giovanna.amatucci.foodbook.util.constants
 
+/**
+ * Constants related to UI layout, animations, and visual configurations.
+ */
 object UiConstants {
     const val RECIPE_DETAILS_IMAGE_GRADIENT_FADE_START_PERCENT = 0.5f
     const val RECIPE_DETAILS_IMAGE_GRAPHICS_LAYER_ALPHA_HACK = 0.99f

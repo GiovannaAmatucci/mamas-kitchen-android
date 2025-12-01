@@ -14,6 +14,13 @@ import androidx.compose.ui.unit.dp
 import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 import com.giovanna.amatucci.foodbook.util.constants.UiConstants
 
+/**
+ * A horizontal indicator for a Pager, showing the current page position.
+ * The active dot uses the primary color, while inactive dots are semi-transparent.
+ *
+ * @param pageCount The total number of pages.
+ * @param currentPage The index of the currently selected page.
+ */
 @Composable
 fun PagerIndicatorComposable(pageCount: Int, currentPage: Int) {
     Row(

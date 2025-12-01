@@ -14,8 +14,16 @@ import com.giovanna.amatucci.foodbook.presentation.components.RecipeList
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesEvent
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesUiState
 
+/**
+ * The main content for the Favorites screen.
+ * Handles the display of the recipe list and the "Delete All" confirmation dialog.
+ *
+ * @param uiState The current state of the favorites screen.
+ * @param onNavigateToRecipe Callback to navigate to recipe details.
+ * @param onEvent Callback for handling user actions (search, delete).
+ */
 @Composable
-fun FavoritesRouteContent(
+fun FavoritesScreen(
     uiState: FavoritesUiState,
     onNavigateToRecipe: (recipeId: String) -> Unit,
     onEvent: (FavoritesEvent) -> Unit
@@ -43,7 +51,12 @@ fun FavoritesRouteContent(
         }
     }
 }
-
+/**
+ * A dialog asking the user to confirm the deletion of all favorites.
+ *
+ * @param onConfirm Callback executed when "Confirm" is clicked.
+ * @param onDismiss Callback executed when "Cancel" is clicked or the dialog is dismissed.
+ */
 @Composable
 private fun DeleteAllFavoritesDialog(
     onConfirm: () -> Unit, onDismiss: () -> Unit

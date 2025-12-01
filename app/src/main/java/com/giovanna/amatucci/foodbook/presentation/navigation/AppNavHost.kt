@@ -6,14 +6,21 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import com.giovanna.amatucci.foodbook.presentation.authentication.content.AuthRoute
 import com.giovanna.amatucci.foodbook.presentation.authentication.content.AuthScreen
+import com.giovanna.amatucci.foodbook.presentation.details.content.DetailsRoute
 import com.giovanna.amatucci.foodbook.presentation.details.content.DetailsScreen
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.FavoritesViewModel
 import com.giovanna.amatucci.foodbook.presentation.navigation.content.MainRoute
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.SearchViewModel
 import org.koin.androidx.compose.koinViewModel
 
-
+/**
+ * The main Navigation Host for the application.
+ * Defines the navigation graph and manages transitions between screens.
+ *
+ * @param navController The central [NavHostController] handling navigation.
+ */
 @Composable
 fun AppNavHost(
     navController: NavHostController,
@@ -26,7 +33,7 @@ fun AppNavHost(
             startDestination = AuthScreen
         ) {
             composable<AuthScreen> {
-                AuthScreen(
+                AuthRoute(
                     onNavigateToHome = {
                         navController.navigate(MainGraph) {
                             popUpTo(AuthGraph) { inclusive = true }
@@ -55,7 +62,7 @@ fun AppNavHost(
             )
         }
         composable<DetailsScreen> {
-            DetailsScreen(
+            DetailsRoute(
                 onNavigateBack = { navController.popBackStack() },
             )
         }

@@ -14,19 +14,19 @@ import com.giovanna.amatucci.foodbook.ui.theme.Dimens.ScreenPadding
 
 
 /**
- * ### Espaçamentos e Tamanhos Comuns
+ * ### Common Spacing and Sizes
  *
- * @param PaddingExtraSmall Espaçamento ou tamanho muito pequeno (e.g., para elementos de layout minimalistas ou bordas finas).
- * @param PaddingSmall Espaçamento ou tamanho pequeno (e.g., entre elementos próximos, ícones e texto).
- * @param PaddingMedium Espaçamento ou tamanho médio, um valor de uso geral para a maioria dos layouts (e.g., entre seções, padding de cartões).
- * @param PaddingLarge Espaçamento ou tamanho grande, para criar separação clara entre seções principais ou padding de tela.
- * @param PaddingExtraLarge Espaçamento ou tamanho muito grande, para criar um impacto visual significativo ou margens amplas.
+ * @param PaddingExtraSmall Very small spacing or size (e.g., for minimalist layout elements or fine borders).
+ * @param PaddingSmall Small spacing or size (e.g., between nearby elements, icons, and text).
+ * @param PaddingMedium Medium spacing or size, a general-purpose value for most layouts (e.g., between sections, card padding).
+ * @param PaddingLarge Large spacing or size, to create clear separation between main sections or screen padding.
+ * @param PaddingExtraLarge Very large spacing or size, to create significant visual impact or wide margins.
  *
- * @param ScreenPadding O padding padrão aplicado nas bordas da maioria das telas.
- * @param CardElevation Elevação padrão para cards e superfícies que flutuam ligeiramente acima do background.
- * @param IconSizeMedium Tamanho médio padrão para ícones.
- * @param ImageSizeLarge Tamanho grande padrão para imagens principais ou de destaque.
- * @param AppBarHeight Altura padrão para a barra superior (TopAppBar).
+ * @param ScreenPadding The default padding applied to the edges of most screens.
+ * @param CardElevation Default elevation for cards and surfaces that float slightly above the background.
+ * @param IconSizeMedium Default medium size for icons.
+ * @param ImageSizeLarge Default large size for main or featured images.
+ * @param AppBarHeight Default height for the top bar (TopAppBar).
  */
 object Dimens {
     val PaddingExtraSmall = 4.dp

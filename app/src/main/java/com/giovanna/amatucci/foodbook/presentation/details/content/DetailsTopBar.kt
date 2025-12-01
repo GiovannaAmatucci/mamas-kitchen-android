@@ -18,7 +18,13 @@ import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsEvent
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsUiState
 
-
+/**
+ * A custom Top Bar for the Details Screen.
+ * It is designed to overlay the recipe image and provides navigation and favorite toggling controls.
+ * @param onNavigateBack Callback triggered when the back button is pressed.
+ * @param onEvent Callback for UI events (specifically toggling favorites).
+ * @param state The current UI state, used to determine if the recipe is favorited.
+ * @param modifier Modifier to be applied to the layout. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsTopBar(
