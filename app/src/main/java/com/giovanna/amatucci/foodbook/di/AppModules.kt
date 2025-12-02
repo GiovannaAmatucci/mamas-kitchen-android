@@ -55,23 +55,13 @@ import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.Favorites
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.SearchViewModel
 import com.giovanna.amatucci.foodbook.util.LogWriter
 import com.giovanna.amatucci.foodbook.util.TimberLogWriter
+import com.giovanna.amatucci.foodbook.util.constants.KeyStoreConstants
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
-
-
-/**
- * Module for core application utilities and services.
- * Provides singletons for logging and other foundational tools.
- */
 val coreModule = module {
     single<LogWriter> { TimberLogWriter() }
 }
-
-/**
- * Module for all network-related dependencies.
- * Includes Ktor HttpClients (both standard and token-refresh handling), API implementations, and Mappers.
- */
 val networkModule = module {
     single<NetworkHttpClient>(createdAtStart = true) {
         NetworkHttpClientImpl(
@@ -92,29 +82,19 @@ val networkModule = module {
     single<FatSecretRecipeApi> { FatSecretRecipeApiImpl(client = get(), logWriter = get()) }
     single { RecipeDataMapper() }
 }
-
-/**
- * Module for local storage dependencies.
- * Includes Room Database, DAOs, and Cryptography managers for secure storage.
- */
 val databaseModule = module {
     single { CryptographyManager() }
     single(createdAtStart = true) {
         Room.databaseBuilder(
             androidContext(),
             AppDatabase::class.java,
-            "foodbook_database.db"
+            KeyStoreConstants.KEY_STORE_ALIAS
         ).fallbackToDestructiveMigration(true).build()
     }
     single { get<AppDatabase>().accessTokenDao() }
     single { get<AppDatabase>().searchDao() }
     single { get<AppDatabase>().favoriteDao() }
 }
-
-/**
- * Module that binds Repository interfaces to their concrete implementations.
- * Connects the Data layer to the Domain layer.
- */
 val repositoryModule = module {
     single<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
     single<TokenRepository> { TokenRepositoryImpl(get(), get(), get()) }
@@ -122,11 +102,6 @@ val repositoryModule = module {
     single<FavoritesRepository> { FavoritesRepositoryImpl(get(), get(), get()) }
     single<SearchRepository> { SearchRepositoryImpl(get(), get()) }
 }
-
-/**
- * Module for Domain Layer UseCases.
- * Factories create new instances of UseCases as needed.
- */
 val domainModule = module {
     factory<CheckAuthenticationStatusUseCase> { CheckAuthenticationStatusUseCaseImpl(get()) }
     factory<FetchAndSaveTokenUseCase> { FetchAndSaveTokenUseCaseImpl(get()) }
@@ -143,11 +118,6 @@ val domainModule = module {
     factory<ClearSearchHistoryUseCase> { ClearSearchHistoryUseCaseImpl(repository = get()) }
 
 }
-
-/**
- * Module for Presentation Layer ViewModels.
- * Provides dependencies for UI Logic.
- */
 val viewModelModule = module {
     viewModel { AuthViewModel(get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }

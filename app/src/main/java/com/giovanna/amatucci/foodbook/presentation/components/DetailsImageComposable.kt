@@ -1,8 +1,10 @@
 package com.giovanna.amatucci.foodbook.presentation.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.pager.HorizontalPager
@@ -21,10 +23,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 import com.giovanna.amatucci.foodbook.util.constants.UiConstants
+import com.giovanna.amatucci.foodbook.util.shimmerEffect
 
 /**
  * A component that displays a carousel of images for the recipe details.
@@ -54,28 +57,45 @@ fun DetailsImageComposable(
             .drawWithContent {
                 drawContent()
                 drawRect(
-                    brush = fadeOutBrush, blendMode = BlendMode.DstIn
+                    brush = fadeOutBrush,
+                    blendMode = BlendMode.DstIn
                 )
             }
     }
 
     if (images.isNotEmpty()) {
         val pagerState = rememberPagerState(pageCount = { images.size })
+
         LaunchedEffect(pagerState.currentPage) {
             onImageDisplayed(images[pagerState.currentPage])
         }
+
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             HorizontalPager(
                 state = pagerState, modifier = Modifier
             ) { pageIndex ->
-                AsyncImage(
+                SubcomposeAsyncImage(
                     model = images[pageIndex],
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(Dimens.ImageSizeLarge)
-                        .then(fadeOutModifier)
+                        .then(fadeOutModifier),
+                    loading = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .shimmerEffect()
+                        )
+                    },
+                    error = {
+                        Image(
+                            painter = painterResource(id = R.drawable.food_no_image),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop
+                        )
+                    }
                 )
             }
 

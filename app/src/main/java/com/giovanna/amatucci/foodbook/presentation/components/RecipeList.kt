@@ -11,14 +11,17 @@ import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 import com.giovanna.amatucci.foodbook.util.constants.UiConstants
 
 /**
- * A grid list that displays recipe cards.
+ * A list that displays recipe cards.
  * Uses paging to load items lazily.
+ * Adjusted to display 1 column for horizontal cards.
  *
  * @param recipes The paginated list of recipes.
  * @param onRecipeClick Callback triggered when a recipe card is clicked, passing the recipe ID.
  */
 @Composable
-fun RecipeList(recipes: LazyPagingItems<RecipeItem>, onRecipeClick: (String) -> Unit) {
+fun RecipeList(
+    recipes: LazyPagingItems<RecipeItem>, onRecipeClick: (String) -> Unit
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(UiConstants.RECIPE_LIST_GRID_CELLS_FIXED),
         contentPadding = PaddingValues(Dimens.PaddingSmall),

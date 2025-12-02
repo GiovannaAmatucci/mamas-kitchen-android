@@ -15,13 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.giovanna.amatucci.foodbook.R
-
-/**
- * Represents the tabs available in the main bottom navigation bar.
- *
- * @property titleResId The string resource ID for the tab title.
- * @property icon The vector icon to display for the tab.
- */
 internal sealed class MainScreenNavTab(
     val titleResId: Int, val icon: ImageVector
 ) {
@@ -33,14 +26,6 @@ internal sealed class MainScreenNavTab(
         titleResId = R.string.favorites_screen_title, icon = Icons.Default.Favorite
     )
 }
-
-/**
- * The bottom navigation bar component for the main screen.
- * It synchronizes with a [PagerState] to highlight the active tab and handle navigation.
- *
- * @param pagerState The state of the horizontal pager controlling the content.
- * @param onTabClick Callback triggered when a navigation item is clicked, passing the target page index.
- */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BottomNavigationBar(

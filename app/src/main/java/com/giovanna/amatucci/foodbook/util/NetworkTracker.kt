@@ -7,13 +7,6 @@ import com.giovanna.amatucci.foodbook.R
 import java.io.IOException
 
 class NoConnectivityException : IOException(R.string.error_no_internet.toString())
-
-/**
- * Extension function to check for active internet connectivity.
- * Checks for WiFi, Cellular, or Ethernet capabilities.
- *
- * @return True if the device has an active internet connection, false otherwise.
- */
 fun Context.isInternetAvailable(): Boolean {
     val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val network = connectivityManager.activeNetwork ?: return false

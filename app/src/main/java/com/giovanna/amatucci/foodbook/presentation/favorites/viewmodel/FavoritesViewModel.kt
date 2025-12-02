@@ -7,6 +7,7 @@ import com.giovanna.amatucci.foodbook.domain.usecase.favorites.DeleteAllFavorite
 import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetFavoritesUseCase
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesEvent
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesUiState
+import com.giovanna.amatucci.foodbook.util.constants.UiConstants
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,15 +31,8 @@ class FavoritesViewModel(
     val uiState: StateFlow<FavoritesUiState> = _uiState.asStateFlow()
 
     init {
-        val recipesFlow = _uiState.map { it.searchQuery }.distinctUntilChanged().debounce(300L)
-            .flatMapLatest { query ->
-                getFavoritesUseCase(query)
-            }
-            .cachedIn(viewModelScope)
-
-        _uiState.update { it.copy(recipes = recipesFlow) }
+        initializeSearchFlow()
     }
-
     fun onEvent(event: FavoritesEvent) {
         when (event) {
             is FavoritesEvent.UpdateSearchQuery -> {
@@ -54,20 +48,30 @@ class FavoritesViewModel(
             }
 
             is FavoritesEvent.ConfirmDeleteAll -> {
-                viewModelScope.launch {
-                    deleteAllFavoritesUseCase()
-                    _uiState.update { it.copy(showConfirmDeleteAllDialog = false) }
-                }
+                performDeleteAll()
             }
 
             is FavoritesEvent.SubmitSearch -> {
                 _uiState.update { it.copy(searchQuery = event.query) }
-
             }
 
             is FavoritesEvent.ClearSearchQuery -> {
                 _uiState.update { it.copy(searchQuery = "") }
             }
         }
+    }
+
+    private fun initializeSearchFlow() {
+        val recipesFlow = _uiState.map { it.searchQuery }.distinctUntilChanged()
+            .debounce(UiConstants.FAVORITE_VIEW_MODEL_DEBOUNCE).flatMapLatest { query ->
+                getFavoritesUseCase(query)
+            }.cachedIn(viewModelScope)
+
+        _uiState.update { it.copy(recipes = recipesFlow) }
+    }
+
+    private fun performDeleteAll() = viewModelScope.launch {
+        deleteAllFavoritesUseCase()
+        _uiState.update { it.copy(showConfirmDeleteAllDialog = false) }
     }
 }

@@ -25,12 +25,6 @@ import androidx.compose.ui.unit.dp
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.util.constants.UiConstants
 import kotlinx.coroutines.delay
-
-/**
- * Displays the Splash Screen with a fade-in animation.
- *
- * @param onAnimationFinished Callback triggered when the splash animation/delay is complete.
- */
 @Composable
 fun AnimatedSplashScreen(onAnimationFinished: () -> Unit) {
     var startAnimation by remember { mutableStateOf(true) }

@@ -19,13 +19,6 @@ import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.stat
 import com.giovanna.amatucci.foodbook.presentation.components.LoadingIndicatorComposable
 import com.giovanna.amatucci.foodbook.presentation.components.NetworkFailedComposable
 import org.koin.compose.viewmodel.koinViewModel
-
-/**
- * The stateful route for Authentication.
- *
- * @param onNavigateToHome Callback executed when authentication is successful.
- * @param viewModel The [AuthViewModel] injected via Koin.
- */
 @Composable
 fun AuthRoute(
     onNavigateToHome: () -> Unit,
@@ -42,15 +35,8 @@ fun AuthRoute(
     AuthScreen(
         uiState = uiState, onRetry = { viewModel.onEvent(AuthEvent.RequestToken) })
 }
-
-/**
- * The stateless UI for Authentication.
- *
- * @param uiState The current authentication state.
- * @param onRetry Callback to retry authentication in case of failure.
- */
 @Composable
-fun AuthScreen(
+private fun AuthScreen(
     uiState: AuthState, onRetry: () -> Unit
 ) {
     Box(

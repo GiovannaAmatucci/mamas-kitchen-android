@@ -12,6 +12,7 @@ import com.giovanna.amatucci.foodbook.domain.repository.FavoritesRepository
 import com.giovanna.amatucci.foodbook.util.LogWriter
 import com.giovanna.amatucci.foodbook.util.constants.LogMessages
 import com.giovanna.amatucci.foodbook.util.constants.RepositoryConstants
+import com.giovanna.amatucci.foodbook.util.constants.TAG
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -20,14 +21,11 @@ class FavoritesRepositoryImpl(
     private val favoriteDao: FavoriteDao,
     private val logWriter: LogWriter
 ) : FavoritesRepository {
-    companion object {
-        private const val TAG = "FavoritesRepository"
-    }
 
     override suspend fun addFavorite(
         recipe: RecipeDetails
     ) {
-        logWriter.d(TAG, LogMessages.REPO_FAVORITE_ADD_START.format(recipe))
+        logWriter.d(TAG.FAVORITES_REPOSITORY, LogMessages.REPO_FAVORITE_ADD_START.format(recipe))
         mapper.favoriteDomainToDto(recipe).let {
             favoriteDao.insertFavorite(it)
         }
@@ -45,7 +43,8 @@ class FavoritesRepositoryImpl(
         val preparedQuery = "%$query%"
         return Pager(
             config = PagingConfig(
-                pageSize = RepositoryConstants.FAVORITE_PAGE_SIZE, enablePlaceholders = false
+                pageSize = RepositoryConstants.FAVORITE_REPOSITORY_PAGE_SIZE,
+                enablePlaceholders = false
             ),
             pagingSourceFactory = { favoriteDao.getAllFavoritesPaged(preparedQuery) }).flow.map { pagingData ->
             pagingData.map { favoriteEntity ->
@@ -55,7 +54,9 @@ class FavoritesRepositoryImpl(
     }
 
     override suspend fun removeFavorite(recipeId: String) {
-        logWriter.d(TAG, LogMessages.REPO_FAVORITE_REMOVE_START.format(recipeId))
+        logWriter.d(
+            TAG.FAVORITES_REPOSITORY, LogMessages.REPO_FAVORITE_REMOVE_START.format(recipeId)
+        )
         favoriteDao.deleteFavorite(recipeId)
     }
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giovanna.amatucci.foodbook.R
+import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
 import com.giovanna.amatucci.foodbook.domain.usecase.details.GetRecipeDetailsUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.favorites.AddFavoritesUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetFavoritesDetailsUseCase
@@ -38,6 +39,17 @@ class DetailsViewModel(
         savedStateHandle.get<String>(UiConstants.DETAILS_VIEW_MODEL_RECIPE_ID)
 
     init {
+        validateAndLoad()
+    }
+
+    fun onEvent(event: DetailsEvent) {
+        when (event) {
+            is DetailsEvent.ToggleFavorite -> toggleFavorite()
+            is DetailsEvent.RetryConnection -> validateAndLoad()
+        }
+    }
+
+    private fun validateAndLoad() {
         if (recipeId.isNullOrBlank()) {
             _uiState.update {
                 it.copy(
@@ -45,56 +57,47 @@ class DetailsViewModel(
                     error = UiText.StringResource(R.string.details_error_invalid_id)
                 )
             }
-        } else {
-            getRecipeDetails(recipeId)
-            observeFavoriteStatus(recipeId)
+            return
         }
+        loadRecipeData(recipeId)
+        observeFavoriteStatus(recipeId)
     }
 
-    fun onEvent(event: DetailsEvent) {
-        when (event) {
-            is DetailsEvent.ToggleFavorite -> toggleFavorite()
-            is DetailsEvent.RetryConnection -> {
-                recipeId?.let { id ->
-                    getRecipeDetails(id)
-                }
+    private fun loadRecipeData(id: String) = viewModelScope.launch {
+        _uiState.update { it.copy(status = DetailsStatus.Loading) }
+        val localRecipe = runCatching { getFavoritesDetailsUseCase(id) }.getOrNull()
+
+        if (localRecipe != null) {
+            onRecipeLoaded(localRecipe)
+            return@launch
+        }
+        fetchRemoteDetails(id)
+    }
+
+    private suspend fun fetchRemoteDetails(id: String) {
+        getRecipeDetailsUseCase(id).let { result ->
+            when (result) {
+                is ResultWrapper.Success -> onRecipeLoaded(result.data)
+                is ResultWrapper.Error -> onError(UiText.DynamicString(result.message))
+                is ResultWrapper.Exception -> onError(UiText.StringResource(R.string.details_error_api_failure))
             }
         }
     }
 
-    private fun getRecipeDetails(recipeId: String) {
-        viewModelScope.launch {
-            _uiState.update { it.copy(status = DetailsStatus.Loading) }
-            val localRecipe = getFavoritesDetailsUseCase(recipeId)
-
-            if (localRecipe != null) {
-                _uiState.update {
-                    it.copy(status = DetailsStatus.Success, recipe = localRecipe)
-                }
-            } else {
-                getRecipeDetailsUseCase(recipeId).let { result ->
-                    when (result) {
-                        is ResultWrapper.Success -> {
-                            _uiState.update {
-                                it.copy(status = DetailsStatus.Success, recipe = result.data)
-                            }
-                        }
-                        is ResultWrapper.Error, is ResultWrapper.Exception -> {
-                            _uiState.update {
-                                it.copy(
-                                    status = DetailsStatus.Error,
-                                    error = UiText.StringResource(R.string.details_error_api_failure)
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+    private fun onRecipeLoaded(recipe: RecipeDetails) {
+        _uiState.update {
+            it.copy(status = DetailsStatus.Success, recipe = recipe, error = null)
         }
     }
 
-    private fun observeFavoriteStatus(recipeId: String) {
-        isFavoritesUseCase(recipeId).onEach { isFavorite ->
+    private fun onError(message: UiText) {
+        _uiState.update {
+            it.copy(status = DetailsStatus.Error, error = message)
+        }
+    }
+
+    private fun observeFavoriteStatus(id: String) {
+        isFavoritesUseCase(id).onEach { isFavorite ->
             _uiState.update { it.copy(isFavorite = isFavorite) }
         }.launchIn(viewModelScope)
     }
@@ -102,8 +105,15 @@ class DetailsViewModel(
     private fun toggleFavorite() = viewModelScope.launch {
         val currentState = _uiState.value
         val recipe = currentState.recipe ?: return@launch
-        val recipeId = recipe.id.takeIf { !it.isNullOrBlank() } ?: return@launch
-        if (currentState.isFavorite == true) removeFavoritesUseCase(recipeId)
-        else addFavoritesUseCase(recipe)
+        val validId = recipe.id.takeIf { !it.isNullOrBlank() } ?: return@launch
+        runCatching {
+            if (currentState.isFavorite == true) {
+                removeFavoritesUseCase(validId)
+            } else {
+                addFavoritesUseCase(recipe)
+            }
+        }.onFailure { e ->
+            _uiState.update { it.copy(error = UiText.DynamicString(e.message.toString())) }
+        }
     }
 }

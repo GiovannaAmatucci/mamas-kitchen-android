@@ -14,13 +14,6 @@ import com.giovanna.amatucci.foodbook.presentation.components.AppSearchBarCompos
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesEvent
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesUiState
 
-/**
- * The Top Bar for the Favorites screen, implemented as a Search Bar.
- * Allows searching within favorites and deleting all items.
- *
- * @param state The current UI state containing the search query.
- * @param onEvent Callback for UI events (query change, delete all).
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoritesTopBar(

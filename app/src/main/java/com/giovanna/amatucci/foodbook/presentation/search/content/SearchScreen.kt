@@ -18,14 +18,6 @@ import com.giovanna.amatucci.foodbook.presentation.components.PagingStateComposa
 import com.giovanna.amatucci.foodbook.presentation.components.RecipeList
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchUiState
 import com.giovanna.amatucci.foodbook.util.constants.UiConstants
-
-/**
- * The main content area for the Search screen.
- * Collects the paging data from the state and delegates rendering to [SearchContent].
- *
- * @param onNavigateToRecipe Callback triggered when a recipe is clicked.
- * @param state The current UI state containing the search query and recipe flow.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
@@ -40,18 +32,6 @@ fun SearchScreen(
         )
     }
 }
-
-/**
- * Handles the logic for displaying different states of the search results:
- * - Idle (no search yet)
- * - Loading/Error (handled by [PagingStateComposable])
- * - Empty results
- * - Success list
- *
- * @param searchQuery The query string currently submitted.
- * @param recipes The paginated list of recipes.
- * @param onRecipeClick Callback triggered when a recipe card is clicked.
- */
 @Composable
 private fun SearchContent(
     searchQuery: String,

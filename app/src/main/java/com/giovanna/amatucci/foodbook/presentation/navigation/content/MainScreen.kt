@@ -19,16 +19,6 @@ import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.SearchViewMo
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchEvent
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchUiState
 import kotlinx.coroutines.launch
-
-/**
- * The entry point (Route) for the Main Screen.
- * It collects states from both [SearchViewModel] and [FavoritesViewModel] and passes them
- * to the stateless [MainScreen] composable.
- *
- * @param searchViewModel The ViewModel managing the search feature.
- * @param favoriteViewModel The ViewModel managing the favorites feature.
- * @param onNavigateToRecipe Callback triggered to navigate to the recipe details screen.
- */
 @Composable
 fun MainRoute(
     searchViewModel: SearchViewModel,
@@ -47,18 +37,8 @@ fun MainRoute(
     )
 }
 private enum class MainTab(val tab: Int) { Search(0), Favorites(1) }
-
-/**
- * The main screen that holds the bottom navigation and swipes between Search and Favorites.
- *
- * @param searchUiState The state of the Search screen.
- * @param favoritesUiState The state of the Favorites screen.
- * @param onSearchEvent Callback for search events.
- * @param onFavoriteEvent Callback for favorite events.
- * @param onNavigateToRecipe Callback to navigate to details screen.
- */
 @Composable
-fun MainScreen(
+private fun MainScreen(
     searchUiState: SearchUiState,
     favoritesUiState: FavoritesUiState,
     onSearchEvent: (SearchEvent) -> Unit,

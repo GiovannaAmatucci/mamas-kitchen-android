@@ -72,10 +72,6 @@ private val LightColorScheme = lightColorScheme(
     inversePrimary = InversePrimaryLight,
     scrim = ScrimLight,
 )
-/**
- * The main Theme composable for FoodBook.
- * Handles Dark/Light mode and Dynamic Colors (Android 12+).
- */
 @Composable
 fun FoodBookTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -99,11 +95,6 @@ fun FoodBookTheme(
         content = content
     )
 }
-
-/**
- * Remembers a scrim color (overlay) based on the current theme (Dark/Light).
- * Used for modal backgrounds or blurring effects.
- */
 @Composable
 fun rememberScrimColor(): Color {
     val isDarkTheme = isSystemInDarkTheme()

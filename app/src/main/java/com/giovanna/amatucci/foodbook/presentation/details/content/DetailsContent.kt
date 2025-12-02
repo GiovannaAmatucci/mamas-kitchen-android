@@ -33,29 +33,18 @@ import com.giovanna.amatucci.foodbook.domain.model.IngredientInfo
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
 import com.giovanna.amatucci.foodbook.presentation.components.DetailsImageComposable
 import com.giovanna.amatucci.foodbook.presentation.components.EmptyMessage
-import com.giovanna.amatucci.foodbook.presentation.components.LoadingIndicatorComposable
+import com.giovanna.amatucci.foodbook.presentation.components.RecipeDetailsShimmer
 import com.giovanna.amatucci.foodbook.presentation.components.SectionTitle
-import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsEvent
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsStatus
 import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 import com.giovanna.amatucci.foodbook.ui.theme.rememberScrimColor
 
-/**
- * The main content container for the details screen.
- * It handles switching between Loading, Error, and Success states.
- *
- * @param modifier The modifier to be applied to the container.
- * @param status The current status of the UI (Loading, Success, Error).
- * @param recipe The recipe details to display (only used when status is Success).
- * @param onEvent Callback for UI events (e.g., retrying connection).
- * @param onImageDisplayed Callback triggered when the main image changes (used for the blurred background).
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsContent(
     modifier: Modifier,
     status: DetailsStatus,
-    recipe: RecipeDetails?, onEvent: (DetailsEvent) -> Unit,
+    recipe: RecipeDetails?,
     onImageDisplayed: (String?) -> Unit = {}
 ) {
     val scrimColor = rememberScrimColor()
@@ -67,7 +56,7 @@ fun DetailsContent(
     ) {
         when (status) {
             is DetailsStatus.Loading -> {
-                LoadingIndicatorComposable()
+                RecipeDetailsShimmer()
             }
 
             is DetailsStatus.Error -> EmptyMessage(message = stringResource(R.string.details_error_message_loading_failed))
@@ -84,15 +73,6 @@ fun DetailsContent(
         }
     }
 }
-
-/**
- * The scrolling list displaying all recipe information.
- *
- * @param recipe The domain object containing all recipe details.
- * @param modifier Modifier for the list.
- * @param onImageDisplayed Callback to bubble up the current image URL.
- */
-
 @Composable
 private fun DetailsList(
     recipe: RecipeDetails, modifier: Modifier, onImageDisplayed: (String?) -> Unit
@@ -144,11 +124,6 @@ private fun DetailsList(
     }
 }
 
-
-/**
- * Displays the recipe name and description.
- */
-
 @Composable
 private fun DetailsHeader(recipe: RecipeDetails) {
     Column(modifier = Modifier.padding(Dimens.PaddingMedium)) {
@@ -170,10 +145,6 @@ private fun DetailsHeader(recipe: RecipeDetails) {
         }
     }
 }
-
-/**
- * A row displaying statistics: Prep time, Cook time, and Servings.
- */
 @Composable
 private fun DetailsRow(recipe: RecipeDetails) {
     Row(
@@ -207,15 +178,6 @@ private fun DetailsRow(recipe: RecipeDetails) {
         }
     }
 }
-
-/**
- * A single statistic item with an icon, label, and value.
- *
- * @param icon The vector icon to display.
- * @param contentDescription Accessibility description for the icon.
- * @param label The label text (e.g., "Prep Time").
- * @param value The value text (e.g., "10 min").
- */
 @Composable
 private fun DetailsStatItem(
     icon: ImageVector, contentDescription: String? = null, label: String, value: String

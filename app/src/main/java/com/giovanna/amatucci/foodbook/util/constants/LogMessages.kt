@@ -1,8 +1,4 @@
 package com.giovanna.amatucci.foodbook.util.constants
-
-/**
- * Centralized log messages for the application to ensure consistency in debugging.
- */
 object LogMessages {
 
     // --- AUTHENTICATION LAYER (AuthApi, AuthRepository) ---

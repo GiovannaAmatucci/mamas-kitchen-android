@@ -7,12 +7,10 @@ import com.giovanna.amatucci.foodbook.util.ResultWrapper
 import kotlinx.coroutines.flow.Flow
 
 interface RecipeRepository {
-
     fun searchRecipesPaginated(
         query: String, recipeTypes: List<String>? = null
     ): Flow<PagingData<RecipeItem>>
 
     suspend fun getRecipeDetails(recipeId: String): ResultWrapper<RecipeDetails>
-
 }
 

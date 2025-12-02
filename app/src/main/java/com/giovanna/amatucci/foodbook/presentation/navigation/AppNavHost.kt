@@ -7,9 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.giovanna.amatucci.foodbook.presentation.authentication.content.AuthRoute
-import com.giovanna.amatucci.foodbook.presentation.authentication.content.AuthScreen
 import com.giovanna.amatucci.foodbook.presentation.details.content.DetailsRoute
-import com.giovanna.amatucci.foodbook.presentation.details.content.DetailsScreen
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.FavoritesViewModel
 import com.giovanna.amatucci.foodbook.presentation.navigation.content.MainRoute
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.SearchViewModel

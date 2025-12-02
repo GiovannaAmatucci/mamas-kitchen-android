@@ -7,6 +7,7 @@ import com.giovanna.amatucci.foodbook.data.remote.model.TokenResponse
 import com.giovanna.amatucci.foodbook.domain.repository.TokenRepository
 import com.giovanna.amatucci.foodbook.util.LogWriter
 import com.giovanna.amatucci.foodbook.util.constants.LogMessages
+import com.giovanna.amatucci.foodbook.util.constants.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.Date
@@ -17,13 +18,9 @@ class TokenRepositoryImpl(
     private val logWriter: LogWriter
 ) : TokenRepository {
 
-    companion object {
-        private const val TAG = "TokenRepository"
-    }
-
     override suspend fun saveToken(response: TokenResponse) {
         withContext(Dispatchers.IO) {
-            logWriter.d(TAG, LogMessages.TOKEN_REPO_SAVE_START)
+            logWriter.d(TAG.TOKEN_REPOSITORY, LogMessages.TOKEN_REPO_SAVE_START)
             try {
                 val token = response.accessToken ?: return@withContext
                 val (iv, encryptedToken) = cryptoManager.encrypt(token)
@@ -37,26 +34,26 @@ class TokenRepositoryImpl(
                 )
                 dao.saveToken(entity)
                 logWriter.d(
-                    TAG, LogMessages.TOKEN_REPO_SAVE_SUCCESS.format(
+                    TAG.TOKEN_REPOSITORY, LogMessages.TOKEN_REPO_SAVE_SUCCESS.format(
                         Date(expiresAt)
                     )
                 )
             } catch (e: Exception) {
-                logWriter.e(TAG, LogMessages.TOKEN_REPO_SAVE_FAILURE, e)
+                logWriter.e(TAG.TOKEN_REPOSITORY, LogMessages.TOKEN_REPO_SAVE_FAILURE, e)
             }
         }
     }
 
     override suspend fun getValidAccessToken(): String? {
         return withContext(Dispatchers.IO) {
-            logWriter.d(TAG, LogMessages.TOKEN_REPO_GET_START)
+            logWriter.d(TAG.TOKEN_REPOSITORY, LogMessages.TOKEN_REPO_GET_START)
             dao.getToken().let { entity ->
                 if (entity == null) {
-                    logWriter.w(TAG, LogMessages.TOKEN_REPO_GET_NOT_FOUND)
+                    logWriter.w(TAG.TOKEN_REPOSITORY, LogMessages.TOKEN_REPO_GET_NOT_FOUND)
                     return@withContext null
                 }
                 if (System.currentTimeMillis() >= entity.expiresAtMillis) {
-                    logWriter.w(TAG, LogMessages.TOKEN_REPO_GET_EXPIRED)
+                    logWriter.w(TAG.TOKEN_REPOSITORY, LogMessages.TOKEN_REPO_GET_EXPIRED)
                     return@withContext null
                 }
                 return@withContext try {
@@ -64,11 +61,14 @@ class TokenRepositoryImpl(
                         iv = entity.initializationVector,
                         encryptedData = entity.encryptedAccessToken
                     )
-                    logWriter.d(TAG, LogMessages.TOKEN_REPO_GET_SUCCESS)
+                    logWriter.d(TAG.TOKEN_REPOSITORY, LogMessages.TOKEN_REPO_GET_SUCCESS)
                     decryptedToken
 
                 } catch (e: Exception) {
-                    logWriter.e(TAG, LogMessages.TOKEN_REPO_DECRYPT_FAILURE.format(e.message))
+                    logWriter.e(
+                        TAG.TOKEN_REPOSITORY,
+                        LogMessages.TOKEN_REPO_DECRYPT_FAILURE.format(e.message)
+                    )
                     null
                 }
             }
@@ -79,9 +79,9 @@ class TokenRepositoryImpl(
         withContext(Dispatchers.IO) {
             try {
                 dao.deleteToken()
-                logWriter.w(TAG, LogMessages.TOKEN_REPO_CLEAR)
+                logWriter.w(TAG.TOKEN_REPOSITORY, LogMessages.TOKEN_REPO_CLEAR)
             } catch (e: Exception) {
-                logWriter.e(TAG, LogMessages.TOKEN_REPO_DECRYPT_FAILURE, e)
+                logWriter.e(TAG.TOKEN_REPOSITORY, LogMessages.TOKEN_REPO_DECRYPT_FAILURE, e)
             }
         }
     }

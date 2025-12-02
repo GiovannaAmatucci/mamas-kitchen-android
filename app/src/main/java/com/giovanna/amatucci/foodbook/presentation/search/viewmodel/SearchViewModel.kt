@@ -30,84 +30,80 @@ class SearchViewModel(
     val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
 
     init {
-        getSearchHistory()
+        fetchSearchHistory()
     }
-
-    private suspend fun refreshHistory() {
-        val history = getSearchQueriesUseCase()
-        _uiState.update { it.copy(searchHistory = history) }
-    }
-    fun searchRecipe(query: String) {
-        viewModelScope.launch {
-            saveSearchQueryUseCase(query)
-            refreshHistory()
-            val newProductsFlow = searchRecipesUseCase(query).cachedIn(viewModelScope)
-            _uiState.update { it.copy(recipes = newProductsFlow, isActive = false) }
-        }
-    }
-
-    fun getSearchHistory() {
-        viewModelScope.launch {
-            val history = getSearchQueriesUseCase()
-            _uiState.update { it.copy(searchHistory = history) }
-        }
-    }
-
-
     fun onEvent(event: SearchEvent) {
         when (event) {
             is SearchEvent.UpdateSearchQuery -> {
                 _uiState.update { it.copy(searchQuery = event.query) }
             }
-
-            is SearchEvent.SubmitSearch -> {
-                val query = event.query
-                _uiState.update { it.copy(submittedQuery = query) }
-
-                if (query.isBlank()) {
-                    _uiState.update {
-                        it.copy(
-                            submittedQuery = "",
-                            recipes = flowOf(PagingData.empty())
-                        )
-                    }
-                } else {
-                    searchRecipe(query)
-                }
-            }
-
+            is SearchEvent.SubmitSearch -> handleSearchSubmission(event.query)
             is SearchEvent.RecentSearchClicked -> {
-                val query = event.query
                 _uiState.update {
                     it.copy(
-                        searchQuery = query,
-                        submittedQuery = query,
+                        searchQuery = event.query,
+                        submittedQuery = event.query,
                         isActive = false
                     )
                 }
-                searchRecipe(query)
+                performSearch(event.query)
             }
 
-            is SearchEvent.ClearSearchQuery -> {
-                _uiState.update {
-                    it.copy(
-                        searchQuery = ""
-                    )
-                }
-            }
-
-            is SearchEvent.ClearSearchHistory -> {
-                viewModelScope.launch {
-                    clearSearchHistoryUseCase()
-                    getSearchHistory()
-                }
-            }
-
+            is SearchEvent.ClearSearchQuery -> _uiState.update { it.copy(searchQuery = "") }
+            is SearchEvent.ClearSearchHistory -> clearHistory()
             is SearchEvent.ActiveChanged -> {
                 _uiState.update { it.copy(isActive = event.active) }
-                if (event.active) {
-                    getSearchHistory()
+                if (event.active) fetchSearchHistory()
+            }
+        }
+    }
+
+    private fun handleSearchSubmission(query: String) {
+        _uiState.update { it.copy(submittedQuery = query) }
+
+        if (query.isBlank()) {
+            _uiState.update {
+                it.copy(submittedQuery = "", recipes = flowOf(PagingData.empty()))
+            }
+        } else {
+            performSearch(query)
+        }
+    }
+
+    private fun performSearch(query: String) {
+        triggerSearchFlow(query)
+        saveQueryToHistory(query)
+    }
+
+    private fun triggerSearchFlow(query: String) = viewModelScope.launch {
+        val newPagingFlow = searchRecipesUseCase(query).cachedIn(viewModelScope)
+
+        _uiState.update {
+            it.copy(recipes = newPagingFlow, isActive = false)
+        }
+    }
+
+    private fun saveQueryToHistory(query: String) = viewModelScope.launch {
+        runCatching {
+            saveSearchQueryUseCase(query)
+            fetchSearchHistory()
+        }
+    }
+
+    private fun fetchSearchHistory() {
+        viewModelScope.launch {
+            runCatching { getSearchQueriesUseCase() }
+                .onSuccess { history ->
+                    _uiState.update { it.copy(searchHistory = history) }
                 }
+        }
+    }
+
+    private fun clearHistory() {
+        viewModelScope.launch {
+            runCatching {
+                clearSearchHistoryUseCase()
+                fetchSearchHistory()
             }
         }
     }

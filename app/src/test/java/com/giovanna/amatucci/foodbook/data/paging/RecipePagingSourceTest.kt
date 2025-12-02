@@ -98,7 +98,9 @@ class RecipePagingSourceTest {
         )
         coEvery {
             api.searchRecipes(
-                testQuery, RepositoryConstants.RECIPE_FATSECRET_STARTING_PAGE_INDEX, testLoadSize
+                testQuery,
+                RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX,
+                testLoadSize
             )
         } returns mockApiSuccessResponse
 
@@ -109,13 +111,15 @@ class RecipePagingSourceTest {
         val expected = PagingSource.LoadResult.Page(
             data = listOf(mockRecipeItem),
             prevKey = null,
-            nextKey = RepositoryConstants.RECIPE_FATSECRET_STARTING_PAGE_INDEX + 1
+            nextKey = RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX + 1
         )
 
         assertEquals(expected, result)
         coVerify(exactly = 1) {
             api.searchRecipes(
-                testQuery, RepositoryConstants.RECIPE_FATSECRET_STARTING_PAGE_INDEX, testLoadSize
+                testQuery,
+                RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX,
+                testLoadSize
             )
         }
         verify(exactly = 1) { mapper.searchRecipeDtoToDomain(mockRecipeSearchDto) }
@@ -177,7 +181,9 @@ class RecipePagingSourceTest {
             // CORREÇÃO 2 e 3
             coEvery {
                 api.searchRecipes(
-                    testQuery, RepositoryConstants.RECIPE_FATSECRET_STARTING_PAGE_INDEX, testLoadSize
+                    testQuery,
+                    RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX,
+                    testLoadSize
                 )
             } returns mockApiNullsResponse
 

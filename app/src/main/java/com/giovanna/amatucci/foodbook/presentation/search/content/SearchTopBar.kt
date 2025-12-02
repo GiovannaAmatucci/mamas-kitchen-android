@@ -26,14 +26,6 @@ import com.giovanna.amatucci.foodbook.presentation.components.AppSearchBarCompos
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchEvent
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchUiState
 import com.giovanna.amatucci.foodbook.ui.theme.Dimens
-
-/**
- * The Top Bar for the Search screen.
- * Displays the search input, back/search icons, and search history list.
- *
- * @param state The current UI state containing query, history, and active status.
- * @param onEvent Callback for search-related events.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchTopBar(

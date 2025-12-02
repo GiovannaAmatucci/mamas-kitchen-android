@@ -4,7 +4,7 @@ package com.giovanna.amatucci.foodbook.domain.model
 data class RecipeDetails(
     val id: String?,
     val name: String?,
-    val description: String?,
+    val description: String? = null,
     val imageUrls: List<String>? = null,
     val preparationTime: String?,
     val cookingTime: String?,
