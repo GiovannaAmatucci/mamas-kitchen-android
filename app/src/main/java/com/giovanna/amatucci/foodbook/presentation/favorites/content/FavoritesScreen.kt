@@ -13,9 +13,8 @@ import com.giovanna.amatucci.foodbook.presentation.components.PagingStateComposa
 import com.giovanna.amatucci.foodbook.presentation.components.RecipeList
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesEvent
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesUiState
-
 @Composable
-fun FavoritesRouteContent(
+fun FavoritesScreen(
     uiState: FavoritesUiState,
     onNavigateToRecipe: (recipeId: String) -> Unit,
     onEvent: (FavoritesEvent) -> Unit
@@ -43,7 +42,6 @@ fun FavoritesRouteContent(
         }
     }
 }
-
 @Composable
 private fun DeleteAllFavoritesDialog(
     onConfirm: () -> Unit, onDismiss: () -> Unit

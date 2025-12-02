@@ -33,9 +33,8 @@ import com.giovanna.amatucci.foodbook.domain.model.IngredientInfo
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
 import com.giovanna.amatucci.foodbook.presentation.components.DetailsImageComposable
 import com.giovanna.amatucci.foodbook.presentation.components.EmptyMessage
-import com.giovanna.amatucci.foodbook.presentation.components.LoadingIndicatorComposable
+import com.giovanna.amatucci.foodbook.presentation.components.RecipeDetailsShimmer
 import com.giovanna.amatucci.foodbook.presentation.components.SectionTitle
-import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsEvent
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsStatus
 import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 import com.giovanna.amatucci.foodbook.ui.theme.rememberScrimColor
@@ -45,7 +44,7 @@ import com.giovanna.amatucci.foodbook.ui.theme.rememberScrimColor
 fun DetailsContent(
     modifier: Modifier,
     status: DetailsStatus,
-    recipe: RecipeDetails?, onEvent: (DetailsEvent) -> Unit,
+    recipe: RecipeDetails?,
     onImageDisplayed: (String?) -> Unit = {}
 ) {
     val scrimColor = rememberScrimColor()
@@ -57,7 +56,7 @@ fun DetailsContent(
     ) {
         when (status) {
             is DetailsStatus.Loading -> {
-                LoadingIndicatorComposable()
+                RecipeDetailsShimmer()
             }
 
             is DetailsStatus.Error -> EmptyMessage(message = stringResource(R.string.details_error_message_loading_failed))
@@ -74,7 +73,6 @@ fun DetailsContent(
         }
     }
 }
-
 @Composable
 private fun DetailsList(
     recipe: RecipeDetails, modifier: Modifier, onImageDisplayed: (String?) -> Unit
@@ -147,7 +145,6 @@ private fun DetailsHeader(recipe: RecipeDetails) {
         }
     }
 }
-
 @Composable
 private fun DetailsRow(recipe: RecipeDetails) {
     Row(
@@ -181,7 +178,6 @@ private fun DetailsRow(recipe: RecipeDetails) {
         }
     }
 }
-
 @Composable
 private fun DetailsStatItem(
     icon: ImageVector, contentDescription: String? = null, label: String, value: String

@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.giovanna.amatucci.foodbook.R
-
 internal sealed class MainScreenNavTab(
     val titleResId: Int, val icon: ImageVector
 ) {
@@ -27,7 +26,6 @@ internal sealed class MainScreenNavTab(
         titleResId = R.string.favorites_screen_title, icon = Icons.Default.Favorite
     )
 }
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BottomNavigationBar(
@@ -40,8 +38,7 @@ fun BottomNavigationBar(
         tabs.forEachIndexed { index, tab ->
             val isSelected = pagerState.currentPage == index
 
-            NavigationBarItem(
-                label = { Text(text = stringResource(id = tab.titleResId)) }, icon = {
+            NavigationBarItem(label = { Text(text = stringResource(id = tab.titleResId)) }, icon = {
                     Icon(
                         imageVector = tab.icon,
                         contentDescription = stringResource(R.string.navigation_main_screen_navigation_bar)

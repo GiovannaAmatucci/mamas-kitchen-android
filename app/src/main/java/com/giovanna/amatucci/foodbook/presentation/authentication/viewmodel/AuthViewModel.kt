@@ -3,6 +3,7 @@ package com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giovanna.amatucci.foodbook.R
+import com.giovanna.amatucci.foodbook.data.remote.model.TokenResponse
 import com.giovanna.amatucci.foodbook.domain.usecase.auth.CheckAuthenticationStatusUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.auth.FetchAndSaveTokenUseCase
 import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthEvent
@@ -34,54 +35,67 @@ class AuthViewModel(
         }
     }
 
-    private fun checkExistingToken() = viewModelScope.launch {
+    private fun checkExistingToken() {
         _uiState.update { it.copy(status = AuthStatus.Loading) }
-        if (checkAuthStatusUseCase.invoke()) {
-            _uiState.update {
-                it.copy(status = AuthStatus.Success, navigateToHome = true)
-            }
-        } else {
-            executeTokenFetch()
+        verifyToken()
+    }
+
+    private fun verifyToken() {
+        viewModelScope.launch {
+            runCatching { checkAuthStatusUseCase() }.onSuccess { result ->
+                result.takeIf { it }?.let {
+                    _uiState.update {
+                        it.copy(status = AuthStatus.Success, navigateToHome = true)
+                    }
+                } ?: executeTokenFetch()
+            }.onFailure { handleErrorException(error = it) }
         }
     }
 
-    private fun fetchToken() = viewModelScope.launch {
-        if (_uiState.value.status is AuthStatus.Loading) return@launch
+    private fun fetchToken() {
+        if (_uiState.value.status is AuthStatus.Loading) return
         _uiState.update { it.copy(status = AuthStatus.Loading) }
         executeTokenFetch()
     }
 
-    private suspend fun executeTokenFetch() {
-        fetchTokenUseCase.invoke().let { result ->
-            when (result) {
-                is ResultWrapper.Success -> {
-                    _uiState.update {
-                        it.copy(status = AuthStatus.Success, navigateToHome = true)
-                    }
-                }
+    private fun executeTokenFetch() {
+        viewModelScope.launch {
+            runCatching { fetchTokenUseCase.invoke() }.onSuccess { result ->
+                handleTokenResult(result = result)
+            }.onFailure { e -> handleErrorException(error = e) }
+        }
+    }
 
-                is ResultWrapper.Error -> {
-                    _uiState.update {
-                        it.copy(
-                            status = AuthStatus.Error,
-                            navigateToHome = false,
-                            error = UiText.DynamicString(result.message)
-                        )
-                    }
-                }
-
-                is ResultWrapper.Exception -> {
-                    val errorMessage = result.exception.message?.let {
-                        UiText.DynamicString(it)
-                    } ?: UiText.StringResource(R.string.auth_error_unknown)
-
-                    _uiState.update {
-                        it.copy(
-                            status = AuthStatus.Error, navigateToHome = false, error = errorMessage
-                        )
-                    }
+    private fun handleTokenResult(result: ResultWrapper<TokenResponse>) {
+        when (result) {
+            is ResultWrapper.Success -> {
+                _uiState.update {
+                    it.copy(status = AuthStatus.Success, navigateToHome = true)
                 }
             }
+
+            is ResultWrapper.Error -> {
+                _uiState.update {
+                    it.copy(
+                        status = AuthStatus.Error,
+                        navigateToHome = false,
+                        error = UiText.DynamicString(result.message)
+                    )
+                }
+            }
+
+            is ResultWrapper.Exception -> {
+                handleErrorException(error = result.exception)
+            }
+        }
+    }
+
+    private fun handleErrorException(error: Throwable) {
+        val errorMessage = error.message?.let {
+            UiText.DynamicString(it)
+        } ?: UiText.StringResource(R.string.auth_error_unknown)
+        _uiState.update {
+            it.copy(status = AuthStatus.Error, navigateToHome = false, error = errorMessage)
         }
     }
 

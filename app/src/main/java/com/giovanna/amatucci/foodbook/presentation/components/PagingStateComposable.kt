@@ -1,6 +1,7 @@
 package com.giovanna.amatucci.foodbook.presentation.components
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -11,22 +12,26 @@ import com.giovanna.amatucci.foodbook.R
 
 
 /**
- * Um componente genérico que lida com os estados comuns de um LazyPagingItems.
- * Exibe conteúdo para os estados de Carregamento, Erro e Lista Vazia.
+ * A generic component that handles common states of a [LazyPagingItems] list.
+ * Displays Shimmer for Loading, Error Message for errors, and Empty Message for empty lists.
  *
- * @param T O tipo de item na lista de paginação.
- * @param pagingItems O LazyPagingItems cujo estado será observado.
- * @param loadingContent O Composable a ser exibido durante o carregamento inicial.
- * @param errorContent O Composable a ser exibido em caso de erro.
- * @param emptyContent O Composable a ser exibido quando a lista carrega com sucesso, mas está vazia.
- * @param content O Composable principal a ser exibido quando há itens na lista.
+ * @param T The type of item in the paging list.
+ * @param pagingItems The [LazyPagingItems] to observe state from.
+ * @param modifier The modifier to be applied to the container.
+ * @param loadingContent Composable to display during initial loading (Defaults to 6 Shimmer Cards).
+ * @param errorContent Composable to display when an error occurs.
+ * @param emptyContent Composable to display when the list loads successfully but is empty.
+ * @param content The main Composable to display when there are items (Success state).
  */
-
 @Composable
 fun <T : Any> PagingStateComposable(
     pagingItems: LazyPagingItems<T>,
     modifier: Modifier = Modifier,
-    loadingContent: @Composable () -> Unit = { LoadingIndicatorComposable() },
+    loadingContent: @Composable () -> Unit = {
+        Column {
+            repeat(6) { RecipeCardShimmer() }
+        }
+    },
     errorContent: @Composable (message: String) -> Unit = { EmptyMessage(message = it) },
     emptyContent: @Composable () -> Unit = { EmptyMessage(message = stringResource(R.string.search_empty_message)) },
     content: @Composable (pagingItems: LazyPagingItems<T>) -> Unit
@@ -42,12 +47,12 @@ fun <T : Any> PagingStateComposable(
                     errorContent(stringResource(R.string.search_error_message_loading_failed))
                 }
 
-                is LoadState.NotLoading if pagingItems.itemCount == 0 ->
-                    emptyContent()
-
-
-                else -> {
-                    content(pagingItems)
+                is LoadState.NotLoading -> {
+                    if (pagingItems.itemCount == 0 && pagingItems.loadState.append.endOfPaginationReached) {
+                        emptyContent()
+                    } else {
+                        content(pagingItems)
+                    }
                 }
             }
         }

@@ -10,9 +10,17 @@ import com.giovanna.amatucci.foodbook.domain.model.IngredientInfo
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 
-
+/**
+ * Component responsible for transforming data between layers (Data <-> Domain).
+ * Ensures that Domain models don't depend on API DTOs or Database Entities.
+ */
 class RecipeDataMapper {
 
+    /**
+     * Converts a search result DTO from the API to a lightweight Domain item.
+     * @param searchDto The API search result object.
+     * @return [RecipeItem] for listing.
+     */
     fun searchRecipeDtoToDomain(searchDto: RecipeSearch): RecipeItem = RecipeItem(
         id = searchDto.recipeId.toLong(),
         name = searchDto.recipeName,
@@ -20,6 +28,11 @@ class RecipeDataMapper {
         imageUrl = searchDto.recipeImage
     )
 
+    /**
+     * Converts a detailed Domain recipe to a Database Entity (for Favorites).
+     * @param recipeDomain The full recipe details from the Domain.
+     * @return [FavoriteEntity] ready to be stored in Room.
+     */
     fun favoriteDomainToDto(recipeDomain: RecipeDetails): FavoriteEntity = FavoriteEntity(
         recipeId = recipeDomain.id.toString(),
         name = recipeDomain.name,
@@ -34,12 +47,23 @@ class RecipeDataMapper {
         categories = recipeDomain.categories
     )
 
+    /**
+     * Converts a Database Entity back to a lightweight Domain item (for the Favorites list).
+     * @param entity The favorite entity from Room.
+     * @return [RecipeItem] for listing.
+     */
     fun favoriteEntityToDomain(entity: FavoriteEntity): RecipeItem = RecipeItem(
         id = entity.recipeId?.toLong(),
         name = entity.name,
         description = entity.description,
         imageUrl = entity.imageUrl
     )
+
+    /**
+     * Converts a Database Entity to a full Domain Detail model (when viewing a favorite offline).
+     * @param entity The favorite entity from Room.
+     * @return [RecipeDetails] for the details screen.
+     */
     fun favoriteEntityToDetailsDomain(entity: FavoriteEntity): RecipeDetails = RecipeDetails(
         id = entity.recipeId,
         name = entity.name,
@@ -53,6 +77,11 @@ class RecipeDataMapper {
         categories = entity.categories
     )
 
+    /**
+     * Converts a raw API Recipe DTO to the Domain Detail model.
+     * @param recipeDto The raw object from the API response.
+     * @return [RecipeDetails] cleaned up for the UI.
+     */
     fun recipeDetailDtoToDomain(recipeDto: Recipe?): RecipeDetails = RecipeDetails(
         id = recipeDto?.recipeId ?: "",
         name = recipeDto?.recipeName ?: "",
@@ -63,12 +92,13 @@ class RecipeDataMapper {
         servings = recipeDto?.numberOfServings ?: "",
         ingredients = recipeDto?.ingredients?.ingredient!!.map { ingredientDtoToDomain(it) },
         directions = recipeDto.directions?.direction!!.map { directionDtoToDomain(it) },
-        categories = recipeDto.recipeCategories?.recipeCategory?.map { it.recipeCategoryName })
-
+        categories = recipeDto.recipeCategories?.recipeCategory?.map { it.recipeCategoryName }
+    )
 
     private fun ingredientDtoToDomain(ingredientDto: Ingredient): IngredientInfo = IngredientInfo(
         description = ingredientDto.ingredientDescription, foodName = ingredientDto.foodName
     )
+
     private fun directionDtoToDomain(directionDto: Direction): DirectionInfo = DirectionInfo(
         number = directionDto.directionNumber, description = directionDto.directionDescription
     )

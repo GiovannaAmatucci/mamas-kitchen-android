@@ -7,38 +7,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 /**
- * @param displayLarge Usado para textos grandes e expressivos, para chamar atenção. Ideal para títulos muito curtos, numerais ou designs de heróis.
- *                     Não é frequentemente usado, mas disponível para alto impacto.
+ * Material 3 Typography definitions.
  *
- * @param displaySmall Usado para textos grandes e importantes, como títulos de introdução ou numerais em destaque.
- *                     Geralmente o maior texto que você verá em uma tela.
- * @param displayMedium Usado para textos grandes, mas com impacto ligeiramente menor que [displayLarge].
- * @param headlineLarge Usado para títulos de tela de alto nível. Para títulos mais curtos e com maior ênfase.
- *                      Ex: Título da tela "Receitas Favoritas".
- * @param headlineMedium Usado para títulos de tela ou seções importantes, como o nome da receita em `DetailsScreen`.
- *                       Ex: "Bolo de Cenoura com Cobertura de Chocolate".
- * @param headlineSmall Usado para títulos de tela ou seções de menor ênfase que as headlines maiores.
- * @param titleLarge Usado para títulos de seções, cabeçalhos de componentes ou elementos de lista proeminentes.
- *                   Ex: Título de "Ingredientes" ou "Instruções" em `DetailsScreen`.
- * @param titleMedium Usado para títulos dentro de componentes menores, como o título de uma receita em `RecipeListItem`.
- *                    Normalmente tem um peso de fonte `Medium`.
- * @param titleSmall Usado para subtítulos, etiquetas de categorias ou informações secundárias em títulos.
- * @param bodyLarge Usado para o corpo principal do texto em um aplicativo, como descrições de receitas.
- *                  É o estilo padrão para a maioria dos textos longos.
- * @param bodyMedium Usado para textos de corpo de menor destaque ou para parágrafos mais curtos.
- *                   Ex: Texto de resumo da receita em `DetailsScreen` se não for o principal.
- * @param bodySmall Usado para textos de corpo menores, como legendas, notas de rodapé ou informações legais.
- * @param labelMedium Usado para texto auxiliar, como hints, etiquetas de ícones em navegação inferior ou tags pequenas.
- * @param labelLarge Usado para texto em botões, campos de texto (labels/placeholders), ou outros elementos interativos.
- *                   Normalmente tem um peso de fonte `Medium`.
- *                   Ex: Texto do botão "Buscar" em `SearchScreen`.
- * @param labelSmall Usado para texto de menor tamanho, como rótulos de tempo, descrições de status ou mensagens de erro sutis.
+ * @param displayLarge Largest text, for short, important titles or hero sections.
+ * @param displayMedium Large text, slightly smaller than displayLarge.
+ * @param displaySmall Large text, for intro titles.
+ * @param headlineLarge High-emphasis screen titles (e.g., "Favorite Recipes").
+ * @param headlineMedium Section titles or important names (e.g., Recipe Name).
+ * @param headlineSmall Smaller section titles.
+ * @param titleLarge Prominent titles for lists or subsections (e.g., "Ingredients").
+ * @param titleMedium Titles inside smaller components (e.g., Recipe Card title).
+ * @param titleSmall Subtitles or tags.
+ * @param bodyLarge Default body text for long content (e.g., Recipe description).
+ * @param bodyMedium Secondary body text.
+ * @param bodySmall Small body text (captions, legal).
+ * @param labelLarge Text for buttons and inputs.
+ * @param labelMedium Helper text.
+ * @param labelSmall Smallest text (time labels, status).
  */
 val Typography = Typography(
 
     displayLarge = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal, // Pode ser alterado para semibold/bold se a fonte permitir
+        fontWeight = FontWeight.Normal,
         fontSize = 57.sp,
         lineHeight = 64.sp,
         letterSpacing = (-0.25).sp
@@ -49,7 +40,6 @@ val Typography = Typography(
         lineHeight = 52.sp,
         letterSpacing = 0.sp
     ),
-
     displaySmall = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,

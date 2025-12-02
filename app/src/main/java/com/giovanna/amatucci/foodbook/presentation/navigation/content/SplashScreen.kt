@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.util.constants.UiConstants
 import kotlinx.coroutines.delay
-
 @Composable
 fun AnimatedSplashScreen(onAnimationFinished: () -> Unit) {
     var startAnimation by remember { mutableStateOf(true) }

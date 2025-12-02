@@ -18,10 +18,9 @@ import com.giovanna.amatucci.foodbook.presentation.components.PagingStateComposa
 import com.giovanna.amatucci.foodbook.presentation.components.RecipeList
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchUiState
 import com.giovanna.amatucci.foodbook.util.constants.UiConstants
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchRouteContent(
+fun SearchScreen(
     onNavigateToRecipe: (id: String) -> Unit, state: SearchUiState
 ) {
     val uiState = state.recipes.collectAsLazyPagingItems()
@@ -33,8 +32,6 @@ fun SearchRouteContent(
         )
     }
 }
-
-
 @Composable
 private fun SearchContent(
     searchQuery: String,

@@ -10,6 +10,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import com.giovanna.amatucci.foodbook.ui.theme.Dimens
 
+/**
+ * A standard section title text component used throughout the app.
+ *
+ * @param title The text content of the title.
+ * @param modifier Modifier to be applied to the text.
+ */
 @Composable
 fun SectionTitle(title: String, modifier: Modifier = Modifier) {
     Text(

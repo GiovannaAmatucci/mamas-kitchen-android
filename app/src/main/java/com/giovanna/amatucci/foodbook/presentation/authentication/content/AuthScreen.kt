@@ -14,41 +14,46 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.AuthViewModel
 import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthEvent
+import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthState
 import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthStatus
 import com.giovanna.amatucci.foodbook.presentation.components.LoadingIndicatorComposable
 import com.giovanna.amatucci.foodbook.presentation.components.NetworkFailedComposable
 import org.koin.compose.viewmodel.koinViewModel
-
 @Composable
-fun AuthScreen(
+fun AuthRoute(
     onNavigateToHome: () -> Unit,
     viewModel: AuthViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    uiState.navigateToHome.let { currentState ->
-        if (currentState) LaunchedEffect(true) {
+    if (uiState.navigateToHome) {
+        LaunchedEffect(Unit) {
             onNavigateToHome()
             viewModel.onEvent(AuthEvent.NavigationCompleted)
         }
     }
 
+    AuthScreen(
+        uiState = uiState, onRetry = { viewModel.onEvent(AuthEvent.RequestToken) })
+}
+@Composable
+private fun AuthScreen(
+    uiState: AuthState, onRetry: () -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface),
         contentAlignment = Alignment.Center,
     ) {
-        uiState.status.let { status ->
-            when (status) {
-                is AuthStatus.Loading, AuthStatus.Success -> {
-                    LoadingIndicatorComposable()
-                }
+        when (uiState.status) {
+            is AuthStatus.Loading, AuthStatus.Success -> {
+                LoadingIndicatorComposable()
+            }
 
-                is AuthStatus.Error -> {
-                    NetworkFailedComposable(
-                        errorMessage = stringResource(R.string.error_no_internet),
-                        onRetry = { viewModel.onEvent(AuthEvent.RequestToken) })
-                }
+            is AuthStatus.Error -> {
+                NetworkFailedComposable(
+                    errorMessage = stringResource(R.string.error_no_internet), onRetry = onRetry
+                )
             }
         }
     }

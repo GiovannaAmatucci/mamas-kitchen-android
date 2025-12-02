@@ -12,6 +12,8 @@ import com.giovanna.amatucci.foodbook.domain.repository.RecipeRepository
 import com.giovanna.amatucci.foodbook.util.LogWriter
 import com.giovanna.amatucci.foodbook.util.ResultWrapper
 import com.giovanna.amatucci.foodbook.util.constants.LogMessages
+import com.giovanna.amatucci.foodbook.util.constants.RepositoryConstants
+import com.giovanna.amatucci.foodbook.util.constants.TAG
 import kotlinx.coroutines.flow.Flow
 
 class RecipeRepositoryImpl(
@@ -19,41 +21,45 @@ class RecipeRepositoryImpl(
     private val mapper: RecipeDataMapper,
     private val logWriter: LogWriter
 ) : RecipeRepository {
-    companion object {
-        private const val TAG = "RecipeRepository"
-    }
-
     override fun searchRecipesPaginated(
         query: String, recipeTypes: List<String>?
     ): Flow<PagingData<RecipeItem>> {
-        logWriter.d(TAG, LogMessages.REPO_PAGER_CREATED.format(query))
+        logWriter.d(TAG.RECIPE_REPOSITORY, LogMessages.REPO_PAGER_CREATED.format(query))
         return Pager(
             config = PagingConfig(
-                pageSize = 20, enablePlaceholders = false, initialLoadSize = 20
+                pageSize = RepositoryConstants.RECIPE_REPOSITORY_PAGE_SIZE,
+                enablePlaceholders = false,
+                initialLoadSize = RepositoryConstants.RECIPE_REPOSITORY_PAGE_SIZE
             ), pagingSourceFactory = {
                 RecipePagingSource(api, mapper, query, logWriter)
             }).flow
     }
 
     override suspend fun getRecipeDetails(recipeId: String): ResultWrapper<RecipeDetails> {
-        logWriter.d(TAG, LogMessages.REPO_DETAILS_REQUEST.format(recipeId))
+        logWriter.d(TAG.RECIPE_REPOSITORY, LogMessages.REPO_DETAILS_REQUEST.format(recipeId))
         api.getRecipeDetails(recipeId).let { apiResult ->
             return when (apiResult) {
                 is ResultWrapper.Success -> {
                     try {
                         val recipeDto = apiResult.data.recipe
                         val recipeDetails = mapper.recipeDetailDtoToDomain(recipeDto)
-                        logWriter.d(TAG, LogMessages.REPO_DETAILS_SUCCESS.format(recipeDetails.id))
+                        logWriter.d(
+                            TAG.RECIPE_REPOSITORY,
+                            LogMessages.REPO_DETAILS_SUCCESS.format(recipeDetails.id)
+                        )
                         ResultWrapper.Success(recipeDetails)
                     } catch (e: Exception) {
-                        logWriter.e(TAG, LogMessages.REPO_DETAILS_MAPPER_FAILURE.format(e.message))
+                        logWriter.e(
+                            TAG.RECIPE_REPOSITORY,
+                            LogMessages.REPO_DETAILS_MAPPER_FAILURE.format(e.message)
+                        )
                         ResultWrapper.Exception(e)
                     }
                 }
 
                 is ResultWrapper.Error -> {
                     logWriter.e(
-                        TAG, LogMessages.REPO_DETAILS_API_ERROR.format(
+                        TAG.RECIPE_REPOSITORY, LogMessages.REPO_DETAILS_API_ERROR.format(
                             apiResult.code.toString(), apiResult.message
                         )
                     )
@@ -62,7 +68,7 @@ class RecipeRepositoryImpl(
 
                 is ResultWrapper.Exception -> {
                     logWriter.e(
-                        TAG,
+                        TAG.RECIPE_REPOSITORY,
                         LogMessages.REPO_DETAILS_API_EXCEPTION.format(apiResult.exception.message)
                     )
                     apiResult

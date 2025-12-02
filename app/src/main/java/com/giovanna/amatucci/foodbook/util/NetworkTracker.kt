@@ -7,7 +7,6 @@ import com.giovanna.amatucci.foodbook.R
 import java.io.IOException
 
 class NoConnectivityException : IOException(R.string.error_no_internet.toString())
-
 fun Context.isInternetAvailable(): Boolean {
     val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val network = connectivityManager.activeNetwork ?: return false

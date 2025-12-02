@@ -72,7 +72,6 @@ private val LightColorScheme = lightColorScheme(
     inversePrimary = InversePrimaryLight,
     scrim = ScrimLight,
 )
-
 @Composable
 fun FoodBookTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -96,7 +95,6 @@ fun FoodBookTheme(
         content = content
     )
 }
-
 @Composable
 fun rememberScrimColor(): Color {
     val isDarkTheme = isSystemInDarkTheme()
@@ -108,4 +106,3 @@ fun rememberScrimColor(): Color {
         }
     }
 }
-

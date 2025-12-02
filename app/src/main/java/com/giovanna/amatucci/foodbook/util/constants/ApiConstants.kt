@@ -1,5 +1,4 @@
 package com.giovanna.amatucci.foodbook.util.constants
-
 object ApiConstants {
 
     object Params {
@@ -32,10 +31,21 @@ object ApiConstants {
 }
 
 object RepositoryConstants {
-    const val RECIPE_FATSECRET_STARTING_PAGE_INDEX = 1
-    const val SEARCH_OLD_QUERY_ADD_INDEX = 0
-    const val NEW_QUERY_TAKE = 10
+    const val RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX = 1
+    const val SEARCH_REPOSITORY_OLD_QUERY_ADD_INDEX = 0
+    const val SEARCH_REPOSITORY_NEW_QUERY_TAKE = 10
 
-    const val FAVORITE_PAGE_SIZE = 20
+    const val FAVORITE_REPOSITORY_PAGE_SIZE = 20
 
+    const val RECIPE_REPOSITORY_PAGE_SIZE = 20
+
+}
+
+object TAG {
+    const val RECIPE_REPOSITORY = "RecipeRepository"
+    const val RECIPE_PAGING_SOURCE = "RecipePagingSource"
+    const val SEARCH_REPOSITORY = "SearchRepository"
+    const val AUTH_REPOSITORY = "AuthRepository"
+    const val TOKEN_REPOSITORY = "TokenRepository"
+    const val FAVORITES_REPOSITORY = "FavoritesRepository"
 }

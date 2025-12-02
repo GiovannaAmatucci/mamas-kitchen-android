@@ -2,7 +2,6 @@ package com.giovanna.amatucci.foodbook.util.constants
 
 import android.content.Context
 import androidx.annotation.StringRes
-
 sealed class UiText {
     data class DynamicString(val value: String) : UiText()
     class StringResource(

@@ -3,7 +3,7 @@ package com.giovanna.amatucci.foodbook.util.constants
 import android.security.keystore.KeyProperties
 
 object KeyStoreConstants {
-    const val KEY_STORE_ALIAS = "my_app_token_key_alias"
+    const val KEY_STORE_ALIAS = "foodbook_keystore"
     const val ANDROID_KEYSTORE = "AndroidKeyStore"
     const val ENCRYPTION_ALGORITHM = KeyProperties.KEY_ALGORITHM_AES
     const val BLOCK_MODE = KeyProperties.BLOCK_MODE_GCM

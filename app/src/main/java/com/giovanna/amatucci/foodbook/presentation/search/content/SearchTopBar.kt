@@ -6,9 +6,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,12 +23,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.presentation.components.AppSearchBarComposable
-import com.giovanna.amatucci.foodbook.presentation.components.SearchLeadingIcon
-import com.giovanna.amatucci.foodbook.presentation.components.SearchTrailingIcon
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchEvent
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchUiState
 import com.giovanna.amatucci.foodbook.ui.theme.Dimens
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchTopBar(
@@ -78,6 +79,35 @@ fun SearchTopBar(
                 )
             }
         })
+}
+
+@Composable
+private fun SearchLeadingIcon(
+    isActive: Boolean,
+    onActiveChange: (Boolean) -> Unit,
+) {
+    if (isActive) IconButton(onClick = { onActiveChange(false) }) {
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+            contentDescription = stringResource(R.string.common_button_back)
+        )
+    } else {
+        Icon(
+            imageVector = Icons.Default.Search,
+            contentDescription = stringResource(R.string.search_screen_title)
+        )
+    }
+}
+
+@Composable
+private fun SearchTrailingIcon(query: String, onClearClick: () -> Unit) {
+    if (query.isNotEmpty()) IconButton(onClick = { onClearClick() }) {
+        Icon(
+            Icons.Default.Close,
+            contentDescription = stringResource(R.string.search_close_description)
+
+        )
+    }
 }
 
 
