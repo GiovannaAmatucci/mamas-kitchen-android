@@ -14,13 +14,16 @@ import com.giovanna.amatucci.foodbook.domain.usecase.search.SearchRecipesUseCase
 import com.giovanna.amatucci.foodbook.presentation.ScreenStatus
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchEvent
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchUiState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SearchViewModel(
@@ -71,7 +74,6 @@ class SearchViewModel(
         loadCategories()
         fetchLastFavorites()
         fetchSearchHistory()
-        kotlinx.coroutines.delay(1000)
         _uiState.update { it.copy(status = ScreenStatus.Success) }
     }
 

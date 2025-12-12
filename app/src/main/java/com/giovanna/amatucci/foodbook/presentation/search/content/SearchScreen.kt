@@ -61,11 +61,11 @@ fun SearchScreen(
 @Composable
 private fun SearchContent(
     searchQuery: String,
-    recipes: LazyPagingItems<RecipeItem>, recentFavorites: List<RecipeItem>,
+    recipes: LazyPagingItems<RecipeItem>, recentFavorites: List<RecipeItem>?,
     onRecipeClick: (String) -> Unit
 ) {
     if (searchQuery.isBlank()) {
-        if (recentFavorites.isNotEmpty()) {
+        if (recentFavorites?.isNotEmpty() == true) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -75,7 +75,7 @@ private fun SearchContent(
                     recipes = recentFavorites, onRecipeClick = onRecipeClick, modifier = Modifier
                 )
             }
-        } else {
+        } else if (recentFavorites != null) {
             FeedbackComponent(
                 title = stringResource(R.string.search_idle_message),
                 description = stringResource(R.string.search_description_message),

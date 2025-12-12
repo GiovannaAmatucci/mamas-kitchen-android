@@ -15,6 +15,6 @@ data class SearchUiState(
     val recipes: Flow<PagingData<RecipeItem>> = flowOf(PagingData.empty()),
     val searchHistory: List<String> = emptyList(),
     val shouldScrollToSearchTab: Boolean = false,
-    val lastFavorites: List<RecipeItem> = emptyList(),
+    val lastFavorites: List<RecipeItem>? = null,
     val categories: List<Category> = emptyList()
 ) : ScreenState
