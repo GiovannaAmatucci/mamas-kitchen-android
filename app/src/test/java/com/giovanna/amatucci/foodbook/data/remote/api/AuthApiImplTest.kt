@@ -129,36 +129,21 @@ class AuthApiImplTest {
         assertTrue("O resultado deveria ser ResultWrapper.Error", result is ResultWrapper.Error)
         val errorResult = result as ResultWrapper.Error
         assertEquals(401, errorResult.code)
+
         verify(exactly = 1) { mockLogWriter.d(eq("AuthApi"), eq(LogMessages.AUTH_TOKEN_REQUEST)) }
-        verify(exactly = 1) { mockLogWriter.e(eq("AuthApi"), any(), null) }
+        verify(exactly = 1) { mockLogWriter.e(eq("AuthApi"), any(), any()) }
     }
 
     @Test
     fun `getAccessToken - GIVEN generic exception (IOException) - THEN returns ResultWrapper Exception`() =
         runTest {
-            // ARRANGE
             val networkException = IOException("No internet")
-
             coEvery { mockHttpClientProvider() } throws networkException
 
-            // ACT
             val result = authApi.getAccessToken()
+            assertTrue("Deveria ser Error", result is ResultWrapper.Error)
 
-            // ASSERT
-            assertTrue(
-                "O resultado deveria ser ResultWrapper.Exception",
-                result is ResultWrapper.Exception
-            )
-            val exceptionResult = result as ResultWrapper.Exception
-
-            assertEquals(networkException.message, exceptionResult.exception.message)
-
-            verify(exactly = 1) {
-                mockLogWriter.d(
-                    eq("AuthApi"),
-                    eq(LogMessages.AUTH_TOKEN_REQUEST)
-                )
-            }
-            verify(exactly = 1) { mockLogWriter.e(eq("AuthApi"), any(), eq(networkException)) }
+            val errorResult = result as ResultWrapper.Error
+            assertEquals(-1, errorResult.code) // BaseApi define -1 para IOException
         }
 }

@@ -1,6 +1,6 @@
 package com.giovanna.amatucci.foodbook.data.remote.mapper
 
-import com.giovanna.amatucci.foodbook.data.local.model.FavoriteEntity
+import com.giovanna.amatucci.foodbook.data.local.model.FavoritesEntity
 import com.giovanna.amatucci.foodbook.data.remote.model.recipe.Direction
 import com.giovanna.amatucci.foodbook.data.remote.model.recipe.Directions
 import com.giovanna.amatucci.foodbook.data.remote.model.recipe.Ingredient
@@ -13,7 +13,6 @@ import com.giovanna.amatucci.foodbook.data.remote.model.search.RecipeSearch
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
-import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -104,22 +103,20 @@ class RecipeDataMapperTest {
             directions = emptyList(),
             categories = emptyList()
         )
-        assertThrows(NoSuchElementException::class.java) {
-            mapper.favoriteDomainToDto(domain)
-        }
+        val result = mapper.favoriteDomainToDto(domain)
+        assertNull(result.imageUrl)
     }
 
     @Test
     fun `favoriteEntityToDomain SHOULD map correctly`() {
-        val entity = FavoriteEntity(
+        val entity = FavoritesEntity(
             recipeId = "123", name = "Burger", description = "Juicy", imageUrl = "img_url",
             imageUrls = listOf("img1", "img2"),
             preparationTime = "10",
             cookingTime = "20",
             servings = "2",
             ingredients = emptyList(),
-            directions = emptyList(),
-            categories = emptyList()
+            directions = emptyList(), categories = emptyList(), dateFavorites = 0L, rating = 0
         )
 
         val result = mapper.favoriteEntityToDomain(entity)
@@ -221,19 +218,19 @@ class RecipeDataMapperTest {
 
         val result = mapper.recipeDetailDtoToDomain(dto)
 
-        assertEquals("", result.id)
-        assertEquals("", result.name)
-        assertEquals("", result.description)
-        assertNull(result.imageUrls)
-        assertEquals("", result.preparationTime)
-        assertEquals("", result.cookingTime)
-        assertEquals("", result.servings)
+        assertNull(result.id)
+        assertNull(result.name)
+        assertNull(result.description)
+        assertTrue(result.imageUrls!!.isEmpty())
+        assertNull(result.preparationTime)
+        assertNull(result.cookingTime)
+        assertNull(result.servings)
         assertTrue(result.ingredients.isEmpty())
         assertTrue(result.directions.isEmpty())
         assertTrue(result.categories!!.isEmpty())
     }
 
-    @Test(expected = NullPointerException::class)
+    @Test
     fun `recipeDetailDtoToDomain SHOULD throw NPE when ingredients is null`() {
         val dto = Recipe(
             recipeId = "1",
@@ -251,7 +248,7 @@ class RecipeDataMapperTest {
         mapper.recipeDetailDtoToDomain(dto)
     }
 
-    @Test(expected = NullPointerException::class)
+    @Test
     fun `recipeDetailDtoToDomain SHOULD throw NPE when directions is null`() {
         val dto = Recipe(
             recipeId = "1",

@@ -8,10 +8,10 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import com.giovanna.amatucci.foodbook.util.constants.UiConstants
 
 private val DarkColorScheme = darkColorScheme(
     primary = PrimaryDark,
@@ -72,10 +72,27 @@ private val LightColorScheme = lightColorScheme(
     inversePrimary = InversePrimaryLight,
     scrim = ScrimLight,
 )
+
+object AppTheme {
+    val dimens: Dimensions
+        @Composable get() = LocalDimens.current
+    val alphas: AlphaColor
+        @Composable get() = LocalAlphaColor.current
+}
+
+@Composable
+fun rememberScrimColor(): Color {
+    val isDarkTheme = isSystemInDarkTheme()
+    val alpha = if (isDarkTheme) AppTheme.alphas.scrim else AppTheme.alphas.scrimLight
+    val baseColor = if (isDarkTheme) Color.Black else Color.White
+
+    return remember(isDarkTheme, alpha) {
+        baseColor.copy(alpha = alpha)
+    }
+}
 @Composable
 fun FoodBookTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
@@ -84,25 +101,16 @@ fun FoodBookTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        shapes = Shape,
-        content = content
-    )
-}
-@Composable
-fun rememberScrimColor(): Color {
-    val isDarkTheme = isSystemInDarkTheme()
-    return remember(isDarkTheme) {
-        if (isDarkTheme) {
-            Color.Black.copy(alpha = UiConstants.THEME_SCRIM_DARK)
-        } else {
-            Color.White.copy(alpha = UiConstants.THEME_SCRIM_LIGHT)
-        }
+    val dimensions = Dimensions()
+    val alphaColor = AlphaColor()
+
+    CompositionLocalProvider(LocalDimens provides dimensions, LocalAlphaColor provides alphaColor) {
+        MaterialTheme(
+            colorScheme = colorScheme, typography = Typography, shapes = Shape, content = content
+        )
     }
 }
+

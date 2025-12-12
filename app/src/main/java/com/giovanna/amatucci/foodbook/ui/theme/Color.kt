@@ -85,7 +85,7 @@ val OnErrorContainerLight = Color(0xFF410002)
 /**
  * @param BackgroundLight The main background color of the screen.
  */
-val BackgroundLight = Color(0xFFFFFBFF)
+val BackgroundLight = Color(0xFFFFFAED)
 
 /**
  * @param OnBackgroundLight Color for text and icons displayed ON TOP OF the [BackgroundLight] color.
@@ -274,3 +274,8 @@ val InverseOnSurfaceDark = Color(0xFF1F1B16)
  * @param InversePrimaryDark A contrasting primary color, used in conjunction with [InverseSurfaceDark] to maintain brand readability in the dark theme.
  */
 val InversePrimaryDark = Color(0xFF865300)
+
+/**
+ * @param RatingStarColor star rating color
+ */
+val RatingStarColor = Color(0xFFFFB300)

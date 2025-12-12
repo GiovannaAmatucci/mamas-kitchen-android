@@ -48,4 +48,7 @@ object TAG {
     const val AUTH_REPOSITORY = "AuthRepository"
     const val TOKEN_REPOSITORY = "TokenRepository"
     const val FAVORITES_REPOSITORY = "FavoritesRepository"
+
+    const val AUTH_API = "AuthApi"
+    const val FAT_SECRET_RECIPE_API = "FatSecretRecipeApi"
 }

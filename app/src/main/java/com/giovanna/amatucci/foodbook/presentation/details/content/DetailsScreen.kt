@@ -1,5 +1,6 @@
 package com.giovanna.amatucci.foodbook.presentation.details.content
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -9,54 +10,116 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.giovanna.amatucci.foodbook.presentation.components.BlurredImageComposable
+import com.giovanna.amatucci.foodbook.R
+import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
+import com.giovanna.amatucci.foodbook.presentation.ScreenStatus
+import com.giovanna.amatucci.foodbook.presentation.components.common.BlurredBackground
+import com.giovanna.amatucci.foodbook.presentation.components.common.BrushGradient
+import com.giovanna.amatucci.foodbook.presentation.components.common.MessageComponent
+import com.giovanna.amatucci.foodbook.presentation.components.recipe.RecipeDetailsList
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.DetailsViewModel
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsEvent
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsUiState
-import com.giovanna.amatucci.foodbook.ui.theme.Dimens
+import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
+import com.giovanna.amatucci.foodbook.ui.theme.rememberScrimColor
 import org.koin.androidx.compose.koinViewModel
+
 @Composable
 fun DetailsRoute(
-    onNavigateBack: () -> Unit, viewModel: DetailsViewModel = koinViewModel()
+    onNavigateBack: () -> Unit,
+    onSearchCategory: (String) -> Unit,
+    viewModel: DetailsViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     DetailsScreen(
-        state = state, onEvent = { viewModel.onEvent(it) }, onNavigateBack = onNavigateBack
+        state = state,
+        onEvent = { onEvent -> viewModel.onEvent(onEvent) },
+        onNavigateBack = onNavigateBack,
+        onSearchCategory = onSearchCategory
     )
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DetailsScreen(
-    state: DetailsUiState, onEvent: (DetailsEvent) -> Unit, onNavigateBack: () -> Unit
+    state: DetailsUiState,
+    onEvent: (DetailsEvent) -> Unit,
+    onNavigateBack: () -> Unit,
+    onSearchCategory: (String) -> Unit
 ) {
-    var currentMainImageUrl by remember(state.recipe) {
-        mutableStateOf(state.recipe?.imageUrls?.firstOrNull())
-    }
-
-    BlurredImageComposable(
-        imageUrl = currentMainImageUrl,
-        blurRadius = Dimens.BlurRadius,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize()
+    state.apply {
+        var currentMainImageUrl by remember(recipe) {
+            mutableStateOf(recipe?.imageUrls?.firstOrNull())
+        }
+        BlurredBackground(
+            imageUrl = currentMainImageUrl, modifier = Modifier.fillMaxSize()
         ) {
-            DetailsContent(
-                modifier = Modifier,
-                status = state.status, recipe = state.recipe,
-                onImageDisplayed = { imageUrl ->
-                    currentMainImageUrl = imageUrl
-                })
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                DetailsContent(
+                    modifier = Modifier,
+                    status = status,
+                    recipe = recipe,
+                    onImageDisplayed = { imageUrl ->
+                        currentMainImageUrl = imageUrl
+                    },
+                    onCategoryClick = onSearchCategory
+                )
 
-            DetailsTopBar(
-                onNavigateBack = onNavigateBack, onEvent = onEvent,
-                state = state,
-                modifier = Modifier.statusBarsPadding()
-            )
+                DetailsTopBar(
+                    onNavigateBack = onNavigateBack,
+                    onEvent = onEvent,
+                    state = state,
+                    modifier = Modifier.statusBarsPadding()
+                )
+            }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DetailsContent(
+    modifier: Modifier = Modifier,
+    status: ScreenStatus,
+    recipe: RecipeDetails?,
+    onImageDisplayed: (String?) -> Unit = {},
+    onCategoryClick: (String) -> Unit
+) {
+    val scrimColor = rememberScrimColor()
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(
+                brush = BrushGradient.verticalScrim(scrimColor, AppTheme.alphas)
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        when (status) {
+            is ScreenStatus.Loading -> {
+                DetailsScreenShimmer()
+            }
+
+            is ScreenStatus.Error -> MessageComponent(
+                message = stringResource(R.string.details_error_message_loading_failed)
+            )
+
+            is ScreenStatus.Success -> {
+                recipe?.let { details ->
+                    RecipeDetailsList(
+                        recipe = details,
+                        modifier = Modifier.fillMaxSize(),
+                        onImageDisplayed = onImageDisplayed,
+                        onCategoryClick = onCategoryClick
+                    )
+                }
+            }
+        }
+    }
+}

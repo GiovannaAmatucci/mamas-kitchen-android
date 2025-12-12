@@ -1,10 +1,11 @@
 package com.giovanna.amatucci.foodbook.data.repository
 
 import androidx.paging.PagingSource
-import com.giovanna.amatucci.foodbook.data.local.db.dao.FavoriteDao
-import com.giovanna.amatucci.foodbook.data.local.model.FavoriteEntity
+import com.giovanna.amatucci.foodbook.data.local.db.dao.FavoritesDao
+import com.giovanna.amatucci.foodbook.data.local.model.FavoritesEntity
 import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipeDataMapper
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
+import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 import com.giovanna.amatucci.foodbook.domain.repository.FavoritesRepository
 import com.giovanna.amatucci.foodbook.util.LogWriter
 import io.mockk.coEvery
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -33,10 +35,10 @@ class FavoriteRepositoryImplTest {
     private lateinit var mapper: RecipeDataMapper
 
     @MockK
-    private lateinit var favoriteDao: FavoriteDao
+    private lateinit var favoritesDao: FavoritesDao
 
     @MockK(relaxed = true)
-    private lateinit var mockPagingSource: PagingSource<Int, FavoriteEntity>
+    private lateinit var mockPagingSource: PagingSource<Int, FavoritesEntity>
 
     @MockK(relaxUnitFun = true)
     private lateinit var logWriter: LogWriter
@@ -56,7 +58,7 @@ class FavoriteRepositoryImplTest {
         categories = emptyList()
     )
 
-    private val mockFavoriteEntity = FavoriteEntity(
+    private val mockFavoritesEntity = FavoritesEntity(
         recipeId = "123",
         name = "Chicken Test",
         description = "A test recipe",
@@ -68,82 +70,132 @@ class FavoriteRepositoryImplTest {
         ingredients = emptyList(),
         directions = emptyList(),
         categories = emptyList(),
-        imageUrls = listOf("http://example.com/img.jpg")
+        imageUrls = listOf("http://example.com/img.jpg"),
+        rating = 0
+    )
+
+    private val mockRecipeItem = RecipeItem(
+        id = 123L,
+        name = "Chicken Test",
+        description = "A test recipe",
+        imageUrl = "http://example.com/img.jpg",
+        rating = 0
     )
 
     @Before
     fun setUp() {
-        repository = FavoritesRepositoryImpl(mapper, favoriteDao, logWriter)
+        repository = FavoritesRepositoryImpl(mapper, favoritesDao, logWriter)
     }
 
     @Test
     fun `addFavorite - GIVEN recipe details - THEN calls mapper and dao insert`() = runTest {
         // ARRANGE
-        every { mapper.favoriteDomainToDto(mockRecipeDetails) } returns mockFavoriteEntity
-        coEvery { favoriteDao.insertFavorite(mockFavoriteEntity) } returns Unit
+        every { mapper.favoriteDomainToDto(mockRecipeDetails) } returns mockFavoritesEntity
+        coEvery { favoritesDao.insertFavorite(mockFavoritesEntity) } returns Unit
 
         // ACT
         repository.addFavorite(mockRecipeDetails)
 
         // ASSERT
         verify(exactly = 1) { mapper.favoriteDomainToDto(mockRecipeDetails) }
-        coVerify(exactly = 1) { favoriteDao.insertFavorite(mockFavoriteEntity) }
+        coVerify(exactly = 1) { favoritesDao.insertFavorite(mockFavoritesEntity) }
+        verify(exactly = 1) { logWriter.d(any(), any()) }
     }
 
     @Test
-    fun `isFavorite - GIVEN recipeId - THEN calls dao with Long id and returns flow value`() =
-        runTest {
-            // ARRANGE
-            val recipeIdString = "123"
-            val recipeIdLong = 123L
-            every { favoriteDao.isFavorite(recipeIdLong) } returns flowOf(true)
+    fun `isFavorite - GIVEN recipeId - THEN calls dao and returns flow`() = runTest {
+        val recipeIdString = "123"
+        every { favoritesDao.isFavorite(123L) } returns flowOf(true)
 
-            // ACT
-            val result = repository.isFavorite(recipeIdString).first()
+        val result = repository.isFavorite(recipeIdString).first()
 
-            // ASSERT
-            assertTrue(result)
-            verify(exactly = 1) { favoriteDao.isFavorite(recipeIdLong) }
-        }
+        assertTrue(result)
+        verify(exactly = 1) { favoritesDao.isFavorite(123L) }
+    }
 
     @Test
     fun `removeFavorite - GIVEN recipeId - THEN calls dao delete`() = runTest {
         // ARRANGE
         val recipeIdString = "123"
-        coEvery { favoriteDao.deleteFavorite(recipeIdString) } returns Unit
+        coEvery { favoritesDao.deleteFavorite(recipeIdString) } returns Unit
 
         // ACT
         repository.removeFavorite(recipeIdString)
 
         // ASSERT
-        coVerify(exactly = 1) { favoriteDao.deleteFavorite(recipeIdString) }
+        coVerify(exactly = 1) { favoritesDao.deleteFavorite(recipeIdString) }
     }
 
     @Test
     fun `deleteAllFavorites - WHEN called - THEN calls dao deleteAllFavorites`() = runTest {
         // ARRANGE
-        coEvery { favoriteDao.deleteAllFavorites() } returns Unit
+        coEvery { favoritesDao.deleteAllFavorites() } returns Unit
 
         // ACT
         repository.deleteAllFavorites()
 
         // ASSERT
-        coVerify(exactly = 1) { favoriteDao.deleteAllFavorites() }
+        coVerify(exactly = 1) { favoritesDao.deleteAllFavorites() }
     }
 
     @Test
-    fun `getFavorites - GIVEN query - THEN calls dao with formatted query and maps PagingData`() =
+    fun `getFavoriteDetails - GIVEN existing id - THEN returns mapped details`() = runTest {
+        // ARRANGE
+        val id = "123"
+        coEvery { favoritesDao.getFavoriteById(id) } returns mockFavoritesEntity
+        every { mapper.favoriteEntityToDetailsDomain(mockFavoritesEntity) } returns mockRecipeDetails
+
+        // ACT
+        val result = repository.getFavoriteDetails(id)
+
+        // ASSERT
+        assertEquals(mockRecipeDetails, result)
+        coVerify(exactly = 1) { favoritesDao.getFavoriteById(id) }
+        verify(exactly = 1) { mapper.favoriteEntityToDetailsDomain(mockFavoritesEntity) }
+    }
+
+    @Test
+    fun `getFavoriteDetails - GIVEN non-existing id - THEN returns null and skips mapper`() =
         runTest {
             // ARRANGE
-            val query = "chicken"
-            val formattedQuery = "%chicken%"
-            every { favoriteDao.getAllFavoritesPaged(eq(formattedQuery)) } returns mockPagingSource
+            val id = "999"
+            coEvery { favoritesDao.getFavoriteById(id) } returns null
 
             // ACT
-            val flow = repository.getFavorites(query)
-            flow.firstOrNull()
+            val result = repository.getFavoriteDetails(id)
 
             // ASSERT
-            verify(exactly = 1) { favoriteDao.getAllFavoritesPaged(formattedQuery) }
+            assertEquals(null, result)
+            coVerify(exactly = 1) { favoritesDao.getFavoriteById(id) }
+            verify(exactly = 0) { mapper.favoriteEntityToDetailsDomain(any()) }
         }
+
+    @Test
+    fun `getLastFavorites - WHEN called - THEN maps entities to domain list`() = runTest {
+        // ARRANGE
+        val entitiesList = listOf(mockFavoritesEntity)
+        every { favoritesDao.getLast3Favorites() } returns flowOf(entitiesList)
+        every { mapper.favoriteEntityToDomain(mockFavoritesEntity) } returns mockRecipeItem
+
+        // ACT
+        val result = repository.getLastFavorites().first()
+
+        // ASSERT
+        assertEquals(1, result.size)
+        assertEquals(mockRecipeItem, result.first())
+        verify(exactly = 1) { favoritesDao.getLast3Favorites() }
+        verify(exactly = 1) { mapper.favoriteEntityToDomain(mockFavoritesEntity) }
+    }
+
+    @Test
+    fun `getFavorites - GIVEN query - THEN calls dao with formatted query`() = runTest {
+        val query = "chicken"
+        val formattedQuery = "%chicken%"
+        every { favoritesDao.getAllFavoritesPaged(formattedQuery) } returns mockPagingSource
+
+        val flow = repository.getFavorites(query)
+        flow.firstOrNull()
+
+        verify(exactly = 1) { favoritesDao.getAllFavoritesPaged(formattedQuery) }
+    }
 }

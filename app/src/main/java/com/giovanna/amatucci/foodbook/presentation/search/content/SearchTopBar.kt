@@ -22,63 +22,73 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.giovanna.amatucci.foodbook.R
-import com.giovanna.amatucci.foodbook.presentation.components.AppSearchBarComposable
+import com.giovanna.amatucci.foodbook.presentation.components.common.SectionTitle
+import com.giovanna.amatucci.foodbook.presentation.components.search.SearchBarWrapper
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchEvent
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchUiState
-import com.giovanna.amatucci.foodbook.ui.theme.Dimens
+import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchTopBar(
     state: SearchUiState, onEvent: (SearchEvent) -> Unit
 ) {
-    AppSearchBarComposable(
-        query = state.searchQuery, isActive = state.isActive,
-        placeholder = R.string.search_screen_title,
-        onQueryChange = { onEvent(SearchEvent.UpdateSearchQuery(it)) },
-        onSearch = { onEvent(SearchEvent.SubmitSearch(it)) },
-        onActiveChange = { onEvent(SearchEvent.ActiveChanged(it)) },
-        leadingIcon = {
-            SearchLeadingIcon(
-                isActive = state.isActive,
-                onActiveChange = { onEvent(SearchEvent.ActiveChanged(it)) })
-        },
-        trailingIcon = {
-            SearchTrailingIcon(
-                query = state.searchQuery, onClearClick = { onEvent(SearchEvent.ClearSearchQuery) })
-        },
-        content = {
-            LazyColumn(
-                modifier = Modifier
-            ) {
-                items(
-                    items = state.searchHistory,
-                    key = { historyItem -> historyItem }) { historyItem ->
-                    ListItem(headlineContent = { Text(historyItem) }, leadingContent = {
-                        Icon(
-                            Icons.Default.History,
-                            contentDescription = stringResource(R.string.search_history_icon_description)
+    state.apply {
+        SearchBarWrapper(
+            query = searchQuery,
+            isActive = isActive,
+            placeholder = R.string.search_screen_title,
+            onQueryChange = { onQueryChange -> onEvent(SearchEvent.UpdateSearchQuery(onQueryChange)) },
+            onSearch = { onSearch -> onEvent(SearchEvent.SubmitSearch(onSearch)) },
+            onActiveChange = { onActiveChange -> onEvent(SearchEvent.ActiveChanged(onActiveChange)) },
+            leadingIcon = {
+                SearchLeadingIcon(
+                    isActive = isActive, onActiveChange = { onActiveChange ->
+                        onEvent(SearchEvent.ActiveChanged(onActiveChange))
+                    }
+                )
+            },
+            trailingIcon = {
+                SearchTrailingIcon(
+                    query = searchQuery, onClearClick = { onEvent(SearchEvent.ClearSearchQuery) })
+            },
+            content = {
+                LazyColumn(
+                    modifier = Modifier
+                ) {
+                    items(items = searchHistory, key = { it }) { historyItem ->
+                        ListItem(
+                            headlineContent = { Text(historyItem) },
+                            leadingContent = {
+                                Icon(
+                                    Icons.Default.History,
+                                    contentDescription = stringResource(R.string.search_history_icon_description)
+                                )
+                            }, modifier = Modifier.clickable {
+                                onEvent(SearchEvent.RecentSearchClicked(historyItem))
+                            }
                         )
-                    }, modifier = Modifier.clickable {
-                        onEvent(SearchEvent.RecentSearchClicked(historyItem))
-                    })
+                    }
+                }
+                TextButton(
+                    onClick = { onEvent(SearchEvent.ClearSearchHistory) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = AppTheme.dimens.paddingMedium,
+                            vertical = AppTheme.dimens.paddingSmall
+                        )
+                ) {
+                    SectionTitle(
+                        title = stringResource(R.string.search_close_description),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 }
             }
-            TextButton(
-                onClick = { onEvent(SearchEvent.ClearSearchHistory) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = Dimens.PaddingMedium, vertical = Dimens.PaddingSmall
-                    )
-            ) {
-                Text(
-                    text = stringResource(R.string.search_close_description),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-        })
+        )
+    }
 }
 
 @Composable

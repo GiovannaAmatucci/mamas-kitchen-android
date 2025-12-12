@@ -27,6 +27,7 @@
     <string name="search_clear_history">Clear history</string>
     <string name="search_access_item_description">View recipe details</string>
     <string name="search_idle_message">Ready to find your next recipe!</string>
+    <string name="search_description_message">Use the search bar to find your favorite dish.</string>
     <string name="search_empty_message">No recipes found for \"%1$s\"</string>
     <string name="search_error_message_loading_failed">Failed to load recipes.</string>
     <string name="search_error_api">API Failure.</string>
@@ -34,7 +35,12 @@
     <string name="search_recent_searches">Recent searches</string>
     <string name="search_remove_recent_search">Remove from recent searches</string>
     <string name="search_clear_search">Clear search</string>
-
+    <string name="search_categories_burguer">Burger</string>
+    <string name="search_categories_pizza">Pizza</string>
+    <string name="search_categories_smoothie">Smoothie</string>
+    <string name="search_categories_pasta">Pasta</string>
+    <string name="search_categories_cake">Cake</string>
+    <string name="search_categories_salad">Salad</string>
 
     <!-- ===================================================================== -->
     <!-- Details                                                       -->
@@ -52,6 +58,7 @@
     <string name="details_error_invalid_id">Invalid ID.</string>
     <string name="details_error_api_failure">API Failure.</string>
     <string name="details_no_images">No images available.</string>
+    <string name="details_rating_stars">Rating Stars.</string>
 
 
     <!-- ===================================================================== -->
@@ -65,6 +72,10 @@
     <string name="favorites_delete_all_description">Delete all favorites</string>
     <string name="favorites_dialog_title">Confirm Deletion</string>
     <string name="favorites_dialog_text">Are you sure you want to delete all your favorites? This action cannot be undone.</string>
+    <string name="favorites_section">Highlights</string>
+    <string name="no_favorites_yet">No favorites yet</string>
+    <string name="no_favorites_description">Hit the heart button on recipes you love to save them here.</string>
+
 
     <!-- ===================================================================== -->
     <!-- Navigation                                                      -->

@@ -6,8 +6,8 @@ import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.data.remote.model.TokenResponse
 import com.giovanna.amatucci.foodbook.domain.usecase.auth.CheckAuthenticationStatusUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.auth.FetchAndSaveTokenUseCase
+import com.giovanna.amatucci.foodbook.presentation.ScreenStatus
 import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthEvent
-import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthStatus
 import com.giovanna.amatucci.foodbook.util.ResultWrapper
 import com.giovanna.amatucci.foodbook.util.constants.UiText
 import io.mockk.MockKAnnotations
@@ -59,7 +59,7 @@ class AuthViewModelTest {
         viewModel.uiState.test {
             awaitItem()
             val state = awaitItem()
-            assertEquals(AuthStatus.Success, state.status)
+            assertEquals(ScreenStatus.Success, state.status)
             assertTrue(state.navigateToHome)
         }
     }
@@ -73,11 +73,11 @@ class AuthViewModelTest {
 
         viewModel.uiState.test {
             val state = awaitItem()
-            if (state.status == AuthStatus.Success) {
+            if (state.status == ScreenStatus.Success) {
                 assertTrue(state.navigateToHome)
             } else {
                 val success = awaitItem()
-                assertEquals(AuthStatus.Success, success.status)
+                assertEquals(ScreenStatus.Success, success.status)
                 assertTrue(success.navigateToHome)
             }
         }
@@ -93,9 +93,9 @@ class AuthViewModelTest {
 
         viewModel.uiState.test {
             val state = awaitItem()
-            val errorState = if (state.status !is AuthStatus.Error) awaitItem() else state
+            val errorState = if (state.status !is ScreenStatus.Error) awaitItem() else state
 
-            assertTrue(errorState.status is AuthStatus.Error)
+            assertTrue(errorState.status is ScreenStatus.Error)
             assertFalse(errorState.navigateToHome)
             assertEquals(errorMsg, (errorState.error as UiText.DynamicString).value)
         }
@@ -103,40 +103,61 @@ class AuthViewModelTest {
 
     @Test
     fun `fetchToken SHOULD set Error state WHEN api returns Exception with message`() = runTest {
+        // ARRANGE
         coEvery { checkAuthStatusUseCase() } returns false
         val exceptionMsg = "Sem internet"
         coEvery { fetchTokenUseCase() } returns ResultWrapper.Exception(Exception(exceptionMsg))
 
+        // ACT
         viewModel = AuthViewModel(checkAuthStatusUseCase, fetchTokenUseCase)
 
+        // ASSERT
         viewModel.uiState.test {
-            val state = awaitItem()
-            val errorState = if (state.status !is AuthStatus.Error) awaitItem() else state
+            var state = awaitItem()
+            while (state.status !is ScreenStatus.Error) {
+                state = awaitItem()
+            }
 
-            assertTrue(errorState.status is AuthStatus.Error)
-            assertEquals(exceptionMsg, (errorState.error as UiText.DynamicString).value)
+            // Agora state é garantidamente um Error (ou o teste falharia no timeout acima)
+            assertTrue(
+                "Esperado estado de erro, mas foi ${state.status}",
+                state.status is ScreenStatus.Error
+            )
+            assertEquals(exceptionMsg, (state.error as UiText.DynamicString).value)
         }
     }
 
     @Test
     fun `fetchToken SHOULD set Unknown Error WHEN api returns Exception without message`() =
         runTest {
+            // ARRANGE
             coEvery { checkAuthStatusUseCase() } returns false
+
+            // Simula exceção SEM mensagem
             coEvery { fetchTokenUseCase() } returns ResultWrapper.Exception(Exception())
 
+            // ACT
             viewModel = AuthViewModel(checkAuthStatusUseCase, fetchTokenUseCase)
 
+            // ASSERT
             viewModel.uiState.test {
-                val state = awaitItem()
-                val errorState = if (state.status !is AuthStatus.Error) awaitItem() else state
+                var state = awaitItem()
 
-                assertTrue(errorState.status is AuthStatus.Error)
-                kotlin.test.assertEquals(
-                    R.string.auth_error_unknown, (errorState.error as UiText.StringResource).resId
+                // Loop para pular Loading
+                while (state.status !is ScreenStatus.Error) {
+                    state = awaitItem()
+                }
+
+                assertTrue(
+                    "Esperado estado de erro, mas foi ${state.status}",
+                    state.status is ScreenStatus.Error
                 )
+
+                // Verifica a conversão para StringResource (Unknown Error)
+                val errorText = state.error as? UiText.StringResource
+                assertEquals(R.string.auth_error_unknown, errorText?.resId)
             }
         }
-
     @Test
     fun `onEvent RequestToken SHOULD NOT call usecase if already Loading`() = runTest {
         coEvery { checkAuthStatusUseCase() } returns false
@@ -149,7 +170,7 @@ class AuthViewModelTest {
 
         viewModel.uiState.test {
             val item = awaitItem()
-            if (item.status !is AuthStatus.Loading) awaitItem()
+            if (item.status !is ScreenStatus.Loading) awaitItem()
         }
 
         viewModel.onEvent(AuthEvent.RequestToken)
@@ -189,8 +210,8 @@ class AuthViewModelTest {
 
         viewModel.uiState.test {
             val state = awaitItem()
-            val finalState = if (state.status is AuthStatus.Loading) awaitItem() else state
-            assertEquals(AuthStatus.Success, finalState.status)
+            val finalState = if (state.status is ScreenStatus.Loading) awaitItem() else state
+            assertEquals(ScreenStatus.Success, finalState.status)
         }
     }
 }

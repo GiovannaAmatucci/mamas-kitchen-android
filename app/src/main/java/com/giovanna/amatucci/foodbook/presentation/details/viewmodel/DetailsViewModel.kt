@@ -1,5 +1,6 @@
 package com.giovanna.amatucci.foodbook.presentation.details.viewmodel
 
+import UiConstants
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,11 +11,10 @@ import com.giovanna.amatucci.foodbook.domain.usecase.favorites.AddFavoritesUseCa
 import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetFavoritesDetailsUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.favorites.IsFavoritesUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.favorites.RemoveFavoritesUseCase
+import com.giovanna.amatucci.foodbook.presentation.ScreenStatus
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsEvent
-import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsStatus
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsUiState
 import com.giovanna.amatucci.foodbook.util.ResultWrapper
-import com.giovanna.amatucci.foodbook.util.constants.UiConstants
 import com.giovanna.amatucci.foodbook.util.constants.UiText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,36 +35,34 @@ class DetailsViewModel(
     private val _uiState = MutableStateFlow(DetailsUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val recipeId: String? =
-        savedStateHandle.get<String>(UiConstants.DETAILS_VIEW_MODEL_RECIPE_ID)
+    private val recipeId: String? = savedStateHandle.get<String>(UiConstants.Details.ARG_RECIPE_ID)
 
     init {
-        validateAndLoad()
+        validateAndLoad(id = recipeId.toString())
     }
 
     fun onEvent(event: DetailsEvent) {
         when (event) {
             is DetailsEvent.ToggleFavorite -> toggleFavorite()
-            is DetailsEvent.RetryConnection -> validateAndLoad()
+            is DetailsEvent.RetryConnection -> validateAndLoad(id = recipeId.toString())
         }
     }
 
-    private fun validateAndLoad() {
-        if (recipeId.isNullOrBlank()) {
+    private fun validateAndLoad(id: String) {
+        if (id.isBlank()) {
             _uiState.update {
                 it.copy(
-                    status = DetailsStatus.Error,
-                    error = UiText.StringResource(R.string.details_error_invalid_id)
+                    status = ScreenStatus.Error(UiText.StringResource(R.string.details_error_invalid_id))
                 )
             }
             return
         }
-        loadRecipeData(recipeId)
-        observeFavoriteStatus(recipeId)
+        loadRecipeData(id)
+        observeFavoriteStatus(id)
     }
 
     private fun loadRecipeData(id: String) = viewModelScope.launch {
-        _uiState.update { it.copy(status = DetailsStatus.Loading) }
+        _uiState.update { it.copy(status = ScreenStatus.Loading) }
         val localRecipe = runCatching { getFavoritesDetailsUseCase(id) }.getOrNull()
 
         if (localRecipe != null) {
@@ -86,13 +84,13 @@ class DetailsViewModel(
 
     private fun onRecipeLoaded(recipe: RecipeDetails) {
         _uiState.update {
-            it.copy(status = DetailsStatus.Success, recipe = recipe, error = null)
+            it.copy(status = ScreenStatus.Success, recipe = recipe, error = null)
         }
     }
 
     private fun onError(message: UiText) {
         _uiState.update {
-            it.copy(status = DetailsStatus.Error, error = message)
+            it.copy(status = ScreenStatus.Error(message))
         }
     }
 

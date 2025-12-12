@@ -8,40 +8,53 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.giovanna.amatucci.foodbook.R
-import com.giovanna.amatucci.foodbook.presentation.components.EmptyMessage
-import com.giovanna.amatucci.foodbook.presentation.components.PagingStateComposable
-import com.giovanna.amatucci.foodbook.presentation.components.RecipeList
+import com.giovanna.amatucci.foodbook.presentation.components.common.MessageComponent
+import com.giovanna.amatucci.foodbook.presentation.components.feedback.FeedbackComponent
+import com.giovanna.amatucci.foodbook.presentation.components.feedback.HandlePagingState
+import com.giovanna.amatucci.foodbook.presentation.components.recipe.RecipeGridList
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesEvent
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesUiState
+
 @Composable
 fun FavoritesScreen(
-    uiState: FavoritesUiState,
+    state: FavoritesUiState,
     onNavigateToRecipe: (recipeId: String) -> Unit,
     onEvent: (FavoritesEvent) -> Unit
 ) {
-    val recipes = uiState.recipes.collectAsLazyPagingItems()
-
-    PagingStateComposable(
-        pagingItems = recipes, emptyContent = {
-            val message = if (uiState.searchQuery.isBlank()) {
-                stringResource(R.string.favorites_empty_message)
-            } else {
-                stringResource(R.string.favorites_empty_search_message, uiState.searchQuery)
-            }
-            EmptyMessage(message = message)
-        }) { loadedRecipes ->
-        RecipeList(
-            recipes = loadedRecipes, onRecipeClick = onNavigateToRecipe
-        )
-    }
-    uiState.showConfirmDeleteAllDialog.let { state ->
-        if (state) {
-            DeleteAllFavoritesDialog(
-                onConfirm = { onEvent(FavoritesEvent.ConfirmDeleteAll) },
-                onDismiss = { onEvent(FavoritesEvent.DismissDeleteAllConfirmation) })
+    val recipes = state.recipes.collectAsLazyPagingItems()
+    state.apply {
+        HandlePagingState(
+            pagingItems = recipes, emptyContent = {
+                if (searchQuery.isBlank()) {
+                    FeedbackComponent(
+                        title = stringResource(R.string.no_favorites_yet),
+                        description = stringResource(R.string.no_favorites_description),
+                        imageRes = R.drawable.ic_favorites_recipe,
+                        subTitleColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                } else {
+                    MessageComponent(
+                        message = stringResource(
+                            R.string.favorites_empty_search_message, state.searchQuery
+                        )
+                    )
+                }
+            }) { loadedRecipes ->
+            RecipeGridList(
+                recipes = loadedRecipes, onRecipeClick = onNavigateToRecipe
+            )
         }
+        if (showConfirmDeleteAllDialog) DeleteAllFavoritesDialog(
+            onConfirm = {
+                onEvent(
+                    FavoritesEvent.ConfirmDeleteAll
+                )
+            },
+            onDismiss = { onEvent(FavoritesEvent.DismissDeleteAllConfirmation) })
     }
 }
+
+
 @Composable
 private fun DeleteAllFavoritesDialog(
     onConfirm: () -> Unit, onDismiss: () -> Unit

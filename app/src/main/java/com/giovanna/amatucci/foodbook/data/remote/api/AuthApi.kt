@@ -8,8 +8,8 @@ import com.giovanna.amatucci.foodbook.util.LogWriter
 import com.giovanna.amatucci.foodbook.util.ResultWrapper
 import com.giovanna.amatucci.foodbook.util.constants.ApiConstants
 import com.giovanna.amatucci.foodbook.util.constants.LogMessages
+import com.giovanna.amatucci.foodbook.util.constants.TAG.AUTH_API
 import io.ktor.client.call.body
-import io.ktor.client.plugins.ResponseException
 import io.ktor.client.request.basicAuth
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.request.post
@@ -25,15 +25,13 @@ interface AuthApi {
 }
 
 
-class AuthApiImpl(private val logWriter: LogWriter, private val client: TokenHttpClient) : AuthApi {
-    companion object {
-        private const val TAG = "AuthApi"
-    }
-
-    override suspend fun getAccessToken(
-    ): ResultWrapper<TokenResponse> {
-        logWriter.d(TAG, LogMessages.AUTH_TOKEN_REQUEST)
-        return try {
+class AuthApiImpl(
+    logWriter: LogWriter, private val client: TokenHttpClient
+) : BaseApi(logWriter), AuthApi {
+    override val tag: String = AUTH_API
+    override suspend fun getAccessToken(): ResultWrapper<TokenResponse> {
+        logWriter.d(tag, LogMessages.AUTH_TOKEN_REQUEST)
+        return safeApiCall {
             val response = client().post(ApiConstants.Methods.TOKEN) {
                 basicAuth(BuildConfig.FATSECRET_CLIENT_ID, BuildConfig.FATSECRET_CLIENT_SECRET)
                 contentType(ContentType.Application.FormUrlEncoded)
@@ -46,19 +44,8 @@ class AuthApiImpl(private val logWriter: LogWriter, private val client: TokenHtt
                     )
                 )
             }
-            logWriter.d(TAG, LogMessages.AUTH_TOKEN_SUCCESS)
-            ResultWrapper.Success(response.body())
-        } catch (e: ResponseException) {
-            val msg = LogMessages.AUTH_TOKEN_FAILURE.format(e.message)
-            logWriter.e(TAG, msg)
-            ResultWrapper.Error(
-                msg, e.response.status.value
-            )
-        } catch (e: Exception) {
-            val msg = LogMessages.AUTH_TOKEN_FAILURE.format(e.message)
-            logWriter.e(TAG, msg, e)
-            ResultWrapper.Exception(e)
+            logWriter.d(tag, LogMessages.AUTH_TOKEN_SUCCESS)
+            response.body()
         }
     }
 }
-

@@ -1,6 +1,6 @@
 package com.giovanna.amatucci.foodbook.data.remote.mapper
 
-import com.giovanna.amatucci.foodbook.data.local.model.FavoriteEntity
+import com.giovanna.amatucci.foodbook.data.local.model.FavoritesEntity
 import com.giovanna.amatucci.foodbook.data.remote.model.recipe.Direction
 import com.giovanna.amatucci.foodbook.data.remote.model.recipe.Ingredient
 import com.giovanna.amatucci.foodbook.data.remote.model.recipe.Recipe
@@ -9,18 +9,7 @@ import com.giovanna.amatucci.foodbook.domain.model.DirectionInfo
 import com.giovanna.amatucci.foodbook.domain.model.IngredientInfo
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
-
-/**
- * Component responsible for transforming data between layers (Data <-> Domain).
- * Ensures that Domain models don't depend on API DTOs or Database Entities.
- */
 class RecipeDataMapper {
-
-    /**
-     * Converts a search result DTO from the API to a lightweight Domain item.
-     * @param searchDto The API search result object.
-     * @return [RecipeItem] for listing.
-     */
     fun searchRecipeDtoToDomain(searchDto: RecipeSearch): RecipeItem = RecipeItem(
         id = searchDto.recipeId.toLong(),
         name = searchDto.recipeName,
@@ -28,43 +17,28 @@ class RecipeDataMapper {
         imageUrl = searchDto.recipeImage
     )
 
-    /**
-     * Converts a detailed Domain recipe to a Database Entity (for Favorites).
-     * @param recipeDomain The full recipe details from the Domain.
-     * @return [FavoriteEntity] ready to be stored in Room.
-     */
-    fun favoriteDomainToDto(recipeDomain: RecipeDetails): FavoriteEntity = FavoriteEntity(
+    fun favoriteDomainToDto(recipeDomain: RecipeDetails): FavoritesEntity = FavoritesEntity(
         recipeId = recipeDomain.id.toString(),
         name = recipeDomain.name,
         description = recipeDomain.description,
-        imageUrl = recipeDomain.imageUrls?.first(),
+        imageUrl = recipeDomain.imageUrls?.firstOrNull(),
         imageUrls = recipeDomain.imageUrls,
         preparationTime = recipeDomain.preparationTime,
         cookingTime = recipeDomain.cookingTime,
         servings = recipeDomain.servings,
         ingredients = recipeDomain.ingredients.map { Ingredient(ingredientDescription = it.description, foodName = it.foodName) },
         directions = recipeDomain.directions.map { Direction(directionDescription = it.description, directionNumber = it.number) },
-        categories = recipeDomain.categories
+        categories = recipeDomain.categories,
+        rating = recipeDomain.rating
     )
 
-    /**
-     * Converts a Database Entity back to a lightweight Domain item (for the Favorites list).
-     * @param entity The favorite entity from Room.
-     * @return [RecipeItem] for listing.
-     */
-    fun favoriteEntityToDomain(entity: FavoriteEntity): RecipeItem = RecipeItem(
+    fun favoriteEntityToDomain(entity: FavoritesEntity): RecipeItem = RecipeItem(
         id = entity.recipeId?.toLong(),
         name = entity.name,
-        description = entity.description,
-        imageUrl = entity.imageUrl
+        description = entity.description, imageUrl = entity.imageUrl, rating = entity.rating
     )
 
-    /**
-     * Converts a Database Entity to a full Domain Detail model (when viewing a favorite offline).
-     * @param entity The favorite entity from Room.
-     * @return [RecipeDetails] for the details screen.
-     */
-    fun favoriteEntityToDetailsDomain(entity: FavoriteEntity): RecipeDetails = RecipeDetails(
+    fun favoriteEntityToDetailsDomain(entity: FavoritesEntity): RecipeDetails = RecipeDetails(
         id = entity.recipeId,
         name = entity.name,
         description = entity.description,
@@ -74,26 +48,27 @@ class RecipeDataMapper {
         servings = entity.servings,
         ingredients = entity.ingredients?.map { IngredientInfo(it.foodName, it.ingredientDescription) } ?: emptyList(),
         directions = entity.directions?.map { DirectionInfo(it.directionNumber, it.directionDescription) } ?: emptyList(),
-        categories = entity.categories
+        categories = entity.categories,
+        rating = entity.rating
     )
 
-    /**
-     * Converts a raw API Recipe DTO to the Domain Detail model.
-     * @param recipeDto The raw object from the API response.
-     * @return [RecipeDetails] cleaned up for the UI.
-     */
-    fun recipeDetailDtoToDomain(recipeDto: Recipe?): RecipeDetails = RecipeDetails(
-        id = recipeDto?.recipeId ?: "",
-        name = recipeDto?.recipeName ?: "",
-        description = recipeDto?.recipeDescription ?: "",
-        imageUrls = recipeDto?.recipeImages?.recipeImage,
-        preparationTime = recipeDto?.preparationTimeMin ?: "",
-        cookingTime = recipeDto?.cookingTimeMin ?: "",
-        servings = recipeDto?.numberOfServings ?: "",
-        ingredients = recipeDto?.ingredients?.ingredient!!.map { ingredientDtoToDomain(it) },
-        directions = recipeDto.directions?.direction!!.map { directionDtoToDomain(it) },
-        categories = recipeDto.recipeCategories?.recipeCategory?.map { it.recipeCategoryName }
-    )
+    fun recipeDetailDtoToDomain(recipeDto: Recipe?): RecipeDetails =
+        RecipeDetails(
+            id = recipeDto?.recipeId,
+            name = recipeDto?.recipeName,
+            description = recipeDto?.recipeDescription,
+            imageUrls = recipeDto?.recipeImages?.recipeImage ?: emptyList(),
+            preparationTime = recipeDto?.preparationTimeMin,
+            cookingTime = recipeDto?.cookingTimeMin,
+            servings = recipeDto?.numberOfServings,
+            ingredients = recipeDto?.ingredients?.ingredient?.map { ingredientDtoToDomain(it) }
+                ?: emptyList(),
+            directions = recipeDto?.directions?.direction?.map { directionDtoToDomain(it) }
+                ?: emptyList(),
+            categories = recipeDto?.recipeCategories?.recipeCategory?.map { it.recipeCategoryName }
+                ?: emptyList(),
+            rating = recipeDto?.rating?.toIntOrNull())
+}
 
     private fun ingredientDtoToDomain(ingredientDto: Ingredient): IngredientInfo = IngredientInfo(
         description = ingredientDto.ingredientDescription, foodName = ingredientDto.foodName
@@ -102,4 +77,3 @@ class RecipeDataMapper {
     private fun directionDtoToDomain(directionDto: Direction): DirectionInfo = DirectionInfo(
         number = directionDto.directionNumber, description = directionDto.directionDescription
     )
-}
