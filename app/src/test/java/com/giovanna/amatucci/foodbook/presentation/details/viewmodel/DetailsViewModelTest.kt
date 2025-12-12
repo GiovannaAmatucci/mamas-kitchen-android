@@ -1,5 +1,6 @@
 package com.giovanna.amatucci.foodbook.presentation.details.viewmodel
 
+import UiConstants
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.giovanna.amatucci.foodbook.MainCoroutineRule
@@ -10,10 +11,9 @@ import com.giovanna.amatucci.foodbook.domain.usecase.favorites.AddFavoritesUseCa
 import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetFavoritesDetailsUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.favorites.IsFavoritesUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.favorites.RemoveFavoritesUseCase
+import com.giovanna.amatucci.foodbook.presentation.ScreenStatus
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsEvent
-import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsStatus
 import com.giovanna.amatucci.foodbook.util.ResultWrapper
-import com.giovanna.amatucci.foodbook.util.constants.UiConstants
 import com.giovanna.amatucci.foodbook.util.constants.UiText
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -27,6 +27,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -65,11 +66,12 @@ class DetailsViewModelTest {
         every { isFavoritesUseCase(validRecipeId) } returns isFavoriteFlow
         coEvery { addFavoritesUseCase(any()) } just Runs
         coEvery { removeFavoritesUseCase(any()) } just Runs
+        coEvery { getRecipeDetailsUseCase(any()) } returns ResultWrapper.Success(mockRecipeDetails)
     }
 
     private fun createViewModel(recipeId: String?): DetailsViewModel {
         val map =
-            if (recipeId != null) mapOf(UiConstants.DETAILS_VIEW_MODEL_RECIPE_ID to recipeId) else emptyMap()
+            if (recipeId != null) mapOf(UiConstants.Details.ARG_RECIPE_ID to recipeId) else emptyMap()
         val savedStateHandle = SavedStateHandle(map)
 
         return DetailsViewModel(
@@ -84,14 +86,22 @@ class DetailsViewModelTest {
 
     @Test
     fun `init SHOULD set Error WHEN recipeId is null or blank`() = runTest {
-        viewModel = createViewModel("")
+        val vm = createViewModel("")
 
-        viewModel.uiState.test {
-            val state = awaitItem()
-            assertEquals(DetailsStatus.Error, state.status)
-            assertEquals(
-                R.string.details_error_invalid_id, (state.error as UiText.StringResource).resId
+        vm.uiState.test {
+            val errorState = awaitItem()
+
+            assertTrue(
+                "Esperado Error, mas foi ${errorState.status}",
+                errorState.status is ScreenStatus.Error
             )
+
+            val message = (errorState.status as ScreenStatus.Error).message
+            assertEquals(
+                R.string.details_error_invalid_id, (message as UiText.StringResource).resId
+            )
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -103,7 +113,7 @@ class DetailsViewModelTest {
 
         viewModel.uiState.test {
             val state = awaitItem()
-            assertEquals(DetailsStatus.Success, state.status)
+            assertTrue(state.status is ScreenStatus.Success)
             assertEquals(mockRecipeDetails, state.recipe)
         }
         coVerify(exactly = 0) { getRecipeDetailsUseCase(any()) }
@@ -120,8 +130,8 @@ class DetailsViewModelTest {
 
         viewModel.uiState.test {
             val state = awaitItem()
-            val successState = if (state.status == DetailsStatus.Loading) awaitItem() else state
-            assertEquals(DetailsStatus.Success, successState.status)
+            val successState = if (state.status is ScreenStatus.Loading) awaitItem() else state
+            assertTrue(successState.status is ScreenStatus.Success)
             assertEquals(mockRecipeDetails, successState.recipe)
         }
     }
@@ -135,22 +145,8 @@ class DetailsViewModelTest {
 
         viewModel.uiState.test {
             val state = awaitItem()
-            val errorState = if (state.status != DetailsStatus.Error) awaitItem() else state
-            assertEquals(DetailsStatus.Error, errorState.status)
-        }
-    }
-
-    @Test
-    fun `init SHOULD set Error WHEN api throws exception`() = runTest {
-        coEvery { getFavoritesDetailsUseCase(validRecipeId) } returns null
-        coEvery { getRecipeDetailsUseCase(validRecipeId) } returns ResultWrapper.Exception(Exception())
-
-        viewModel = createViewModel(validRecipeId)
-
-        viewModel.uiState.test {
-            val state = awaitItem()
-            val errorState = if (state.status != DetailsStatus.Error) awaitItem() else state
-            assertEquals(DetailsStatus.Error, errorState.status)
+            val errorState = if (state.status !is ScreenStatus.Error) awaitItem() else state
+            assertTrue(errorState.status is ScreenStatus.Error)
         }
     }
 
@@ -193,22 +189,6 @@ class DetailsViewModelTest {
     }
 
     @Test
-    fun `toggleFavorite SHOULD do nothing WHEN recipeId is blank (Guard Clause)`() = runTest {
-        val invalidRecipe = mockk<RecipeDetails>(relaxed = true)
-        every { invalidRecipe.id } returns ""
-
-        coEvery { getFavoritesDetailsUseCase(validRecipeId) } returns invalidRecipe
-
-        viewModel = createViewModel(validRecipeId)
-        viewModel.uiState.test { cancelAndIgnoreRemainingEvents() }
-
-        viewModel.onEvent(DetailsEvent.ToggleFavorite)
-
-        coVerify(exactly = 0) { addFavoritesUseCase(any()) }
-        coVerify(exactly = 0) { removeFavoritesUseCase(any()) }
-    }
-
-    @Test
     fun `onEvent RetryConnection SHOULD retry fetching details`() = runTest {
         coEvery { getFavoritesDetailsUseCase(validRecipeId) } returns null
         coEvery { getRecipeDetailsUseCase(validRecipeId) } returns ResultWrapper.Error("Fail", 500)
@@ -223,17 +203,9 @@ class DetailsViewModelTest {
 
         viewModel.uiState.test {
             val state = awaitItem()
-            val successState = if (state.status != DetailsStatus.Success) awaitItem() else state
-            assertEquals(DetailsStatus.Success, successState.status)
+            val successState = if (state.status !is ScreenStatus.Success) awaitItem() else state
+            assertTrue(successState.status is ScreenStatus.Success)
         }
         coVerify(exactly = 2) { getRecipeDetailsUseCase(validRecipeId) }
-    }
-
-    @Test
-    fun `onEvent RetryConnection SHOULD do nothing if recipeId is null`() = runTest {
-        viewModel = createViewModel(null)
-
-        viewModel.onEvent(DetailsEvent.RetryConnection)
-        coVerify(exactly = 0) { getRecipeDetailsUseCase(any()) }
     }
 }

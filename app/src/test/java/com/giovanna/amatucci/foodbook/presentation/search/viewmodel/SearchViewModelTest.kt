@@ -2,6 +2,7 @@ package com.giovanna.amatucci.foodbook.presentation.search.viewmodel
 
 import androidx.paging.PagingData
 import com.giovanna.amatucci.foodbook.MainCoroutineRule
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetRecentFavoritesUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.search.ClearSearchHistoryUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.search.GetSearchQueriesUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.search.SaveSearchQueryUseCase
@@ -27,7 +28,7 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class SearchViewModelTest {
     @get:Rule
-    val mainCoroutineRule = MainCoroutineRule() // Usa StandardTestDispatcher
+    val mainCoroutineRule = MainCoroutineRule()
 
     // Mocks
     @MockK
@@ -42,27 +43,35 @@ class SearchViewModelTest {
     @MockK
     lateinit var clearSearchHistoryUseCase: ClearSearchHistoryUseCase
 
+    @MockK
+    lateinit var getRecentFavoritesUseCase: GetRecentFavoritesUseCase
+
     private lateinit var viewModel: SearchViewModel
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
+        // Mocks Padrão
         coEvery { getSearchQueriesUseCase() } returns listOf("pizza", "burger")
         coEvery { searchRecipesUseCase(any()) } returns flowOf(PagingData.empty())
+        coEvery { getRecentFavoritesUseCase() } returns flowOf(emptyList()) // Novo Mock necessário
         coEvery { saveSearchQueryUseCase(any()) } just Runs
         coEvery { clearSearchHistoryUseCase() } just Runs
+
         viewModel = SearchViewModel(
             searchRecipesUseCase,
             saveSearchQueryUseCase,
             getSearchQueriesUseCase,
-            clearSearchHistoryUseCase
+            clearSearchHistoryUseCase,
+            getRecentFavoritesUseCase // Nova dependência adicionada
         )
     }
 
     @Test
-    fun `init SHOULD load search history`() = runTest {
+    fun `init SHOULD load search history AND recent favorites`() = runTest {
         mainCoroutineRule.testDispatcher.scheduler.advanceUntilIdle()
         coVerify(exactly = 1) { getSearchQueriesUseCase() }
+        coVerify(exactly = 1) { getRecentFavoritesUseCase() }
     }
 
     @Test
@@ -153,7 +162,7 @@ class SearchViewModelTest {
         mainCoroutineRule.testDispatcher.scheduler.advanceUntilIdle()
         assertEquals("testing", viewModel.uiState.value.searchQuery)
         viewModel.onEvent(SearchEvent.ClearSearchQuery)
-        mainCoroutineRule.testDispatcher.scheduler.advanceUntilIdle() // Processa o update
+        mainCoroutineRule.testDispatcher.scheduler.advanceUntilIdle()
         assertEquals("", viewModel.uiState.value.searchQuery)
     }
 

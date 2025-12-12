@@ -21,6 +21,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.io.IOException
+import kotlin.test.assertNotNull
 
 @ExperimentalCoroutinesApi
 class RecipeRepositoryImplTest {
@@ -145,4 +146,17 @@ class RecipeRepositoryImplTest {
             verify(exactly = 1) { mapper.recipeDetailDtoToDomain(mockRecipeDto) }
             verify(exactly = 1) { logWriter.e(eq("RecipeRepository"), any(), null) }
         }
+
+    @Test
+    fun `searchRecipesPaginated - WHEN called - THEN logs and returns Flow`() = runTest {
+        // ARRANGE
+        val query = "pizza"
+
+        // ACT
+        val result = repository.searchRecipesPaginated(query, null)
+
+        // ASSERT
+        assertNotNull(result)
+        verify(exactly = 1) { logWriter.d(eq("RecipeRepository"), any()) }
+    }
 }
