@@ -9,16 +9,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.giovanna.amatucci.foodbook.R
+import com.giovanna.amatucci.foodbook.presentation.ScreenStatus
 import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.AuthViewModel
 import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthEvent
 import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthState
-import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthStatus
-import com.giovanna.amatucci.foodbook.presentation.components.LoadingIndicatorComposable
-import com.giovanna.amatucci.foodbook.presentation.components.NetworkFailedComposable
+import com.giovanna.amatucci.foodbook.presentation.components.common.Loading
+import com.giovanna.amatucci.foodbook.presentation.components.feedback.NetworkErrorComponent
 import org.koin.compose.viewmodel.koinViewModel
+
 @Composable
 fun AuthRoute(
     onNavigateToHome: () -> Unit,
@@ -31,7 +30,6 @@ fun AuthRoute(
             viewModel.onEvent(AuthEvent.NavigationCompleted)
         }
     }
-
     AuthScreen(
         uiState = uiState, onRetry = { viewModel.onEvent(AuthEvent.RequestToken) })
 }
@@ -46,13 +44,13 @@ private fun AuthScreen(
         contentAlignment = Alignment.Center,
     ) {
         when (uiState.status) {
-            is AuthStatus.Loading, AuthStatus.Success -> {
-                LoadingIndicatorComposable()
+            is ScreenStatus.Loading, ScreenStatus.Success -> {
+                Loading()
             }
 
-            is AuthStatus.Error -> {
-                NetworkFailedComposable(
-                    errorMessage = stringResource(R.string.error_no_internet), onRetry = onRetry
+            is ScreenStatus.Error -> {
+                NetworkErrorComponent(
+                    onRetry = onRetry
                 )
             }
         }

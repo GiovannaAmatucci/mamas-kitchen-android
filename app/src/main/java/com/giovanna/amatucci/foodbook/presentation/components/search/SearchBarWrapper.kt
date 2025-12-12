@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.components
+package com.giovanna.amatucci.foodbook.presentation.components.search
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.ColumnScope
@@ -14,7 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
-import com.giovanna.amatucci.foodbook.ui.theme.Dimens
+import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
+
 /**
  * A customized Search Bar component wrapper around Material3 SearchBar.
  *
@@ -33,7 +34,7 @@ import com.giovanna.amatucci.foodbook.ui.theme.Dimens
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppSearchBarComposable(
+fun SearchBarWrapper(
     query: String,
     isActive: Boolean,
     @StringRes placeholder: Int,
@@ -54,7 +55,7 @@ fun AppSearchBarComposable(
         .fillMaxWidth()
         .then(
             if (isActive && expandable) Modifier
-            else Modifier.padding(all = Dimens.PaddingMedium)
+            else Modifier.padding(all = AppTheme.dimens.paddingMedium)
         )
 
     SearchBar(

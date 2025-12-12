@@ -1,28 +1,39 @@
 package com.giovanna.amatucci.foodbook.ui.theme
 
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
+@Immutable
+data class Dimensions(
+    val paddingExtraSmall: Dp = 4.dp,
+    val paddingSmall: Dp = 8.dp,
+    val paddingMedium: Dp = 16.dp,
+    val paddingLarge: Dp = 24.dp,
+    val paddingExtraLarge: Dp = 32.dp,
 
-/**
- * ### Common Spacing and Sizes
- * Centralized dimensions to avoid hardcoded values in UI components.
- */
-object Dimens {
-    val PaddingExtraSmall = 4.dp
-    val PaddingVerticalCard = 6.dp
-    val PaddingSmall = 8.dp
-    val PaddingMedium = 16.dp
-    val PaddingLarge = 24.dp
-    val PaddingExtraLarge = 32.dp
-    val CardElevation = 2.dp
-    val ImageSizeLarge = 200.dp
-    val RecipeCardHeight = 140.dp
-    val ShimmerTitleHeight = 20.dp
-    val ShimmerTextHeight = 12.dp
-    val BlurRadius = 30.dp
-    val PagerIndicatorSpacing = 12.dp
-    val CardPressedScale = 0.96f
-    val ShimmerTitleWidthFraction = 0.8f
-    val ShimmerTextWidthFraction = 0.6f
-    val TextLineHeightMultiplier = 1.2
-}
+    val iconSizeSmall: Dp = 20.dp,
+    val iconSizeMedium: Dp = 24.dp,
+    val iconSizeLarge: Dp = 40.dp,
+
+    val imageSizeMedium: Dp = 150.dp,
+    val imageSizeLarge: Dp = 200.dp,
+    val imageSizeExtraLarge: Dp = 300.dp,
+
+    val cardCornerRadius: Dp = 16.dp,
+    val cardElevation: Dp = 2.dp,
+    val cardElevationPressed: Dp = 1.dp,
+    val cardPressedScale: Float = 0.96f,
+
+    val categoryCardHeight: Dp = 90.dp,
+    val categoryCardExpandedWidth: Dp = 200.dp,
+    val categoryIconSize: Dp = 60.dp,
+    val recipeCardHeight: Dp = 140.dp,
+    val heroCardHeight: Dp = 200.dp,
+
+    val blurRadius: Dp = 30.dp,
+    val pagerIndicatorSpacing: Dp = 8.dp
+)
+
+val LocalDimens = staticCompositionLocalOf { Dimensions() }

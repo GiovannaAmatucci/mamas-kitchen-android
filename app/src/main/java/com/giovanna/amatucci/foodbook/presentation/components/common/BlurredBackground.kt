@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.components
+package com.giovanna.amatucci.foodbook.presentation.components.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -10,30 +10,23 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.giovanna.amatucci.foodbook.R
+import com.giovanna.amatucci.foodbook.presentation.components.image.FadedAsyncImage
+import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
 
-/**•A Composable that uses an image from a URL as a blurred background for its content.
- * @param imageUrl The URL of the image to be used as background.
- * @param modifier The Modifier to be applied to the Box containing the background and content.
- * @param blurRadius The blur radius to be applied to the background image.
- * @param content The content to be displayed over the blurred background.
- */
 @Composable
-fun BlurredImageComposable(
+fun BlurredBackground(
     imageUrl: String?,
-    modifier: Modifier = Modifier, blurRadius: Dp = 20.dp, content: @Composable BoxScope.() -> Unit
+    modifier: Modifier = Modifier,
+    blurRadius: Dp = AppTheme.dimens.blurRadius,
+    content: @Composable BoxScope.() -> Unit
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         if (imageUrl != null) {
-            AsyncImage(
-                model = imageUrl,
-                contentDescription = null,
-                modifier = Modifier
+            FadedAsyncImage(
+                imageUrl = imageUrl, modifier = Modifier
                     .fillMaxSize()
-                    .blur(blurRadius),
-                contentScale = ContentScale.Crop
+                    .blur(blurRadius)
             )
         } else {
             Image(

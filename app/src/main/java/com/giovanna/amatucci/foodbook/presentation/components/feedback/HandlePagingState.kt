@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.components
+package com.giovanna.amatucci.foodbook.presentation.components.feedback
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,7 +9,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.giovanna.amatucci.foodbook.R
-
+import com.giovanna.amatucci.foodbook.presentation.components.common.MessageComponent
+import com.giovanna.amatucci.foodbook.presentation.components.feedback.shimmer.RecipeCardShimmer
 
 /**
  * A generic component that handles common states of a [LazyPagingItems] list.
@@ -24,7 +25,7 @@ import com.giovanna.amatucci.foodbook.R
  * @param content The main Composable to display when there are items (Success state).
  */
 @Composable
-fun <T : Any> PagingStateComposable(
+fun <T : Any> HandlePagingState(
     pagingItems: LazyPagingItems<T>,
     modifier: Modifier = Modifier,
     loadingContent: @Composable () -> Unit = {
@@ -32,8 +33,8 @@ fun <T : Any> PagingStateComposable(
             repeat(6) { RecipeCardShimmer() }
         }
     },
-    errorContent: @Composable (message: String) -> Unit = { EmptyMessage(message = it) },
-    emptyContent: @Composable () -> Unit = { EmptyMessage(message = stringResource(R.string.search_empty_message)) },
+    errorContent: @Composable (message: String) -> Unit = { MessageComponent(message = it) },
+    emptyContent: @Composable () -> Unit = { MessageComponent(message = stringResource(R.string.search_empty_message)) },
     content: @Composable (pagingItems: LazyPagingItems<T>) -> Unit
 ) {
     Box(modifier = modifier.fillMaxSize()) {

@@ -4,7 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.giovanna.amatucci.foodbook.data.local.db.dao.FavoriteDao
+import com.giovanna.amatucci.foodbook.data.local.db.dao.FavoritesDao
 import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipeDataMapper
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
@@ -17,8 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class FavoritesRepositoryImpl(
-    private val mapper: RecipeDataMapper,
-    private val favoriteDao: FavoriteDao,
+    private val mapper: RecipeDataMapper, private val favoritesDao: FavoritesDao,
     private val logWriter: LogWriter
 ) : FavoritesRepository {
 
@@ -27,17 +26,17 @@ class FavoritesRepositoryImpl(
     ) {
         logWriter.d(TAG.FAVORITES_REPOSITORY, LogMessages.REPO_FAVORITE_ADD_START.format(recipe))
         mapper.favoriteDomainToDto(recipe).let {
-            favoriteDao.insertFavorite(it)
+            favoritesDao.insertFavorite(it)
         }
     }
 
     override suspend fun getFavoriteDetails(recipeId: String): RecipeDetails? =
-        favoriteDao.getFavoriteById(recipeId)?.let { favoriteEntity ->
+        favoritesDao.getFavoriteById(recipeId)?.let { favoriteEntity ->
             mapper.favoriteEntityToDetailsDomain(favoriteEntity)
         }
 
     override fun isFavorite(recipeId: String): Flow<Boolean> =
-        favoriteDao.isFavorite(recipeId.toLong())
+        favoritesDao.isFavorite(recipeId.toLong())
 
     override fun getFavorites(query: String): Flow<PagingData<RecipeItem>> {
         val preparedQuery = "%$query%"
@@ -46,10 +45,16 @@ class FavoritesRepositoryImpl(
                 pageSize = RepositoryConstants.FAVORITE_REPOSITORY_PAGE_SIZE,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { favoriteDao.getAllFavoritesPaged(preparedQuery) }).flow.map { pagingData ->
+            pagingSourceFactory = { favoritesDao.getAllFavoritesPaged(preparedQuery) }).flow.map { pagingData ->
             pagingData.map { favoriteEntity ->
                 mapper.favoriteEntityToDomain(favoriteEntity)
             }
+        }
+    }
+
+    override fun getLastFavorites(): Flow<List<RecipeItem>> {
+        return favoritesDao.getLast3Favorites().map { list ->
+            list.map { mapper.favoriteEntityToDomain(it) }
         }
     }
 
@@ -57,10 +62,10 @@ class FavoritesRepositoryImpl(
         logWriter.d(
             TAG.FAVORITES_REPOSITORY, LogMessages.REPO_FAVORITE_REMOVE_START.format(recipeId)
         )
-        favoriteDao.deleteFavorite(recipeId)
+        favoritesDao.deleteFavorite(recipeId)
     }
 
     override suspend fun deleteAllFavorites() {
-        favoriteDao.deleteAllFavorites()
+        favoritesDao.deleteAllFavorites()
     }
 }

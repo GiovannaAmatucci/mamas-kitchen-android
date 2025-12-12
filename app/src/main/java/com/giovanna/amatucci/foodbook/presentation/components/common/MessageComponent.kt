@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.components
+package com.giovanna.amatucci.foodbook.presentation.components.common
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,27 +8,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import com.giovanna.amatucci.foodbook.ui.theme.Dimens
+import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
 
-/**
- * A centralized empty state component.
- *
- * @param message The message text to display.
- * @param modifier Modifier for the container box.
- */
 @Composable
-fun EmptyMessage(message: String, modifier: Modifier = Modifier) {
+fun MessageComponent(message: String, modifier: Modifier = Modifier, color: Color? = null) {
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(Dimens.PaddingMedium),
+            .padding(AppTheme.dimens.paddingMedium),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = message,
             style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = color ?: MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }

@@ -37,6 +37,8 @@ import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetFavoritesDetai
 import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetFavoritesDetailsUseCaseImpl
 import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetFavoritesUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetFavoritesUseCaseImpl
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetRecentFavoritesUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetRecentFavoritesUseCaseImpl
 import com.giovanna.amatucci.foodbook.domain.usecase.favorites.IsFavoritesUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.favorites.IsFavoritesUseCaseImpl
 import com.giovanna.amatucci.foodbook.domain.usecase.favorites.RemoveFavoritesUseCase
@@ -111,6 +113,7 @@ val domainModule = module {
     factory<GetFavoritesDetailsUseCase> { GetFavoritesDetailsUseCaseImpl(repository = get()) }
     factory<GetFavoritesUseCase> { GetFavoritesUseCaseImpl(repository = get()) }
     factory<RemoveFavoritesUseCase> { RemoveFavoritesUseCaseImpl(repository = get()) }
+    factory<GetRecentFavoritesUseCase> { GetRecentFavoritesUseCaseImpl(repository = get()) }
     factory<IsFavoritesUseCase> { IsFavoritesUseCaseImpl(repository = get()) }
     factory<SaveSearchQueryUseCase> { SaveSearchQueryUseCaseImpl(repository = get()) }
     factory<GetSearchQueriesUseCase> { GetSearchQueriesUseCaseImpl(repository = get()) }
@@ -120,7 +123,7 @@ val domainModule = module {
 }
 val viewModelModule = module {
     viewModel { AuthViewModel(get(), get()) }
-    viewModel { SearchViewModel(get(), get(), get(), get()) }
+    viewModel { SearchViewModel(get(), get(), get(), get(), get()) }
     viewModel { DetailsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { FavoritesViewModel(get(), get()) }
 }

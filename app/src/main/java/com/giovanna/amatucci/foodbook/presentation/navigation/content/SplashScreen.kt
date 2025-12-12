@@ -1,5 +1,6 @@
 package com.giovanna.amatucci.foodbook.presentation.navigation.content
 
+import UiConstants
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -21,19 +22,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.giovanna.amatucci.foodbook.R
-import com.giovanna.amatucci.foodbook.util.constants.UiConstants
+import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
 import kotlinx.coroutines.delay
+
 @Composable
 fun AnimatedSplashScreen(onAnimationFinished: () -> Unit) {
     var startAnimation by remember { mutableStateOf(true) }
     val alphaAnim = animateFloatAsState(
-        targetValue = if (startAnimation) UiConstants.SPLASH_SCREEN_IF_START_ANIMATION else UiConstants.SPLASH_SCREEN_ELSE_START_ANIMATION,
-        animationSpec = tween(durationMillis = UiConstants.SPLASH_SCREEN_DURATION_ANIMATION)
+        targetValue = if (startAnimation) AppTheme.alphas.opaque else AppTheme.alphas.disabled,
+        animationSpec = tween(durationMillis = UiConstants.Splash.ANIMATION_DURATION)
     )
     LaunchedEffect(key1 = true) {
-        delay(UiConstants.SPLASH_SCREEN_DELAY)
+        delay(UiConstants.Splash.DELAY)
         onAnimationFinished()
     }
 
@@ -52,7 +53,7 @@ fun AnimatedSplashScreen(onAnimationFinished: () -> Unit) {
                 contentDescription = stringResource(R.string.navigation_mamas_kitchen_content_description_logo)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(AppTheme.dimens.pagerIndicatorSpacing))
             Image(
                 painter = painterResource(id = R.drawable.ic_mamas_kitchen_text_light),
                 contentDescription = stringResource(R.string.navigation_mamas_kitchen_content_description)

@@ -6,9 +6,9 @@ import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.data.remote.model.TokenResponse
 import com.giovanna.amatucci.foodbook.domain.usecase.auth.CheckAuthenticationStatusUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.auth.FetchAndSaveTokenUseCase
+import com.giovanna.amatucci.foodbook.presentation.ScreenStatus
 import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthEvent
 import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthState
-import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.state.AuthStatus
 import com.giovanna.amatucci.foodbook.util.ResultWrapper
 import com.giovanna.amatucci.foodbook.util.constants.UiText
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,7 +36,7 @@ class AuthViewModel(
     }
 
     private fun checkExistingToken() {
-        _uiState.update { it.copy(status = AuthStatus.Loading) }
+        _uiState.update { it.copy(status = ScreenStatus.Loading) }
         verifyToken()
     }
 
@@ -45,7 +45,7 @@ class AuthViewModel(
             runCatching { checkAuthStatusUseCase() }.onSuccess { result ->
                 result.takeIf { it }?.let {
                     _uiState.update {
-                        it.copy(status = AuthStatus.Success, navigateToHome = true)
+                        it.copy(status = ScreenStatus.Success, navigateToHome = true)
                     }
                 } ?: executeTokenFetch()
             }.onFailure { handleErrorException(error = it) }
@@ -53,8 +53,8 @@ class AuthViewModel(
     }
 
     private fun fetchToken() {
-        if (_uiState.value.status is AuthStatus.Loading) return
-        _uiState.update { it.copy(status = AuthStatus.Loading) }
+        if (_uiState.value.status is ScreenStatus.Loading) return
+        _uiState.update { it.copy(status = ScreenStatus.Loading) }
         executeTokenFetch()
     }
 
@@ -70,14 +70,14 @@ class AuthViewModel(
         when (result) {
             is ResultWrapper.Success -> {
                 _uiState.update {
-                    it.copy(status = AuthStatus.Success, navigateToHome = true)
+                    it.copy(status = ScreenStatus.Success, navigateToHome = true)
                 }
             }
 
             is ResultWrapper.Error -> {
                 _uiState.update {
                     it.copy(
-                        status = AuthStatus.Error,
+                        status = ScreenStatus.Error(UiText.StringResource(R.string.auth_error_with_code)),
                         navigateToHome = false,
                         error = UiText.DynamicString(result.message)
                     )
@@ -94,8 +94,13 @@ class AuthViewModel(
         val errorMessage = error.message?.let {
             UiText.DynamicString(it)
         } ?: UiText.StringResource(R.string.auth_error_unknown)
+
         _uiState.update {
-            it.copy(status = AuthStatus.Error, navigateToHome = false, error = errorMessage)
+            it.copy(
+                status = ScreenStatus.Error(errorMessage), // <--- ADICIONE ISSO
+                navigateToHome = false,
+                error = errorMessage
+            )
         }
     }
 

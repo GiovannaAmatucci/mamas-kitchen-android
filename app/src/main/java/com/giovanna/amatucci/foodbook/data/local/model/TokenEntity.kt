@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity("access_tokens")
+@Entity("tokenEntity")
 data class TokenEntity(
     @PrimaryKey val id: String = "default_token",
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB) val encryptedAccessToken: ByteArray,

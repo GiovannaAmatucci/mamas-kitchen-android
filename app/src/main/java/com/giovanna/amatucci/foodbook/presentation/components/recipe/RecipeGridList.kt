@@ -1,5 +1,7 @@
-package com.giovanna.amatucci.foodbook.presentation.components
+package com.giovanna.amatucci.foodbook.presentation.components.recipe
 
+import RecipeCard
+import UiConstants
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -7,26 +9,17 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.paging.compose.LazyPagingItems
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
-import com.giovanna.amatucci.foodbook.ui.theme.Dimens
-import com.giovanna.amatucci.foodbook.util.constants.UiConstants
+import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
 
-/**
- * A list that displays recipe cards.
- * Uses paging to load items lazily.
- * Adjusted to display 1 column for horizontal cards.
- *
- * @param recipes The paginated list of recipes.
- * @param onRecipeClick Callback triggered when a recipe card is clicked, passing the recipe ID.
- */
 @Composable
-fun RecipeList(
+fun RecipeGridList(
     recipes: LazyPagingItems<RecipeItem>, onRecipeClick: (String) -> Unit
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(UiConstants.RECIPE_LIST_GRID_CELLS_FIXED),
-        contentPadding = PaddingValues(Dimens.PaddingSmall),
-        horizontalArrangement = Arrangement.spacedBy(Dimens.PaddingSmall),
-        verticalArrangement = Arrangement.spacedBy(Dimens.PaddingSmall)
+        columns = GridCells.Fixed(UiConstants.Layout.LIST_GRID_CELLS_FIXED),
+        contentPadding = PaddingValues(AppTheme.dimens.paddingSmall),
+        horizontalArrangement = Arrangement.spacedBy(AppTheme.dimens.paddingSmall),
+        verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.paddingSmall)
     ) {
         items(
             count = recipes.itemCount,

@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.giovanna.amatucci.foodbook.R
-import com.giovanna.amatucci.foodbook.presentation.components.AppSearchBarComposable
+import com.giovanna.amatucci.foodbook.presentation.components.search.SearchBarWrapper
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesEvent
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesUiState
 
@@ -20,10 +20,10 @@ fun FavoritesTopBar(
     state: FavoritesUiState,
     onEvent: (FavoritesEvent) -> Unit,
 ) {
-    AppSearchBarComposable(
+    SearchBarWrapper(
         query = state.searchQuery,
-        onQueryChange = { onEvent(FavoritesEvent.UpdateSearchQuery(it)) },
-        onSearch = { onEvent(FavoritesEvent.SubmitSearch(it)) },
+        onQueryChange = { onQueryChange -> onEvent(FavoritesEvent.UpdateSearchQuery(onQueryChange)) },
+        onSearch = { onSearch -> onEvent(FavoritesEvent.SubmitSearch(onSearch)) },
         isActive = true,
         expandable = false,
         placeholder = R.string.favorites_search_placeholder,

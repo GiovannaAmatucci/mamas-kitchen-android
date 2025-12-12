@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.components
+package com.giovanna.amatucci.foodbook.presentation.components.feedback.shimmer
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,32 +17,29 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import com.giovanna.amatucci.foodbook.ui.theme.Dimens
-import com.giovanna.amatucci.foodbook.ui.theme.Shape
+import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
 import com.giovanna.amatucci.foodbook.util.shimmerEffect
 
-/**
- * A placeholder card that displays a loading shimmer effect.
- * Mirrors the structure of [RecipeCard] (Horizontal Layout) using Theme Dimens.
- */
 @Composable
 fun RecipeCardShimmer() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(Dimens.RecipeCardHeight)
-            .padding(vertical = Dimens.PaddingVerticalCard, horizontal = Dimens.PaddingSmall),
-        shape = RoundedCornerShape(Dimens.PaddingMedium),
+            .height(AppTheme.dimens.recipeCardHeight)
+            .padding(
+                vertical = AppTheme.dimens.paddingSmall, horizontal = AppTheme.dimens.paddingSmall
+            ), shape = RoundedCornerShape(AppTheme.dimens.cardCornerRadius),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Row(modifier = Modifier.fillMaxWidth()) {
             Box(
                 modifier = Modifier
-                    .width(Dimens.RecipeCardHeight)
+                    .width(AppTheme.dimens.recipeCardHeight)
                     .fillMaxHeight()
                     .clip(
                         RoundedCornerShape(
-                            topStart = Dimens.PaddingMedium, bottomStart = Dimens.PaddingMedium
+                            topStart = AppTheme.dimens.cardCornerRadius,
+                            bottomStart = AppTheme.dimens.cardCornerRadius
                         )
                     )
                     .shimmerEffect()
@@ -50,31 +47,32 @@ fun RecipeCardShimmer() {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(Dimens.PaddingMedium),
+                    .padding(AppTheme.dimens.paddingMedium),
                 verticalArrangement = Arrangement.Center
             ) {
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth(Dimens.ShimmerTitleWidthFraction)
-                        .height(Dimens.ShimmerTitleHeight)
-                        .clip(Shape.extraSmall)
+                        .fillMaxWidth(0.8f)
+                        .height(AppTheme.dimens.iconSizeSmall)
+                        .clip(MaterialTheme.shapes.extraSmall)
                         .shimmerEffect()
                 )
-                Spacer(modifier = Modifier.height(Dimens.PaddingMedium))
+                Spacer(modifier = Modifier.height(AppTheme.dimens.paddingMedium))
 
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(Dimens.ShimmerTextHeight)
-                        .clip(Shape.extraSmall)
+                        .height(AppTheme.dimens.paddingSmall)
+                        .clip(MaterialTheme.shapes.extraSmall)
                         .shimmerEffect()
                 )
-                Spacer(modifier = Modifier.height(Dimens.PaddingSmall))
+                Spacer(modifier = Modifier.height(AppTheme.dimens.paddingSmall))
+
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth(Dimens.ShimmerTextWidthFraction)
-                        .height(Dimens.ShimmerTextHeight)
-                        .clip(Shape.extraSmall)
+                        .fillMaxWidth(AppTheme.alphas.medium)
+                        .height(AppTheme.dimens.paddingSmall)
+                        .clip(MaterialTheme.shapes.extraSmall)
                         .shimmerEffect()
                 )
             }

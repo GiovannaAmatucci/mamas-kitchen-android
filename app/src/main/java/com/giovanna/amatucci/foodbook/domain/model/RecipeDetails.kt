@@ -11,5 +11,6 @@ data class RecipeDetails(
     val servings: String?,
     val ingredients: List<IngredientInfo>,
     val directions: List<DirectionInfo>,
-    val categories: List<String>?
+    val categories: List<String>?,
+    val rating: Int? = 0
 )

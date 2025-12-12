@@ -12,6 +12,8 @@ interface FavoritesRepository {
     fun isFavorite(recipeId: String): Flow<Boolean>
     fun getFavorites(query: String): Flow<PagingData<RecipeItem>>
     suspend fun removeFavorite(recipeId: String)
+
+    fun getLastFavorites(): Flow<List<RecipeItem>>
     suspend fun deleteAllFavorites()
 
 }

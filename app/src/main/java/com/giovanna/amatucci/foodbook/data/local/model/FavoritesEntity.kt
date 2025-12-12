@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 import com.giovanna.amatucci.foodbook.data.remote.model.recipe.Direction
 import com.giovanna.amatucci.foodbook.data.remote.model.recipe.Ingredient
 
-@Entity(tableName = "favorite_recipes")
-data class FavoriteEntity(
+@Entity(tableName = "favoritesEntity")
+data class FavoritesEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     @ColumnInfo(name = "recipe_id") val recipeId: String?,
     @ColumnInfo(name = "name") val name: String?,
@@ -20,5 +20,7 @@ data class FavoriteEntity(
     @ColumnInfo("servings") val servings: String?,
     @ColumnInfo("ingredients") val ingredients: List<Ingredient>?,
     @ColumnInfo("directions") val directions: List<Direction>?,
-    @ColumnInfo("categories") val categories: List<String>?
+    @ColumnInfo("categories") val categories: List<String>?,
+    @ColumnInfo("rating") val rating: Int?
+
 )
