@@ -128,7 +128,7 @@ val viewModelModule = module {
     viewModel { AuthViewModel(get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get(), get()) }
     viewModel { DetailsViewModel(get(), get(), get(), get(), get(), get()) }
-    viewModel { FavoritesViewModel(get(), get()) }
+    viewModel { FavoritesViewModel(get(), get(), get()) }
 }
 
 val appModules = listOf(

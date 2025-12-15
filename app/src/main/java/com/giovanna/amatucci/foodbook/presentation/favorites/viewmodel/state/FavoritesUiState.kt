@@ -8,5 +8,6 @@ import kotlinx.coroutines.flow.emptyFlow
 data class FavoritesUiState(
     val searchQuery: String = "",
     val recipes: Flow<PagingData<RecipeItem>> = emptyFlow(),
-    val showConfirmDeleteAllDialog: Boolean = false
+    val showConfirmDeleteAllDialog: Boolean = false,
+    val hasAnyFavorite: Boolean = false
 )

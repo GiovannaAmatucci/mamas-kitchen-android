@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.giovanna.amatucci.foodbook.domain.usecase.favorites.DeleteAllFavoritesUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetFavoritesUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetRecentFavoritesUseCase
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesEvent
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesUiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -24,7 +25,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class FavoritesViewModel(
     private val getFavoritesUseCase: GetFavoritesUseCase,
-    private val deleteAllFavoritesUseCase: DeleteAllFavoritesUseCase
+    private val deleteAllFavoritesUseCase: DeleteAllFavoritesUseCase,
+    private val getRecentFavoritesUseCase: GetRecentFavoritesUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(FavoritesUiState())
@@ -32,6 +34,7 @@ class FavoritesViewModel(
 
     init {
         initializeSearchFlow()
+        observeDatabaseCount()
     }
 
     fun onEvent(event: FavoritesEvent) {
@@ -59,6 +62,12 @@ class FavoritesViewModel(
             is FavoritesEvent.ClearSearchQuery -> {
                 _uiState.update { it.copy(searchQuery = "") }
             }
+        }
+    }
+
+    private fun observeDatabaseCount() = viewModelScope.launch {
+        getRecentFavoritesUseCase().collect { list ->
+            _uiState.update { it.copy(hasAnyFavorite = list.isNotEmpty()) }
         }
     }
 

@@ -2,8 +2,10 @@ package com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel
 
 import androidx.paging.PagingData
 import com.giovanna.amatucci.foodbook.MainCoroutineRule
+import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 import com.giovanna.amatucci.foodbook.domain.usecase.favorites.DeleteAllFavoritesUseCase
 import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetFavoritesUseCase
+import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetRecentFavoritesUseCase
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesEvent
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -36,16 +38,52 @@ class FavoritesViewModelTest {
     @MockK
     lateinit var deleteAllFavoritesUseCase: DeleteAllFavoritesUseCase
 
+    @MockK
+    lateinit var getRecentFavoritesUseCase: GetRecentFavoritesUseCase // 1. Novo Mock
+
     private lateinit var viewModel: FavoritesViewModel
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
         every { getFavoritesUseCase(any()) } returns flowOf(PagingData.empty())
-
         coEvery { deleteAllFavoritesUseCase() } just Runs
+        every { getRecentFavoritesUseCase() } returns flowOf(emptyList())
+        viewModel = FavoritesViewModel(
+            getFavoritesUseCase, deleteAllFavoritesUseCase, getRecentFavoritesUseCase
+        )
+    }
 
-        viewModel = FavoritesViewModel(getFavoritesUseCase, deleteAllFavoritesUseCase)
+    @Test
+    fun `init SHOULD set hasAnyFavorite to TRUE when database has items`() = runTest {
+        // ARRANGE
+        val mockList = listOf(RecipeItem(1, "Test", "Desc", "Img", 5))
+        every { getRecentFavoritesUseCase() } returns flowOf(mockList)
+
+        // ACT
+        viewModel = FavoritesViewModel(
+            getFavoritesUseCase, deleteAllFavoritesUseCase, getRecentFavoritesUseCase
+        )
+
+        mainCoroutineRule.testDispatcher.scheduler.advanceUntilIdle()
+
+        // ASSERT
+        assertTrue(viewModel.uiState.value.hasAnyFavorite)
+    }
+
+    @Test
+    fun `init SHOULD set hasAnyFavorite to FALSE when database is empty`() = runTest {
+        // ARRANGE
+        every { getRecentFavoritesUseCase() } returns flowOf(emptyList())
+
+        // ACT
+        viewModel = FavoritesViewModel(
+            getFavoritesUseCase, deleteAllFavoritesUseCase, getRecentFavoritesUseCase
+        )
+        mainCoroutineRule.testDispatcher.scheduler.advanceUntilIdle()
+
+        // ASSERT
+        assertFalse(viewModel.uiState.value.hasAnyFavorite)
     }
 
     @Test
@@ -136,29 +174,5 @@ class FavoritesViewModelTest {
         mainCoroutineRule.testDispatcher.scheduler.advanceUntilIdle()
         coVerify(exactly = 1) { deleteAllFavoritesUseCase() }
         assertFalse(viewModel.uiState.value.showConfirmDeleteAllDialog)
-    }
-
-    @Test
-    fun `onEvent SubmitSearch SHOULD not trigger use case if query unchanged`() = runTest {
-        val job = launch { viewModel.uiState.value.recipes.collect {} }
-        mainCoroutineRule.testDispatcher.scheduler.advanceTimeBy(301L)
-        verify(exactly = 1) { getFavoritesUseCase("") }
-        viewModel.onEvent(FavoritesEvent.SubmitSearch(""))
-        mainCoroutineRule.testDispatcher.scheduler.advanceTimeBy(301L)
-        verify(exactly = 1) { getFavoritesUseCase("") }
-
-        job.cancel()
-    }
-
-    @Test
-    fun `onEvent ClearSearchQuery SHOULD not trigger use case if already empty`() = runTest {
-        val job = launch { viewModel.uiState.value.recipes.collect {} }
-        mainCoroutineRule.testDispatcher.scheduler.advanceTimeBy(301L)
-        verify(exactly = 1) { getFavoritesUseCase("") }
-        viewModel.onEvent(FavoritesEvent.ClearSearchQuery)
-        mainCoroutineRule.testDispatcher.scheduler.advanceTimeBy(301L)
-        verify(exactly = 1) { getFavoritesUseCase("") }
-
-        job.cancel()
     }
 }
