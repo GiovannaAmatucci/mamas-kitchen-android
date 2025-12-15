@@ -1,9 +1,10 @@
 package com.giovanna.amatucci.foodbook.data.paging
 
+import UiConstants
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.giovanna.amatucci.foodbook.data.remote.api.FatSecretRecipeApi
-import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipeDataMapper
+import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipesMapper
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 import com.giovanna.amatucci.foodbook.util.LogWriter
 import com.giovanna.amatucci.foodbook.util.ResultWrapper
@@ -13,8 +14,7 @@ import com.giovanna.amatucci.foodbook.util.constants.TAG
 
 
 class RecipePagingSource(
-    private val api: FatSecretRecipeApi,
-    private val mapper: RecipeDataMapper,
+    private val api: FatSecretRecipeApi, private val mapper: RecipesMapper,
     private val query: String, private val logWriter: LogWriter
 ) : PagingSource<Int, RecipeItem>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RecipeItem> {
@@ -64,8 +64,8 @@ class RecipePagingSource(
 
     override fun getRefreshKey(state: PagingState<Int, RecipeItem>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
-            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
-                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(UiConstants.Details.PAGE_COUNT_MIN)
+                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(UiConstants.Details.PAGE_COUNT_MIN)
         }
     }
 }

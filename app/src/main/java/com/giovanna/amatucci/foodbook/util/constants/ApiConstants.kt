@@ -39,6 +39,8 @@ object RepositoryConstants {
 
     const val RECIPE_REPOSITORY_PAGE_SIZE = 20
 
+    const val AUTH_REPOSITORY_EXPIRES_IN = 1000L
+
 }
 
 object TAG {

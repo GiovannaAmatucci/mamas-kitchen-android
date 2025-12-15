@@ -8,7 +8,8 @@ import com.giovanna.amatucci.foodbook.data.remote.api.AuthApi
 import com.giovanna.amatucci.foodbook.data.remote.api.AuthApiImpl
 import com.giovanna.amatucci.foodbook.data.remote.api.FatSecretRecipeApi
 import com.giovanna.amatucci.foodbook.data.remote.api.FatSecretRecipeApiImpl
-import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipeDataMapper
+import com.giovanna.amatucci.foodbook.data.remote.mapper.FavoritesMapper
+import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipesMapper
 import com.giovanna.amatucci.foodbook.data.remote.network.NetworkHttpClient
 import com.giovanna.amatucci.foodbook.data.remote.network.NetworkHttpClientImpl
 import com.giovanna.amatucci.foodbook.data.remote.network.TokenHttpClient
@@ -61,6 +62,7 @@ import com.giovanna.amatucci.foodbook.util.constants.KeyStoreConstants
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
+
 val coreModule = module {
     single<LogWriter> { TimberLogWriter() }
 }
@@ -82,7 +84,8 @@ val networkModule = module {
     }
     single<AuthApi> { AuthApiImpl(logWriter = get(), get()) }
     single<FatSecretRecipeApi> { FatSecretRecipeApiImpl(client = get(), logWriter = get()) }
-    single { RecipeDataMapper() }
+    single { RecipesMapper() }
+    single { FavoritesMapper() }
 }
 val databaseModule = module {
     single { CryptographyManager() }
@@ -98,7 +101,7 @@ val databaseModule = module {
     single { get<AppDatabase>().favoriteDao() }
 }
 val repositoryModule = module {
-    single<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
+    single<AuthRepository> { AuthRepositoryImpl(get(), get(), get(), get()) }
     single<TokenRepository> { TokenRepositoryImpl(get(), get(), get()) }
     single<RecipeRepository> { RecipeRepositoryImpl(get(), get(), get()) }
     single<FavoritesRepository> { FavoritesRepositoryImpl(get(), get(), get()) }

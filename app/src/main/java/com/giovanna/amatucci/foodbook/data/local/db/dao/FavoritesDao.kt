@@ -22,10 +22,10 @@ interface FavoritesDao {
     @Query("SELECT EXISTS(SELECT 1 FROM favoritesEntity WHERE recipe_id = :recipeId LIMIT 1)")
     fun isFavorite(recipeId: Long): Flow<Boolean>
 
-    @Query("SELECT * FROM favoritesEntity WHERE name LIKE :query ORDER BY date_favorites DESC")
+    @Query("SELECT * FROM favoritesEntity WHERE name LIKE :query ORDER BY data_favorites DESC")
     fun getAllFavoritesPaged(query: String): PagingSource<Int, FavoritesEntity>
 
-    @Query("SELECT * FROM favoritesEntity ORDER BY date_favorites DESC LIMIT 3")
+    @Query("SELECT * FROM favoritesEntity ORDER BY data_favorites DESC LIMIT 3")
     fun getLast3Favorites(): Flow<List<FavoritesEntity>>
 
     @Query("DELETE FROM favoritesEntity")

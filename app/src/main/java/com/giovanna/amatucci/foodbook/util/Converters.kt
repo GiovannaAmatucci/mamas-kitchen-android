@@ -4,8 +4,9 @@ import androidx.room.TypeConverter
 import com.giovanna.amatucci.foodbook.data.remote.model.recipe.Direction
 import com.giovanna.amatucci.foodbook.data.remote.model.recipe.Ingredient
 import kotlinx.serialization.json.Json
+
+private val json = Json { ignoreUnknownKeys = true }
 class Converters {
-    private val json = Json { ignoreUnknownKeys = true }
     @TypeConverter
     fun fromStringToList(value: String?): List<String>? {
         return value?.let { json.decodeFromString(it) }

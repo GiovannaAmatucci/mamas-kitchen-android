@@ -14,7 +14,7 @@ data class FavoritesEntity(
     @ColumnInfo(name = "description") val description: String?,
     @ColumnInfo("image_url") val imageUrl: String?,
     @ColumnInfo("image_urls") val imageUrls: List<String>?,
-    @ColumnInfo("date_favorites") val dateFavorites: Long = System.currentTimeMillis(),
+    @ColumnInfo("data_favorites") val dataFavorites: Long = System.currentTimeMillis(),
     @ColumnInfo("preparation_time") val preparationTime: String?,
     @ColumnInfo("cooking_time") val cookingTime: String?,
     @ColumnInfo("servings") val servings: String?,
