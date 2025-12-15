@@ -1,7 +1,7 @@
 package com.giovanna.amatucci.foodbook.data.repository
 
 import com.giovanna.amatucci.foodbook.data.remote.api.FatSecretRecipeApi
-import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipeDataMapper
+import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipesMapper
 import com.giovanna.amatucci.foodbook.data.remote.model.recipe.Recipe
 import com.giovanna.amatucci.foodbook.data.remote.model.recipe.RecipeResponse
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
@@ -33,7 +33,7 @@ class RecipeRepositoryImplTest {
     private lateinit var api: FatSecretRecipeApi
 
     @MockK
-    private lateinit var mapper: RecipeDataMapper
+    private lateinit var mapper: RecipesMapper
 
     @MockK(relaxUnitFun = true)
     private lateinit var logWriter: LogWriter

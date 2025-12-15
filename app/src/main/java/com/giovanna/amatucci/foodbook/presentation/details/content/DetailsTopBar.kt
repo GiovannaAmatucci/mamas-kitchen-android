@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsEvent
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsUiState
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsTopBar(

@@ -5,18 +5,24 @@ import androidx.compose.ui.graphics.Color
 import com.giovanna.amatucci.foodbook.ui.theme.AlphaColor
 
 object BrushGradient {
-    fun imageFadeMask(alphas: AlphaColor): Brush = Brush.verticalGradient(
-        colorStops = arrayOf(
-            alphas.scrimLight to Color.Black, alphas.opaque to Color.Transparent
-        )
-    )
+    fun verticalScrim(
+        color: Color, startAlpha: Float, endAlpha: Float, alphas: AlphaColor
+    ): Brush {
+        fun getAlpha(factor: Float): Float {
+            return startAlpha + (endAlpha - startAlpha) * factor
+        }
 
-    fun verticalScrim(color: Color, alphas: AlphaColor): Brush = Brush.verticalGradient(
-        colorStops = arrayOf(
-            0.0f to Color.Transparent,
-            0.5f to color.copy(alpha = alphas.scrim),
-            1.0f to color.copy(alpha = alphas.high)
+        return Brush.verticalGradient(
+            0.0f to color.copy(alpha = startAlpha),
+            0.15f to color.copy(alpha = getAlpha(alphas.easeStep1)),
+            0.30f to color.copy(alpha = getAlpha(alphas.easeStep2)),
+            0.45f to color.copy(alpha = getAlpha(alphas.easeStep3)),
+            0.60f to color.copy(alpha = getAlpha(alphas.easeStep4)),
+            0.75f to color.copy(alpha = getAlpha(alphas.easeStep5)),
+            0.90f to color.copy(alpha = getAlpha(alphas.easeStep6)),
+            1.0f to color.copy(alpha = endAlpha)
         )
-    )
-
+    }
 }
+
+

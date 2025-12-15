@@ -41,6 +41,7 @@ fun MainRoute(
 }
 
 private enum class MainTab(val tab: Int) { Search(0), Favorites(1) }
+
 @Composable
 private fun MainScreen(
     searchUiState: SearchUiState,
@@ -75,8 +76,7 @@ private fun MainScreen(
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier,
-                contentPadding = innerPadding,
-                beyondViewportPageCount = UiConstants.Details.PAGE_COUNT_MIN
+                contentPadding = innerPadding, beyondViewportPageCount = UiConstants.Home.PAGE_COUNT
             ) { pageIndex ->
                 when (pageIndex) {
                     MainTab.Search.tab -> {

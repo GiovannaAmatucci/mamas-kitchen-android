@@ -8,16 +8,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
-import com.giovanna.amatucci.foodbook.presentation.components.common.GradientScrim
 import com.giovanna.amatucci.foodbook.presentation.components.common.SectionSubTitle
 import com.giovanna.amatucci.foodbook.presentation.components.common.SectionTitle
+import com.giovanna.amatucci.foodbook.presentation.components.common.fadedBottomEdge
 import com.giovanna.amatucci.foodbook.presentation.components.image.FadedAsyncImage
 import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
 
@@ -34,9 +34,10 @@ fun HeroCard(
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
                 FadedAsyncImage(
-                    imageUrl = imageUrl, modifier = Modifier.fillMaxSize()
+                    imageUrl = imageUrl, modifier = Modifier
+                        .fillMaxSize()
+                        .fadedBottomEdge()
                 )
-                GradientScrim()
                 Column(
                     modifier = Modifier
                         .align(Alignment.BottomStart)
@@ -46,9 +47,9 @@ fun HeroCard(
                         SectionTitle(
                             title = name.uppercase(),
                             fontWeight = FontWeight.ExtraBold,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.onSurface,
                             textAlign = TextAlign.Start,
-                            maxLines = UiConstants.Layout.MAX_LINES_LARGE,
+                            maxLines = UiConstants.Layout.MAX_LINES_DEFAULT,
                             modifier = Modifier
                         )
                     }
@@ -57,9 +58,7 @@ fun HeroCard(
                             Spacer(modifier = Modifier.height(AppTheme.dimens.paddingExtraSmall))
                             SectionSubTitle(
                                 subTitle = description,
-                                color = Color.White.copy(
-                                    alpha = AppTheme.alphas.medium
-                                ),
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = AppTheme.alphas.scrimLight),
                                 modifier = modifier.padding(
                                     bottom = AppTheme.dimens.paddingMedium
                                 ),

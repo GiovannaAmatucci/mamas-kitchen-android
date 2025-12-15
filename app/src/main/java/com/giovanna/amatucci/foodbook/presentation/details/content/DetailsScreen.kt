@@ -18,13 +18,11 @@ import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
 import com.giovanna.amatucci.foodbook.presentation.ScreenStatus
 import com.giovanna.amatucci.foodbook.presentation.components.common.BlurredBackground
-import com.giovanna.amatucci.foodbook.presentation.components.common.BrushGradient
 import com.giovanna.amatucci.foodbook.presentation.components.common.MessageComponent
 import com.giovanna.amatucci.foodbook.presentation.components.recipe.RecipeDetailsList
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.DetailsViewModel
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsEvent
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsUiState
-import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
 import com.giovanna.amatucci.foodbook.ui.theme.rememberScrimColor
 import org.koin.androidx.compose.koinViewModel
 
@@ -92,13 +90,10 @@ private fun DetailsContent(
     onImageDisplayed: (String?) -> Unit = {},
     onCategoryClick: (String) -> Unit
 ) {
-    val scrimColor = rememberScrimColor()
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(
-                brush = BrushGradient.verticalScrim(scrimColor, AppTheme.alphas)
-            ),
+            .background(rememberScrimColor()),
         contentAlignment = Alignment.Center
     ) {
         when (status) {

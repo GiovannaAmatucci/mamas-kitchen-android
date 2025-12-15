@@ -61,7 +61,8 @@ fun SearchScreen(
 @Composable
 private fun SearchContent(
     searchQuery: String,
-    recipes: LazyPagingItems<RecipeItem>, recentFavorites: List<RecipeItem>?,
+    recipes: LazyPagingItems<RecipeItem>,
+    recentFavorites: List<RecipeItem>?,
     onRecipeClick: (String) -> Unit
 ) {
     if (searchQuery.isBlank()) {

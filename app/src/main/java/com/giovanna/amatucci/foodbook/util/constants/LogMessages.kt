@@ -1,4 +1,5 @@
 package com.giovanna.amatucci.foodbook.util.constants
+
 object LogMessages {
 
     // --- AUTHENTICATION LAYER (AuthApi, AuthRepository) ---

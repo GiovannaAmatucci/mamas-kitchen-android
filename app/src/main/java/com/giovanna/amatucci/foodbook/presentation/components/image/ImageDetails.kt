@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.presentation.components.common.PagerIndicator
+import com.giovanna.amatucci.foodbook.presentation.components.common.fadedBottomEdge
 import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
 
 @Composable
@@ -41,6 +42,7 @@ fun ImageDetails(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(imageHeight)
+                        .fadedBottomEdge()
                 )
             }
             if (pageCount > UiConstants.Details.PAGE_COUNT_MIN) {
@@ -71,7 +73,7 @@ private fun NoImageDetails(imageHeight: Dp, modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .height(imageHeight)
-            .fadingBottomEdge(),
+            .fadedBottomEdge(),
         contentScale = ContentScale.Crop
     )
 }

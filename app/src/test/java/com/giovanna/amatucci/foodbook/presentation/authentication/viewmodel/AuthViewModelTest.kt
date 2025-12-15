@@ -158,6 +158,7 @@ class AuthViewModelTest {
                 assertEquals(R.string.auth_error_unknown, errorText?.resId)
             }
         }
+
     @Test
     fun `onEvent RequestToken SHOULD NOT call usecase if already Loading`() = runTest {
         coEvery { checkAuthStatusUseCase() } returns false

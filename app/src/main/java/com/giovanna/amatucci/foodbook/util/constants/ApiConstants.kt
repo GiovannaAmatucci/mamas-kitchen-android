@@ -1,4 +1,5 @@
 package com.giovanna.amatucci.foodbook.util.constants
+
 object ApiConstants {
 
     object Params {
@@ -39,6 +40,8 @@ object RepositoryConstants {
 
     const val RECIPE_REPOSITORY_PAGE_SIZE = 20
 
+    const val AUTH_REPOSITORY_EXPIRES_IN = 1000L
+
 }
 
 object TAG {
@@ -48,7 +51,8 @@ object TAG {
     const val AUTH_REPOSITORY = "AuthRepository"
     const val TOKEN_REPOSITORY = "TokenRepository"
     const val FAVORITES_REPOSITORY = "FavoritesRepository"
-
     const val AUTH_API = "AuthApi"
     const val FAT_SECRET_RECIPE_API = "FatSecretRecipeApi"
+
+    const val NETWORK_HTTP_CLIENT = "NetworkHttpClient"
 }

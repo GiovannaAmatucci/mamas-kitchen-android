@@ -7,6 +7,7 @@ import com.giovanna.amatucci.foodbook.presentation.ScreenState
 import com.giovanna.amatucci.foodbook.presentation.ScreenStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+
 data class SearchUiState(
     override val status: ScreenStatus = ScreenStatus.Loading,
     val searchQuery: String = "",

@@ -7,6 +7,7 @@ import com.giovanna.amatucci.foodbook.util.LogWriter
 import com.giovanna.amatucci.foodbook.util.NoConnectivityException
 import com.giovanna.amatucci.foodbook.util.ResultWrapper
 import com.giovanna.amatucci.foodbook.util.constants.LogMessages
+import com.giovanna.amatucci.foodbook.util.constants.TAG
 import com.giovanna.amatucci.foodbook.util.isInternetAvailable
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
@@ -42,23 +43,20 @@ class NetworkHttpClientImpl(
     private val isDebug: Boolean,
     private val logWriter: LogWriter
 ) : NetworkHttpClient {
-    companion object {
-        private const val TAG = "NetworkHttpClient"
-    }
 
     private val mutex = Mutex()
 
     private suspend fun fetchAndSaveNewToken(): BearerTokens? {
-        logWriter.d(TAG, LogMessages.KTOR_REFRESH_MUTEX_EXECUTE)
+        logWriter.d(TAG.NETWORK_HTTP_CLIENT, LogMessages.KTOR_REFRESH_MUTEX_EXECUTE)
         val result = auth.fetchAndSaveToken()
 
         return if (result is ResultWrapper.Success) {
-            logWriter.d(TAG, LogMessages.KTOR_REFRESH_SUCCESS)
+            logWriter.d(TAG.NETWORK_HTTP_CLIENT, LogMessages.KTOR_REFRESH_SUCCESS)
             result.data.accessToken?.let { newAccessToken ->
                 BearerTokens(newAccessToken, "")
             }
         } else {
-            logWriter.e(TAG, LogMessages.KTOR_REFRESH_FAILURE)
+            logWriter.e(TAG.NETWORK_HTTP_CLIENT, LogMessages.KTOR_REFRESH_FAILURE)
             token.clearToken()
             null
         }
@@ -87,26 +85,30 @@ class NetworkHttpClientImpl(
                     bearer {
                         loadTokens {
                             mutex.withLock {
-                                logWriter.d(TAG, LogMessages.KTOR_LOAD_START)
+                                logWriter.d(TAG.NETWORK_HTTP_CLIENT, LogMessages.KTOR_LOAD_START)
                                 val validToken = token.getValidAccessToken()
 
                                 if (validToken != null) {
-                                    logWriter.d(TAG, LogMessages.KTOR_LOAD_SUCCESS)
+                                    logWriter.d(
+                                        TAG.NETWORK_HTTP_CLIENT, LogMessages.KTOR_LOAD_SUCCESS
+                                    )
                                     return@withLock BearerTokens(validToken, "")
                                 }
 
-                                logWriter.w(TAG, LogMessages.KTOR_LOAD_FAILURE)
+                                logWriter.w(TAG.NETWORK_HTTP_CLIENT, LogMessages.KTOR_LOAD_FAILURE)
                                 return@withLock fetchAndSaveNewToken()
                             }
                         }
                         refreshTokens {
                             mutex.withLock {
-                                logWriter.w(TAG, LogMessages.KTOR_REFRESH_START)
+                                logWriter.w(TAG.NETWORK_HTTP_CLIENT, LogMessages.KTOR_REFRESH_START)
                                 val currentTokenInDb = token.getValidAccessToken()
                                 val oldTokenThatFailed = oldTokens?.accessToken
 
                                 if (oldTokenThatFailed != currentTokenInDb && currentTokenInDb != null) {
-                                    logWriter.d(TAG, LogMessages.KTOR_REFRESH_MUTEX_WAIT)
+                                    logWriter.d(
+                                        TAG.NETWORK_HTTP_CLIENT, LogMessages.KTOR_REFRESH_MUTEX_WAIT
+                                    )
                                     return@withLock BearerTokens(currentTokenInDb, "")
                                 }
                                 return@withLock fetchAndSaveNewToken()
@@ -125,7 +127,7 @@ class NetworkHttpClientImpl(
                     level = if (isDebug) LogLevel.ALL else LogLevel.NONE
                     logger = object : Logger {
                         override fun log(message: String) {
-                            if (isDebug) logWriter.d(TAG, message)
+                            if (isDebug) logWriter.d(TAG.NETWORK_HTTP_CLIENT, message)
                         }
                     }
                 }

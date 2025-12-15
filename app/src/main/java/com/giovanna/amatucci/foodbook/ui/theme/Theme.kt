@@ -90,6 +90,7 @@ fun rememberScrimColor(): Color {
         baseColor.copy(alpha = alpha)
     }
 }
+
 @Composable
 fun FoodBookTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -101,6 +102,7 @@ fun FoodBookTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
+
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }

@@ -1,4 +1,5 @@
 <resources>
+
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash_icon_wrapper</item>
         <item name="windowSplashScreenBackground">#EA952F</item>

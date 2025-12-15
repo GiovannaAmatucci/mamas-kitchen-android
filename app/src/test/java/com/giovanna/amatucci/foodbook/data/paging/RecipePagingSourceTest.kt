@@ -2,7 +2,7 @@ package com.giovanna.amatucci.foodbook.data.paging
 
 import androidx.paging.PagingSource
 import com.giovanna.amatucci.foodbook.data.remote.api.FatSecretRecipeApi
-import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipeDataMapper
+import com.giovanna.amatucci.foodbook.data.remote.mapper.RecipesMapper
 import com.giovanna.amatucci.foodbook.data.remote.model.search.RecipeSearch
 import com.giovanna.amatucci.foodbook.data.remote.model.search.RecipesSearch
 import com.giovanna.amatucci.foodbook.data.remote.model.search.SearchResponse
@@ -35,7 +35,7 @@ class RecipePagingSourceTest {
     private lateinit var api: FatSecretRecipeApi
 
     @MockK
-    private lateinit var mapper: RecipeDataMapper
+    private lateinit var mapper: RecipesMapper
 
     @MockK(relaxUnitFun = true)
     private lateinit var logWriter: LogWriter

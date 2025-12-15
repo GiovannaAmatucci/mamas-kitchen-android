@@ -33,6 +33,7 @@ fun AuthRoute(
     AuthScreen(
         uiState = uiState, onRetry = { viewModel.onEvent(AuthEvent.RequestToken) })
 }
+
 @Composable
 private fun AuthScreen(
     uiState: AuthState, onRetry: () -> Unit

@@ -13,7 +13,6 @@
     <string name="error_no_internet">No internet connection.</string>
 
 
-
     <!-- ===================================================================== -->
     <!-- Search                                                      -->
     <!-- ===================================================================== -->
@@ -59,6 +58,8 @@
     <string name="details_error_api_failure">API Failure.</string>
     <string name="details_no_images">No images available.</string>
     <string name="details_rating_stars">Rating Stars.</string>
+    <string name="cd_rating_description">%1$d out of  %2$s rating</string>
+    <string name="label_rating_counter">%1$d/%2$d</string>
 
 
     <!-- ===================================================================== -->
