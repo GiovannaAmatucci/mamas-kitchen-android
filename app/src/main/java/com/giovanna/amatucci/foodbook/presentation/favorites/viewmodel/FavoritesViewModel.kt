@@ -33,6 +33,7 @@ class FavoritesViewModel(
     init {
         initializeSearchFlow()
     }
+
     fun onEvent(event: FavoritesEvent) {
         when (event) {
             is FavoritesEvent.UpdateSearchQuery -> {

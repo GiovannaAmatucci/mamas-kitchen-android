@@ -22,8 +22,7 @@ abstract class BaseApi(
 
         } catch (e: NoConnectivityException) {
             ResultWrapper.Error(e.message.orEmpty())
-        }
-        catch (e: ClientRequestException) {
+        } catch (e: ClientRequestException) {
             val msg = LogMessages.API_ERROR_CLIENT.format(e.response.status)
             logWriter.e(tag, msg, e)
             ResultWrapper.Error(msg, e.response.status.value)

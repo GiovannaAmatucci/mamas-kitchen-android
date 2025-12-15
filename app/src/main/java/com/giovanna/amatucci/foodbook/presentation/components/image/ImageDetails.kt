@@ -41,7 +41,8 @@ fun ImageDetails(
                     imageUrl = images[pageIndex],
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(imageHeight).fadedBottomEdge()
+                        .height(imageHeight)
+                        .fadedBottomEdge()
                 )
             }
             if (pageCount > UiConstants.Details.PAGE_COUNT_MIN) {

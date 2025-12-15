@@ -92,7 +92,8 @@ private fun DetailsContent(
 ) {
     Box(
         modifier = modifier
-            .fillMaxSize().background(rememberScrimColor()),
+            .fillMaxSize()
+            .background(rememberScrimColor()),
         contentAlignment = Alignment.Center
     ) {
         when (status) {

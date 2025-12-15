@@ -34,7 +34,9 @@ fun HeroCard(
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
                 FadedAsyncImage(
-                    imageUrl = imageUrl, modifier = Modifier.fillMaxSize().fadedBottomEdge()
+                    imageUrl = imageUrl, modifier = Modifier
+                        .fillMaxSize()
+                        .fadedBottomEdge()
                 )
                 Column(
                     modifier = Modifier

@@ -1,4 +1,5 @@
 package com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state
+
 sealed interface FavoritesEvent {
     data class UpdateSearchQuery(val query: String) : FavoritesEvent
     data object ShowDeleteAllConfirmation : FavoritesEvent

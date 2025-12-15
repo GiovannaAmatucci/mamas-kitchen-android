@@ -41,6 +41,7 @@ fun MainRoute(
 }
 
 private enum class MainTab(val tab: Int) { Search(0), Favorites(1) }
+
 @Composable
 private fun MainScreen(
     searchUiState: SearchUiState,

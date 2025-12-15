@@ -6,11 +6,13 @@ import com.giovanna.amatucci.foodbook.data.remote.model.recipe.Ingredient
 import kotlinx.serialization.json.Json
 
 private val json = Json { ignoreUnknownKeys = true }
+
 class Converters {
     @TypeConverter
     fun fromStringToList(value: String?): List<String>? {
         return value?.let { json.decodeFromString(it) }
     }
+
     @TypeConverter
     fun fromListToString(list: List<String>?): String? {
         return list?.let { json.encodeToString(it) }
