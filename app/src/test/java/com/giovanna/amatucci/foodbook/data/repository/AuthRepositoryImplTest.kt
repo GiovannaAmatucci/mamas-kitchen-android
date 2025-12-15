@@ -1,10 +1,10 @@
 package com.giovanna.amatucci.foodbook.data.repository
 
-// 'verify' normal não é mais necessário para suspend functions
-import android.database.sqlite.SQLiteException
+import com.giovanna.amatucci.foodbook.data.local.db.CryptographyManager
+import com.giovanna.amatucci.foodbook.data.local.db.dao.AccessTokenDao
+import com.giovanna.amatucci.foodbook.data.local.model.TokenEntity
 import com.giovanna.amatucci.foodbook.data.remote.api.AuthApi
 import com.giovanna.amatucci.foodbook.data.remote.model.TokenResponse
-import com.giovanna.amatucci.foodbook.domain.repository.TokenRepository
 import com.giovanna.amatucci.foodbook.util.LogWriter
 import com.giovanna.amatucci.foodbook.util.ResultWrapper
 import io.mockk.coEvery
@@ -12,8 +12,10 @@ import io.mockk.coVerify
 import io.mockk.coVerifyOrder
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
+import io.mockk.slot
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -30,33 +32,56 @@ class AuthRepositoryImplTest {
     @MockK
     private lateinit var authApi: AuthApi
 
+    @MockK(relaxUnitFun = true)
+    private lateinit var accessTokenDao: AccessTokenDao
+
     @MockK
-    private lateinit var tokenRepository: TokenRepository
+    private lateinit var cryptoManager: CryptographyManager
 
     @MockK(relaxUnitFun = true)
     private lateinit var logWriter: LogWriter
 
     private lateinit var authRepository: AuthRepositoryImpl
 
+    // --- MOCK DATA ---
     private val mockTokenResponse = TokenResponse(
-        accessToken = "fake-token-123",
+        accessToken = "fake-raw-token",
         tokenType = "Bearer",
         expiresIn = 3600
     )
-    private val apiSuccessResult = ResultWrapper.Success(mockTokenResponse)
+
+    private val fakeIv = "fake_iv".toByteArray()
+    private val fakeEncryptedToken = "fake_encrypted_data".toByteArray()
+
+    // CORREÇÃO AQUI: Usamos 'to' para criar um Pair, igual no seu TokenRepositoryImplTest
+    private val mockEncryptedData = fakeIv to fakeEncryptedToken
 
     @Before
     fun setUp() {
-        authRepository = AuthRepositoryImpl(authApi, tokenRepository, logWriter)
+        authRepository = AuthRepositoryImpl(
+            authApi = authApi,
+            dao = accessTokenDao, // Agora injetamos o DAO
+            cryptoManager = cryptoManager,   // Agora injetamos o Manager
+            logWriter = logWriter
+        )
     }
 
     @Test
-    fun `fetchAndSaveToken - GIVEN API and DB work - THEN save token and return Success`() =
+    fun `fetchAndSaveToken - GIVEN API Success - THEN encrypts token, saves to DAO and returns Success`() =
         runTest {
             // ARRANGE
+            val apiSuccessResult = ResultWrapper.Success(mockTokenResponse)
+
+            // 1. API retorna sucesso
             coEvery { authApi.getAccessToken() } returns apiSuccessResult
-            coEvery { tokenRepository.clearToken() } returns Unit
-            coEvery { tokenRepository.saveToken(mockTokenResponse) } returns Unit
+
+            // 2. CryptoManager retorna o Pair (iv, data)
+            // Nota: Se o método encrypt não for suspend, use 'every'. Se for, use 'coEvery'.
+            // Baseado no seu TokenRepositoryImplTest, parece ser 'coEvery'.
+            coEvery { cryptoManager.encrypt(any()) } returns mockEncryptedData
+
+            // 3. DAO aceita a gravação
+            coEvery { accessTokenDao.saveToken(any()) } returns Unit
 
             // ACT
             val result = authRepository.fetchAndSaveToken()
@@ -64,15 +89,25 @@ class AuthRepositoryImplTest {
             // ASSERT
             assertTrue("O resultado deveria ser Success", result is ResultWrapper.Success)
             assertEquals(mockTokenResponse, (result as ResultWrapper.Success).data)
+
+            // Verifica a ordem das chamadas
             coVerifyOrder {
                 authApi.getAccessToken()
-                tokenRepository.clearToken()
-                tokenRepository.saveToken(mockTokenResponse)
+                cryptoManager.encrypt(any())
+                accessTokenDao.saveToken(any())
             }
+
+            // Verifica se o objeto salvo no banco tem os dados criptografados corretos
+            val slot = slot<TokenEntity>()
+            coVerify { accessTokenDao.saveToken(capture(slot)) }
+
+            val savedEntity = slot.captured
+            assertArrayEquals(fakeIv, savedEntity.initializationVector)
+            assertArrayEquals(fakeEncryptedToken, savedEntity.encryptedAccessToken)
         }
 
     @Test
-    fun `fetchAndSaveToken - GIVEN API returns Error - THEN returns Error and does NOT call the DB`() =
+    fun `fetchAndSaveToken - GIVEN API Error - THEN returns Error and DOES NOT call DAO`() =
         runTest {
             // ARRANGE
             val apiErrorResult = ResultWrapper.Error("Unauthorized", 401)
@@ -82,14 +117,16 @@ class AuthRepositoryImplTest {
             val result = authRepository.fetchAndSaveToken()
 
             // ASSERT
-            assertTrue("O resultado deveria ser Error", result is ResultWrapper.Error)
+            assertTrue(result is ResultWrapper.Error)
             assertEquals(401, (result as ResultWrapper.Error).code)
-            coVerify(exactly = 0) { tokenRepository.clearToken() }
-            coVerify(exactly = 0) { tokenRepository.saveToken(any()) }
+
+            // Garante que não tentou criptografar nem salvar
+            coVerify(exactly = 0) { cryptoManager.encrypt(any()) }
+            coVerify(exactly = 0) { accessTokenDao.saveToken(any()) }
         }
 
     @Test
-    fun `fetchAndSaveToken - GIVEN API returns Exception - THEN returns Exception and does NOT call the DB`() =
+    fun `fetchAndSaveToken - GIVEN API Exception - THEN returns Exception and DOES NOT call DAO`() =
         runTest {
             // ARRANGE
             val apiException = IOException("No Network")
@@ -100,31 +137,30 @@ class AuthRepositoryImplTest {
             val result = authRepository.fetchAndSaveToken()
 
             // ASSERT
-            assertTrue("O resultado deveria ser Exception", result is ResultWrapper.Exception)
+            assertTrue(result is ResultWrapper.Exception)
             assertEquals(apiException, (result as ResultWrapper.Exception).exception)
 
-            coVerify(exactly = 0) { tokenRepository.clearToken() }
-            coVerify(exactly = 0) { tokenRepository.saveToken(any()) }
+            coVerify(exactly = 0) { cryptoManager.encrypt(any()) }
+            coVerify(exactly = 0) { accessTokenDao.saveToken(any()) }
         }
 
     @Test
-    fun `fetchAndSaveToken - API success given but database fails - then returns exception`() =
+    fun `fetchAndSaveToken - GIVEN API Success BUT DB fails - THEN returns Exception`() =
         runTest {
             // ARRANGE
-            val dbException = SQLiteException("Database is read-only")
-            coEvery { authApi.getAccessToken() } returns apiSuccessResult
-            coEvery { tokenRepository.clearToken() } throws dbException
+            coEvery { authApi.getAccessToken() } returns ResultWrapper.Success(mockTokenResponse)
+            coEvery { cryptoManager.encrypt(any()) } returns mockEncryptedData
+
+            val dbException = RuntimeException("Disk full")
+            coEvery { accessTokenDao.saveToken(any()) } throws dbException
 
             // ACT
             val result = authRepository.fetchAndSaveToken()
 
             // ASSERT
-            assertTrue("O resultado deveria ser Exception", result is ResultWrapper.Exception)
+            assertTrue("Deveria retornar Exception capturada", result is ResultWrapper.Exception)
             assertEquals(dbException, (result as ResultWrapper.Exception).exception)
-            coVerifyOrder {
-                authApi.getAccessToken()
-                tokenRepository.clearToken()
-            }
-            coVerify(exactly = 0) { tokenRepository.saveToken(any()) }
+
+            coVerify { accessTokenDao.saveToken(any()) }
         }
 }
