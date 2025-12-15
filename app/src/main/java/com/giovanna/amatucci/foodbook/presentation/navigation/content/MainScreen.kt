@@ -75,8 +75,7 @@ private fun MainScreen(
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier,
-                contentPadding = innerPadding,
-                beyondViewportPageCount = UiConstants.Details.PAGE_COUNT_MIN
+                contentPadding = innerPadding, beyondViewportPageCount = UiConstants.Home.PAGE_COUNT
             ) { pageIndex ->
                 when (pageIndex) {
                     MainTab.Search.tab -> {

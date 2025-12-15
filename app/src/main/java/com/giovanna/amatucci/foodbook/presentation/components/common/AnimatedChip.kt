@@ -19,6 +19,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import com.giovanna.amatucci.foodbook.domain.model.Category
 import com.giovanna.amatucci.foodbook.presentation.components.image.IconImage
 import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
@@ -45,6 +49,7 @@ fun AnimatedChip(
             modifier = Modifier
                 .height(categoryCardHeight)
                 .width(width)
+                .semantics { selected = isSelected; role = Role.RadioButton }
                 .noRippleClickable(onClick),
             shape = CircleShape,
             color = backgroundColor,
@@ -68,9 +73,3 @@ fun AnimatedChip(
     }
 }
 
-@Composable
-private fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = this.clickable(
-    interactionSource = remember { MutableInteractionSource() },
-    indication = null,
-    onClick = onClick
-)
