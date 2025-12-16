@@ -1,9 +1,7 @@
-package com.giovanna.amatucci.foodbook.db
+package com.giovanna.amatucci.foodbook.data.local.db
 
-import com.giovanna.amatucci.foodbook.data.local.db.CryptographyManager
 import com.giovanna.amatucci.foodbook.util.constants.KeyStoreConstants
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotEquals
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -33,14 +31,14 @@ class CryptographyManagerTest {
         val (iv, encryptedData) = cryptographyManager.encrypt(originalData)
 
         // ASSERT
-        assertNotEquals(originalData, String(encryptedData, Charsets.UTF_8))
-        assertNotEquals(0, iv.size)
-        assertNotEquals(0, encryptedData.size)
+        Assert.assertNotEquals(originalData, String(encryptedData, Charsets.UTF_8))
+        Assert.assertNotEquals(0, iv.size)
+        Assert.assertNotEquals(0, encryptedData.size)
         // ACT
         val decryptedData = cryptographyManager.decrypt(iv, encryptedData)
 
         // ASSERT FINAL
-        assertEquals(originalData, decryptedData)
+        Assert.assertEquals(originalData, decryptedData)
     }
 
     @Test
@@ -53,12 +51,12 @@ class CryptographyManagerTest {
         val (iv2, result2) = cryptographyManager.encrypt(text)
 
         // ASSERT
-        assertNotEquals(
+        Assert.assertNotEquals(
             "Os vetores de inicialização (IV) devem ser diferentes a cada chamada",
             iv1.contentToString(),
             iv2.contentToString()
         )
-        assertNotEquals(
+        Assert.assertNotEquals(
             "O texto cifrado deve ser diferente devido ao IV único",
             result1.contentToString(),
             result2.contentToString()
