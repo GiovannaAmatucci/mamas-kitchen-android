@@ -56,3 +56,8 @@ object TAG {
 
     const val NETWORK_HTTP_CLIENT = "NetworkHttpClient"
 }
+
+object VIEWMODEL {
+    const val FAVORITE_DEBOUNCE = 300L
+    const val ARG_RECIPE_ID = "recipeId"
+}

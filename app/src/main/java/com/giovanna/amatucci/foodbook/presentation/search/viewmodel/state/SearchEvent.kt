@@ -9,4 +9,6 @@ sealed interface SearchEvent {
     data object SearchTabSwitched : SearchEvent
     data object ClearSearchQuery : SearchEvent
     data object ClearSearchHistory : SearchEvent
+
+    data object Retry : SearchEvent
 }

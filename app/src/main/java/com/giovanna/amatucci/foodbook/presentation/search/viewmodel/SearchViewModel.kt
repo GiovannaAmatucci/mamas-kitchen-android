@@ -66,6 +66,15 @@ class SearchViewModel(
             is SearchEvent.SearchTabSwitched -> {
                 _uiState.update { it.copy(shouldScrollToSearchTab = false) }
             }
+
+            SearchEvent.Retry -> {
+                val currentQuery = _uiState.value.submittedQuery
+                if (currentQuery.isNotBlank()) {
+                    performSearch(currentQuery)
+                } else {
+                    initialDataLoad()
+                }
+            }
         }
     }
 

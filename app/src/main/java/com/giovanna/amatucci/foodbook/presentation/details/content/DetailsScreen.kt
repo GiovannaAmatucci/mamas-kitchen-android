@@ -60,7 +60,7 @@ private fun DetailsScreen(
             Box(
                 modifier = Modifier.fillMaxSize()
             ) {
-                DetailsContent(
+                DetailsScreenContent(
                     modifier = Modifier,
                     status = status,
                     recipe = recipe,
@@ -83,7 +83,7 @@ private fun DetailsScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun DetailsContent(
+private fun DetailsScreenContent(
     modifier: Modifier = Modifier,
     status: ScreenStatus,
     recipe: RecipeDetails?,

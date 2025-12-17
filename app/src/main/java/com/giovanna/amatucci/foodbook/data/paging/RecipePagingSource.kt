@@ -1,6 +1,5 @@
 package com.giovanna.amatucci.foodbook.data.paging
 
-import UiConstants
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.giovanna.amatucci.foodbook.data.remote.api.FatSecretRecipeApi
@@ -64,8 +63,8 @@ class RecipePagingSource(
 
     override fun getRefreshKey(state: PagingState<Int, RecipeItem>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
-            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(UiConstants.Details.PAGE_COUNT_MIN)
-                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(UiConstants.Details.PAGE_COUNT_MIN)
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX)
+                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX)
         }
     }
 }

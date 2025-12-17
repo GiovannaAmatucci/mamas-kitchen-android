@@ -29,9 +29,8 @@ fun FavoritesScreen(
     onEvent: (FavoritesEvent) -> Unit
 ) {
     val recipes = state.recipes.collectAsLazyPagingItems()
-
     state.apply {
-        FavoritesContent(
+        FavoritesScreenContent(
             searchQuery = searchQuery,
             recipes = recipes,
             onNavigateToRecipe = onNavigateToRecipe,
@@ -48,7 +47,7 @@ fun FavoritesScreen(
 }
 
 @Composable
-private fun FavoritesContent(
+private fun FavoritesScreenContent(
     searchQuery: String,
     recipes: LazyPagingItems<RecipeItem>,
     onNavigateToRecipe: (String) -> Unit,

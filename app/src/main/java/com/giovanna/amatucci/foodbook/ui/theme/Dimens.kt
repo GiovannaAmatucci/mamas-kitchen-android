@@ -32,8 +32,17 @@ data class Dimensions(
     val recipeCardHeight: Dp = 140.dp,
     val heroCardHeight: Dp = 200.dp,
 
-    val blurRadius: Dp = 30.dp,
-    val pagerIndicatorSpacing: Dp = 8.dp
+    val blurRadius: Dp = 30.dp, val pagerIndicatorSpacing: Dp = 8.dp, val pageCount: Int = 1,
+
+    val maxLinesDefault: Int = 1, val maxLinesMedium: Int = 2, val maxLinesLarge: Int = 3,
+
+    val weightDefault: Float = 1f,
+
+    val listGridCellsFixed: Int = 1,
+
+    val animationDelay: Long = 2000L,
+    val animationDuration: Int = 1500,
+    val maxRatingStars: Int = 5
 )
 
 val LocalDimens = staticCompositionLocalOf { Dimensions() }

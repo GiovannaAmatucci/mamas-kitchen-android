@@ -1,6 +1,5 @@
 package com.giovanna.amatucci.foodbook.presentation.details.viewmodel
 
-import UiConstants
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,6 +15,7 @@ import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.Detai
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsUiState
 import com.giovanna.amatucci.foodbook.util.ResultWrapper
 import com.giovanna.amatucci.foodbook.util.constants.UiText
+import com.giovanna.amatucci.foodbook.util.constants.VIEWMODEL.ARG_RECIPE_ID
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -35,7 +35,7 @@ class DetailsViewModel(
     private val _uiState = MutableStateFlow(DetailsUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val recipeId: String? = savedStateHandle.get<String>(UiConstants.Details.ARG_RECIPE_ID)
+    private val recipeId: String? = savedStateHandle.get<String>(ARG_RECIPE_ID)
 
     init {
         validateAndLoad(id = recipeId.toString())

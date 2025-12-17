@@ -34,12 +34,14 @@
     <string name="search_recent_searches">Recent searches</string>
     <string name="search_remove_recent_search">Remove from recent searches</string>
     <string name="search_clear_search">Clear search</string>
+    <string name="search_categories">Categories</string>
     <string name="search_categories_burguer">Burger</string>
     <string name="search_categories_pizza">Pizza</string>
     <string name="search_categories_smoothie">Smoothie</string>
     <string name="search_categories_pasta">Pasta</string>
     <string name="search_categories_cake">Cake</string>
     <string name="search_categories_salad">Salad</string>
+    <string name="search_toggle_section">Toggle Section</string>
 
     <!-- ===================================================================== -->
     <!-- Details                                                       -->

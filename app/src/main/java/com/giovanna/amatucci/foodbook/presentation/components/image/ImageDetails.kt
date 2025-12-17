@@ -1,6 +1,5 @@
 package com.giovanna.amatucci.foodbook.presentation.components.image
 
-import UiConstants
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -45,7 +44,7 @@ fun ImageDetails(
                         .fadedBottomEdge()
                 )
             }
-            if (pageCount > UiConstants.Details.PAGE_COUNT_MIN) {
+            if (pageCount > AppTheme.dimens.pageCount) {
                 Spacer(
                     modifier = Modifier.height(
                         spaceHeight

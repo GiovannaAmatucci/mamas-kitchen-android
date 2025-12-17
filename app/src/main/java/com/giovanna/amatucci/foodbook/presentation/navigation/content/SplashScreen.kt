@@ -1,6 +1,5 @@
 package com.giovanna.amatucci.foodbook.presentation.navigation.content
 
-import UiConstants
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -26,15 +25,16 @@ import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
 import kotlinx.coroutines.delay
 
+private const val DELAY = 2000L
 @Composable
 fun AnimatedSplashScreen(onAnimationFinished: () -> Unit) {
     var startAnimation by remember { mutableStateOf(true) }
     val alphaAnim = animateFloatAsState(
         targetValue = if (startAnimation) AppTheme.alphas.opaque else AppTheme.alphas.disabled,
-        animationSpec = tween(durationMillis = UiConstants.Splash.ANIMATION_DURATION)
+        animationSpec = tween(durationMillis = AppTheme.dimens.animationDuration)
     )
     LaunchedEffect(key1 = true) {
-        delay(UiConstants.Splash.DELAY)
+        delay(DELAY)
         onAnimationFinished()
     }
 

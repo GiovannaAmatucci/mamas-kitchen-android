@@ -1,6 +1,5 @@
 package com.giovanna.amatucci.foodbook.presentation.components.common
 
-import UiConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
@@ -32,7 +31,7 @@ fun ChipText(
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(start = AppTheme.dimens.paddingSmall),
-            maxLines = UiConstants.Layout.MAX_LINES_DEFAULT,
+            maxLines = AppTheme.dimens.maxLinesDefault,
             softWrap = false,
             overflow = TextOverflow.Clip
         )

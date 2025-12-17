@@ -1,6 +1,5 @@
 package com.giovanna.amatucci.foodbook.presentation.components.recipe
 
-import UiConstants
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -12,6 +11,7 @@ import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
 import com.giovanna.amatucci.foodbook.presentation.components.common.SectionSubTitle
 import com.giovanna.amatucci.foodbook.presentation.components.common.SectionTitle
 import com.giovanna.amatucci.foodbook.presentation.components.common.StarRating
+import com.giovanna.amatucci.foodbook.presentation.components.common.SubCategoriesChips
 import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
 
 @Composable
@@ -25,7 +25,7 @@ fun RecipeHeader(
                     title = name,
                     style = MaterialTheme.typography.headlineLarge,
                     color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = UiConstants.Layout.MAX_LINES_LARGE
+                    maxLines = AppTheme.dimens.maxLinesLarge
                 )
             }
             Spacer(modifier = Modifier.height(AppTheme.dimens.paddingSmall))
@@ -39,7 +39,7 @@ fun RecipeHeader(
                 SectionSubTitle(
                     subTitle = description,
                     color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = UiConstants.Layout.MAX_LINES_LARGE
+                    maxLines = AppTheme.dimens.maxLinesLarge
                 )
                 Spacer(modifier = Modifier.height(AppTheme.dimens.paddingMedium))
             }

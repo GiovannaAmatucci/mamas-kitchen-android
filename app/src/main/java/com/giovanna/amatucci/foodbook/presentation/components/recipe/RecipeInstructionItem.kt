@@ -1,12 +1,10 @@
 package com.giovanna.amatucci.foodbook.presentation.components.recipe
 
-import UiConstants
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
@@ -18,25 +16,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.giovanna.amatucci.foodbook.domain.model.DirectionInfo
-import com.giovanna.amatucci.foodbook.domain.model.IngredientInfo
 import com.giovanna.amatucci.foodbook.presentation.components.common.SectionSubTitle
 import com.giovanna.amatucci.foodbook.presentation.components.common.SectionTitle
 import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
-
-@Composable
-fun RecipeIngredientItem(
-    ingredient: IngredientInfo, modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = AppTheme.dimens.paddingLarge)
-    ) {
-        SectionSubTitle(
-            subTitle = "• ${ingredient.description}", color = MaterialTheme.colorScheme.onSurface
-        )
-    }
-}
 
 @Composable
 fun RecipeInstructionItem(
@@ -62,7 +44,7 @@ fun RecipeInstructionItem(
                 subTitle = description,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier,
-                maxLines = if (isExpanded) Int.MAX_VALUE else UiConstants.Layout.MAX_LINES_LARGE,
+                maxLines = if (isExpanded) Int.MAX_VALUE else AppTheme.dimens.maxLinesLarge,
                 lineHeight = MaterialTheme.typography.bodyLarge.lineHeight
             )
         }
