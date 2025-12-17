@@ -1,107 +1,154 @@
 package com.giovanna.amatucci.foodbook.presentation.search.content
 
+import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.giovanna.amatucci.foodbook.R
+import com.giovanna.amatucci.foodbook.domain.model.Category
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 import com.giovanna.amatucci.foodbook.presentation.ScreenStatus
-import com.giovanna.amatucci.foodbook.presentation.components.common.MessageComponent
-import com.giovanna.amatucci.foodbook.presentation.components.common.RecentFavoritesSection
-import com.giovanna.amatucci.foodbook.presentation.components.feedback.FeedbackComponent
-import com.giovanna.amatucci.foodbook.presentation.components.feedback.HandlePagingState
+import com.giovanna.amatucci.foodbook.presentation.components.common.CollapsibleSectionChips
 import com.giovanna.amatucci.foodbook.presentation.components.feedback.NetworkErrorComponent
 import com.giovanna.amatucci.foodbook.presentation.components.recipe.CategorySection
-import com.giovanna.amatucci.foodbook.presentation.components.recipe.RecipeGridList
+import com.giovanna.amatucci.foodbook.presentation.components.search.SearchInitialSection
+import com.giovanna.amatucci.foodbook.presentation.components.search.SearchList
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchEvent
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchUiState
+import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
-    onNavigateToRecipe: (id: String) -> Unit, state: SearchUiState, onEvent: (SearchEvent) -> Unit
+    state: SearchUiState, onNavigateToRecipe: (id: String) -> Unit, onEvent: (SearchEvent) -> Unit
+) {
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+    var areFiltersExpanded by rememberSaveable(isLandscape) {
+        mutableStateOf(!isLandscape)
+    }
+    SearchScreenContent(
+        state = state,
+        isLandscape = isLandscape,
+        areFiltersExpanded = areFiltersExpanded,
+        onToggleFilters = { areFiltersExpanded = !areFiltersExpanded },
+        onEvent = onEvent,
+        onNavigate = onNavigateToRecipe
+    )
+}
+
+@Composable
+private fun SearchScreenContent(
+    state: SearchUiState,
+    isLandscape: Boolean,
+    areFiltersExpanded: Boolean,
+    onToggleFilters: () -> Unit,
+    onEvent: (SearchEvent) -> Unit,
+    onNavigate: (String) -> Unit,
 ) {
     state.apply {
-        if (status == ScreenStatus.Loading) SearchScreenShimmer()
-        else Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .fillMaxWidth()
-        ) {
-            CategorySection(
-                categories = categories, currentQuery = submittedQuery, onCategoryClick = { query ->
-                    if (submittedQuery != query) {
-                        onEvent(SearchEvent.UpdateSearchQuery(query))
-                        onEvent(SearchEvent.SubmitSearch(query))
-                    } else {
-                        onEvent(SearchEvent.UpdateSearchQuery(""))
-                        onEvent(SearchEvent.SubmitSearch(""))
+        Box(modifier = Modifier.fillMaxSize()) {
+            when (status) {
+                is ScreenStatus.Loading -> {
+                    SearchScreenShimmer()
+                }
+
+                is ScreenStatus.Error -> {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        NetworkErrorComponent(onRetry = { onEvent(SearchEvent.Retry) })
                     }
-                })
-            SearchContent(
-                searchQuery = submittedQuery,
-                recipes = recipes.collectAsLazyPagingItems(),
-                onRecipeClick = onNavigateToRecipe,
-                recentFavorites = lastFavorites
-            )
+                }
+
+                is ScreenStatus.Success -> {
+                    SearchScreenContentSuccess(
+                        searchQuery = submittedQuery,
+                        categories = categories,
+                        recipes = recipes.collectAsLazyPagingItems(),
+                        recentFavorites = lastFavorites,
+                        isLandscape = isLandscape,
+                        areFiltersExpanded = areFiltersExpanded,
+                        onToggleFilters = onToggleFilters,
+                        onCategoryClick = { query ->
+                            val newQuery = if (submittedQuery != query) query else ""
+                            onEvent(SearchEvent.UpdateSearchQuery(newQuery))
+                            onEvent(SearchEvent.SubmitSearch(newQuery))
+                        },
+                        onNavigateToRecipe = onNavigate
+                    )
+                }
+            }
         }
     }
 }
 
 @Composable
-private fun SearchContent(
+private fun SearchScreenContentSuccess(
     searchQuery: String,
+    categories: List<Category>,
     recipes: LazyPagingItems<RecipeItem>,
     recentFavorites: List<RecipeItem>?,
-    onRecipeClick: (String) -> Unit
+    isLandscape: Boolean,
+    areFiltersExpanded: Boolean,
+    onToggleFilters: () -> Unit,
+    onCategoryClick: (String) -> Unit,
+    onNavigateToRecipe: (String) -> Unit
 ) {
-    if (searchQuery.isBlank()) {
-        if (recentFavorites?.isNotEmpty() == true) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-            ) {
-                RecentFavoritesSection(
-                    recipes = recentFavorites, onRecipeClick = onRecipeClick, modifier = Modifier
-                )
-            }
-        } else if (recentFavorites != null) {
-            FeedbackComponent(
-                title = stringResource(R.string.search_idle_message),
-                description = stringResource(R.string.search_description_message),
-                imageRes = R.drawable.ic_search_recipes
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .fillMaxWidth()
+    ) {
+        if (isLandscape) {
+            CollapsibleSectionChips(
+                title = stringResource(R.string.search_categories),
+                isExpanded = areFiltersExpanded,
+                onToggleClick = onToggleFilters
             )
         }
-    } else {
-        HandlePagingState(pagingItems = recipes, emptyContent = {
-            MessageComponent(stringResource(R.string.search_empty_message, searchQuery))
-        }, errorContent = {
-            Box(
-                modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
-            ) { NetworkErrorComponent(onRetry = { recipes.retry() }) }
-        }) { loadedRecipes ->
-            RecipeGridList(recipes = loadedRecipes, onRecipeClick = onRecipeClick)
+        AnimatedVisibility(
+            visible = areFiltersExpanded,
+            enter = expandVertically() + fadeIn(),
+            exit = shrinkVertically() + fadeOut()
+        ) {
+            CategorySection(
+                categories = categories,
+                currentQuery = searchQuery,
+                onCategoryClick = onCategoryClick
+            )
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(AppTheme.dimens.weightDefault)
+        ) {
+            if (searchQuery.isBlank()) {
+                SearchInitialSection(
+                    recentFavorites = recentFavorites, onRecipeClick = onNavigateToRecipe
+                )
+            } else {
+                SearchList(
+                    searchQuery = searchQuery, recipes = recipes, onRecipeClick = onNavigateToRecipe
+                )
+            }
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
