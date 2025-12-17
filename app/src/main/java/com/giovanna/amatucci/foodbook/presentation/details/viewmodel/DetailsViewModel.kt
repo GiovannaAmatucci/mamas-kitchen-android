@@ -45,8 +45,12 @@ class DetailsViewModel(
         when (event) {
             is DetailsEvent.ToggleFavorite -> toggleFavorite()
             is DetailsEvent.RetryConnection -> validateAndLoad(id = recipeId.toString())
+            is DetailsEvent.OnImageChange -> {
+                _uiState.update { it.copy(currentImageUrl = event.url) }
+            }
         }
     }
+
 
     private fun validateAndLoad(id: String) {
         if (id.isBlank()) {
@@ -84,7 +88,12 @@ class DetailsViewModel(
 
     private fun onRecipeLoaded(recipe: RecipeDetails) {
         _uiState.update {
-            it.copy(status = ScreenStatus.Success, recipe = recipe, error = null)
+            it.copy(
+                status = ScreenStatus.Success,
+                recipe = recipe,
+                error = null,
+                currentImageUrl = recipe.imageUrls?.firstOrNull()
+            )
         }
     }
 

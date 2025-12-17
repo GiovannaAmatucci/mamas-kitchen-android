@@ -23,14 +23,22 @@ class RecipesMapper {
             name = recipeDto?.recipeName,
             description = recipeDto?.recipeDescription,
             imageUrls = recipeDto?.recipeImages?.recipeImage ?: emptyList(),
-            preparationTime = recipeDto?.preparationTimeMin,
+            preparationTime = recipeDto?.preparationTimeMin?.takeIf { it.isNotBlank() },
             cookingTime = recipeDto?.cookingTimeMin,
             servings = recipeDto?.numberOfServings,
-            ingredients = recipeDto?.ingredients?.ingredient?.map { ingredientDtoToDomain(it) }
+            ingredients = recipeDto?.ingredients?.ingredient?.map { ingredient ->
+                ingredientDtoToDomain(
+                    ingredient
+                )
+            }
                 ?: emptyList(),
-            directions = recipeDto?.directions?.direction?.map { directionDtoToDomain(it) }
+            directions = recipeDto?.directions?.direction?.map { direction ->
+                directionDtoToDomain(
+                    direction
+                )
+            }
                 ?: emptyList(),
-            categories = recipeDto?.recipeCategories?.recipeCategory?.map { it.recipeCategoryName }
+            categories = recipeDto?.recipeCategories?.recipeCategory?.map { categories -> categories.recipeCategoryName }
                 ?: emptyList(),
             rating = recipeDto?.rating?.toIntOrNull())
 
