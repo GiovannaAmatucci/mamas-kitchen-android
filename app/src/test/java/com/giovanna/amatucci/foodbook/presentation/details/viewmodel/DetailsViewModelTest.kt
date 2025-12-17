@@ -1,6 +1,5 @@
 package com.giovanna.amatucci.foodbook.presentation.details.viewmodel
 
-import UiConstants
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.giovanna.amatucci.foodbook.MainCoroutineRule
@@ -15,6 +14,7 @@ import com.giovanna.amatucci.foodbook.presentation.ScreenStatus
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsEvent
 import com.giovanna.amatucci.foodbook.util.ResultWrapper
 import com.giovanna.amatucci.foodbook.util.constants.UiText
+import com.giovanna.amatucci.foodbook.util.constants.VIEWMODEL
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -70,8 +70,7 @@ class DetailsViewModelTest {
     }
 
     private fun createViewModel(recipeId: String?): DetailsViewModel {
-        val map =
-            if (recipeId != null) mapOf(UiConstants.Details.ARG_RECIPE_ID to recipeId) else emptyMap()
+        val map = if (recipeId != null) mapOf(VIEWMODEL.ARG_RECIPE_ID to recipeId) else emptyMap()
         val savedStateHandle = SavedStateHandle(map)
 
         return DetailsViewModel(

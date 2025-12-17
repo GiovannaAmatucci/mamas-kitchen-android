@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
-import com.giovanna.amatucci.foodbook.presentation.components.cards.HeroCard
+import com.giovanna.amatucci.foodbook.presentation.components.cards.FavoritesHeroCard
 import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
 
 @Composable
@@ -29,7 +29,7 @@ fun RecentFavoritesSection(
                 modifier = Modifier.padding(horizontal = AppTheme.dimens.paddingMedium)
             )
             forEach { recipe ->
-                HeroCard(
+                FavoritesHeroCard(
                     recipe = recipe,
                     onClick = { onRecipeClick(recipe.id.toString()) },
                     modifier = Modifier.fillMaxWidth()

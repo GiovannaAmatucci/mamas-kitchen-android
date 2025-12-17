@@ -1,6 +1,5 @@
 package com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel
 
-import UiConstants
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
@@ -9,6 +8,7 @@ import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetFavoritesUseCa
 import com.giovanna.amatucci.foodbook.domain.usecase.favorites.GetRecentFavoritesUseCase
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesEvent
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.state.FavoritesUiState
+import com.giovanna.amatucci.foodbook.util.constants.VIEWMODEL.FAVORITE_DEBOUNCE
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class FavoritesViewModel(
@@ -73,7 +72,7 @@ class FavoritesViewModel(
 
     private fun initializeSearchFlow() {
         val recipesFlow = _uiState.map { it.searchQuery }.distinctUntilChanged()
-            .debounce(UiConstants.Components.FAVORITE_DEBOUNCE).flatMapLatest { query ->
+            .debounce(FAVORITE_DEBOUNCE).flatMapLatest { query ->
                 getFavoritesUseCase(query)
             }.cachedIn(viewModelScope)
 

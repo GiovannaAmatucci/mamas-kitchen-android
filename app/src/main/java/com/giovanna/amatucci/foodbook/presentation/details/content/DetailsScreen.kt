@@ -7,9 +7,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -51,21 +48,18 @@ private fun DetailsScreen(
     onSearchCategory: (String) -> Unit
 ) {
     state.apply {
-        var currentMainImageUrl by remember(recipe) {
-            mutableStateOf(recipe?.imageUrls?.firstOrNull())
-        }
         BlurredBackground(
-            imageUrl = currentMainImageUrl, modifier = Modifier.fillMaxSize()
+            imageUrl = currentImageUrl, modifier = Modifier.fillMaxSize()
         ) {
             Box(
                 modifier = Modifier.fillMaxSize()
             ) {
-                DetailsContent(
+                DetailsScreenContent(
                     modifier = Modifier,
                     status = status,
                     recipe = recipe,
                     onImageDisplayed = { imageUrl ->
-                        currentMainImageUrl = imageUrl
+                        imageUrl?.let { onEvent(DetailsEvent.OnImageChange(it)) }
                     },
                     onCategoryClick = onSearchCategory
                 )
@@ -83,7 +77,7 @@ private fun DetailsScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun DetailsContent(
+private fun DetailsScreenContent(
     modifier: Modifier = Modifier,
     status: ScreenStatus,
     recipe: RecipeDetails?,

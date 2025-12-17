@@ -10,5 +10,6 @@ data class DetailsUiState(
     val recipe: RecipeDetails? = null,
     val error: UiText? = null,
     val isFavorite: Boolean? = null,
-    val isRefreshing: Boolean = false
+    val isRefreshing: Boolean = false,
+    val currentImageUrl: String? = null
 ) : ScreenState

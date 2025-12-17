@@ -29,8 +29,6 @@ import org.junit.Test
 class SearchViewModelTest {
     @get:Rule
     val mainCoroutineRule = MainCoroutineRule()
-
-    // Mocks
     @MockK
     lateinit var searchRecipesUseCase: SearchRecipesUseCase
 
@@ -51,10 +49,9 @@ class SearchViewModelTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        // Mocks Padrão
         coEvery { getSearchQueriesUseCase() } returns listOf("pizza", "burger")
         coEvery { searchRecipesUseCase(any()) } returns flowOf(PagingData.empty())
-        coEvery { getRecentFavoritesUseCase() } returns flowOf(emptyList()) // Novo Mock necessário
+        coEvery { getRecentFavoritesUseCase() } returns flowOf(emptyList())
         coEvery { saveSearchQueryUseCase(any()) } just Runs
         coEvery { clearSearchHistoryUseCase() } just Runs
 
@@ -62,8 +59,7 @@ class SearchViewModelTest {
             searchRecipesUseCase,
             saveSearchQueryUseCase,
             getSearchQueriesUseCase,
-            clearSearchHistoryUseCase,
-            getRecentFavoritesUseCase // Nova dependência adicionada
+            clearSearchHistoryUseCase, getRecentFavoritesUseCase
         )
     }
 

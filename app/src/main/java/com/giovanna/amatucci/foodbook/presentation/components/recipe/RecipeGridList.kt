@@ -1,7 +1,6 @@
 package com.giovanna.amatucci.foodbook.presentation.components.recipe
 
 import RecipeCard
-import UiConstants
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -16,7 +15,7 @@ fun RecipeGridList(
     recipes: LazyPagingItems<RecipeItem>, onRecipeClick: (String) -> Unit
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(UiConstants.Layout.LIST_GRID_CELLS_FIXED),
+        columns = GridCells.Fixed(AppTheme.dimens.listGridCellsFixed),
         contentPadding = PaddingValues(AppTheme.dimens.paddingSmall),
         horizontalArrangement = Arrangement.spacedBy(AppTheme.dimens.paddingSmall),
         verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.paddingSmall)

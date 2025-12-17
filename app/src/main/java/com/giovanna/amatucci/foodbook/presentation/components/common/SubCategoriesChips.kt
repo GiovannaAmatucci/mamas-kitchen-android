@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.components.recipe
+package com.giovanna.amatucci.foodbook.presentation.components.common
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi

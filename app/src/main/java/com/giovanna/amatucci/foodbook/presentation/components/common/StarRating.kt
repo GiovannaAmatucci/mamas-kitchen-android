@@ -1,6 +1,5 @@
 package com.giovanna.amatucci.foodbook.presentation.components.common
 
-import UiConstants
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
@@ -26,7 +25,7 @@ import com.giovanna.amatucci.foodbook.ui.theme.RatingStarColor
 fun StarRating(
     rating: Int,
     modifier: Modifier = Modifier,
-    maxStars: Int = UiConstants.Components.Rating.MAX_STARS,
+    maxStars: Int = AppTheme.dimens.maxRatingStars,
     activeColor: Color = RatingStarColor,
     inactiveColor: Color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = AppTheme.alphas.high)
 ) {

@@ -1,6 +1,5 @@
 package com.giovanna.amatucci.foodbook.presentation.navigation.content
 
-import UiConstants
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
@@ -20,6 +19,7 @@ import com.giovanna.amatucci.foodbook.presentation.search.content.SearchTopBar
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.SearchViewModel
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchEvent
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchUiState
+import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
 import kotlinx.coroutines.launch
 
 @Composable
@@ -76,7 +76,8 @@ private fun MainScreen(
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier,
-                contentPadding = innerPadding, beyondViewportPageCount = UiConstants.Home.PAGE_COUNT
+                contentPadding = innerPadding,
+                beyondViewportPageCount = AppTheme.dimens.pageCount
             ) { pageIndex ->
                 when (pageIndex) {
                     MainTab.Search.tab -> {

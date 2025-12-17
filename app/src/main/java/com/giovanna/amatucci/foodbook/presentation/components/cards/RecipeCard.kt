@@ -54,7 +54,7 @@ fun RecipeCard(
                             title = name,
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.titleMedium,
-                            maxLines = UiConstants.Layout.MAX_LINES_MEDIUM,
+                            maxLines = AppTheme.dimens.maxLinesMedium,
                             color = MaterialTheme.colorScheme.onSurface,
                             textAlign = TextAlign.Start,
                             modifier = Modifier.padding(
@@ -66,7 +66,7 @@ fun RecipeCard(
                     description?.let { desc ->
                         SectionSubTitle(
                             subTitle = desc,
-                            maxLines = UiConstants.Layout.MAX_LINES_MEDIUM,
+                            maxLines = AppTheme.dimens.maxLinesMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Start,
                             modifier = Modifier.padding(

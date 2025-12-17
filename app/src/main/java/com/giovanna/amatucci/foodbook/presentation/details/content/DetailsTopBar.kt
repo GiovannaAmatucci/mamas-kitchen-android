@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsEvent
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.state.DetailsUiState
+import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,7 +31,7 @@ fun DetailsTopBar(
     val (favoriteIcon, favoriteTint) = if (isFavorite) {
         Icons.Filled.Favorite to MaterialTheme.colorScheme.primary
     } else {
-        Icons.Outlined.FavoriteBorder to MaterialTheme.colorScheme.onSurfaceVariant
+        Icons.Outlined.FavoriteBorder to MaterialTheme.colorScheme.onSurface
     }
     Row(
         modifier = modifier, verticalAlignment = Alignment.CenterVertically
@@ -39,10 +40,10 @@ fun DetailsTopBar(
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = stringResource(R.string.common_button_back),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                tint = MaterialTheme.colorScheme.onSurface
             )
         }
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(AppTheme.dimens.weightDefault))
 
         IconButton(onClick = { onEvent(DetailsEvent.ToggleFavorite) }) {
             Icon(

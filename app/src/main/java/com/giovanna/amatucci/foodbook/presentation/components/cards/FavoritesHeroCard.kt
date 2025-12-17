@@ -1,6 +1,5 @@
 package com.giovanna.amatucci.foodbook.presentation.components.cards
 
-import UiConstants
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,7 +21,7 @@ import com.giovanna.amatucci.foodbook.presentation.components.image.FadedAsyncIm
 import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
 
 @Composable
-fun HeroCard(
+fun FavoritesHeroCard(
     recipe: RecipeItem, onClick: () -> Unit, modifier: Modifier = Modifier
 ) {
     recipe.apply {
@@ -49,7 +48,7 @@ fun HeroCard(
                             fontWeight = FontWeight.ExtraBold,
                             color = MaterialTheme.colorScheme.onSurface,
                             textAlign = TextAlign.Start,
-                            maxLines = UiConstants.Layout.MAX_LINES_DEFAULT,
+                            maxLines = AppTheme.dimens.maxLinesDefault,
                             modifier = Modifier
                         )
                     }
@@ -63,7 +62,7 @@ fun HeroCard(
                                     bottom = AppTheme.dimens.paddingMedium
                                 ),
                                 textAlign = TextAlign.Start,
-                                maxLines = UiConstants.Layout.MAX_LINES_MEDIUM
+                                maxLines = AppTheme.dimens.maxLinesMedium
                             )
                         }
                     }
