@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.giovanna.amatucci.foodbook.R
@@ -54,7 +55,7 @@ fun SearchTopBar(
             },
             content = {
                 LazyColumn(
-                    modifier = Modifier
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     items(items = searchHistory, key = { it }) { historyItem ->
                         ListItem(
@@ -62,29 +63,34 @@ fun SearchTopBar(
                             leadingContent = {
                                 Icon(
                                     Icons.Default.History,
-                                    contentDescription = stringResource(R.string.search_history_icon_description)
+                                    contentDescription = null
                                 )
-                            }, modifier = Modifier.clickable {
+                            },
+                            modifier = Modifier.clickable {
                                 onEvent(SearchEvent.RecentSearchClicked(historyItem))
                             }
                         )
                     }
-                }
-                TextButton(
-                    onClick = { onEvent(SearchEvent.ClearSearchHistory) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            horizontal = AppTheme.dimens.paddingMedium,
-                            vertical = AppTheme.dimens.paddingSmall
-                        )
-                ) {
-                    SectionTitle(
-                        title = stringResource(R.string.search_close_description),
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+                    if (searchHistory.isNotEmpty()) {
+                        item {
+                            TextButton(
+                                onClick = { onEvent(SearchEvent.ClearSearchHistory) },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(
+                                        horizontal = AppTheme.dimens.paddingMedium,
+                                        vertical = AppTheme.dimens.paddingSmall
+                                    )
+                            ) {
+                                SectionTitle(
+                                    title = stringResource(R.string.search_close_description),
+                                    textAlign = TextAlign.Center,
+                                    style = MaterialTheme.typography.labelLarge,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        }
+                    }
                 }
             }
         )
@@ -111,11 +117,15 @@ private fun SearchLeadingIcon(
 
 @Composable
 private fun SearchTrailingIcon(query: String, onClearClick: () -> Unit) {
-    if (query.isNotEmpty()) IconButton(onClick = { onClearClick() }) {
+    val isVisible = query.isNotEmpty()
+    IconButton(
+        onClick = { if (isVisible) onClearClick() },
+        enabled = isVisible
+    ) {
         Icon(
-            Icons.Default.Close,
-            contentDescription = stringResource(R.string.search_close_description)
-
+            imageVector = Icons.Default.Close,
+            contentDescription = stringResource(R.string.search_close_description),
+            tint = if (isVisible) MaterialTheme.colorScheme.onSurface else Color.Transparent
         )
     }
 }
