@@ -75,7 +75,7 @@ The app addresses the need for a reliable kitchen companion by offering:
 
 | Personal Favorites | Dark/Light Mode | Adaptive Landscape |
 |:---:|:---:|:---:|
-| <img src="assets/demo_favorites.gif" width="180" /> | <img src="assets/demo_dark_to_light_mode.gif" width="200" /> | <img src="assets/demo_landscape.gif" width="200" /> |
+| <img src="assets/demo_favorites.gif" width="200" /> | <img src="assets/demo_dark_to_light_mode.gif" width="200" /> | <img src="assets/demo_landscape.gif" width="200" /> |
 
 </div>
 
