@@ -1,0 +1,51 @@
+name: Android CI
+
+on:
+
+  pull_request:
+    branches: [ "main", "dev" ]
+  push:
+    branches: [ "main", "dev" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Java (JDK)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Gradle Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Create local.properties
+        run: echo "sdk.dir=$ANDROID_HOME" > local.properties
+
+      - name: Create key.properties file
+        env:
+          FATSECRET_CLIENT_ID: ${{ secrets.FATSECRET_CLIENT_ID }}
+          FATSECRET_CLIENT_SECRET: ${{ secrets.FATSECRET_CLIENT_SECRET }}
+          DB_PASSPHRASE: ${{ secrets.DB_PASSPHRASE }}
+        run: |
+          echo "FATSECRET_CLIENT_ID=$FATSECRET_CLIENT_ID" > key.properties
+          echo "FATSECRET_CLIENT_SECRET=$FATSECRET_CLIENT_SECRET" >> key.properties
+          echo "DB_PASSPHRASE=$DB_PASSPHRASE" >> key.properties
+
+      - name: Building with Gradle
+        run: ./gradlew build
+

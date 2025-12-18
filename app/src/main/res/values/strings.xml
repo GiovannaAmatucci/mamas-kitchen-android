@@ -1,3 +1,97 @@
 <resources>
-    <string name="app_name">Food Book</string>
+    <string name="app_name">Mama`s Kitchen</string>
+
+    <!-- ===================================================================== -->
+    <!-- Common / Shared Strings                                               -->
+    <!-- ===================================================================== -->
+    <string name="common_error_generic">An unknown error occurred. Please try again.</string>
+    <string name="common_button_back">Back</string>
+    <string name="common_button_retry">Retry</string>
+    <string name="common_button_confirm">Confirm</string>
+    <string name="common_button_cancel">Cancel</string>
+    <string name="common_button_try_again">Try Again</string>
+    <string name="error_no_internet">No internet connection.</string>
+
+
+    <!-- ===================================================================== -->
+    <!-- Search                                                      -->
+    <!-- ===================================================================== -->
+    <string name="search_screen_title">Search</string>
+    <string name="search_field_placeholder">Type a dish or ingredient</string>
+    <string name="search_button_text">Search</string>
+    <string name="search_back_description">Back</string>
+    <string name="search_close_description">Close and clear search</string>
+    <string name="search_history_icon_description">History Icon</string>
+    <string name="search_no_history">No search history</string>
+    <string name="search_clear_history">Clear history</string>
+    <string name="search_access_item_description">View recipe details</string>
+    <string name="search_idle_message">Ready to find your next recipe!</string>
+    <string name="search_description_message">Use the search bar to find your favorite dish.</string>
+    <string name="search_empty_message">No recipes found for \"%1$s\"</string>
+    <string name="search_error_message_loading_failed">Failed to load recipes.</string>
+    <string name="search_error_api">API Failure.</string>
+    <string name="search_error_saving_history">Error saving history.</string>
+    <string name="search_recent_searches">Recent searches</string>
+    <string name="search_remove_recent_search">Remove from recent searches</string>
+    <string name="search_clear_search">Clear search</string>
+    <string name="search_categories">Categories</string>
+    <string name="search_categories_burguer">Burger</string>
+    <string name="search_categories_pizza">Pizza</string>
+    <string name="search_categories_smoothie">Smoothie</string>
+    <string name="search_categories_pasta">Pasta</string>
+    <string name="search_categories_cake">Cake</string>
+    <string name="search_categories_salad">Salad</string>
+    <string name="search_toggle_section">Toggle Section</string>
+
+    <!-- ===================================================================== -->
+    <!-- Details                                                       -->
+    <!-- ===================================================================== -->
+    <string name="details_screen_title_default">Details</string>
+    <string name="details_section_title_ingredients">Ingredients</string>
+    <string name="details_section_title_instructions">Instructions</string>
+    <string name="details_stats_cook_time">Cook Time</string>
+    <string name="details_stats_servings">Servings</string>
+    <string name="details_stats_prep_time">Preparation Time</string>
+    <string name="details_error_message_loading_failed">Failed to load recipe details.</string>
+    <string name="details_error_message_no_ingredients">No ingredients found.</string>
+    <string name="details_error_message_no_instructions">No instructions found.</string>
+    <string name="details_error_message_no_recipe">No recipe found.</string>
+    <string name="details_error_invalid_id">Invalid ID.</string>
+    <string name="details_error_api_failure">API Failure.</string>
+    <string name="details_no_images">No images available.</string>
+    <string name="details_rating_stars">Rating Stars.</string>
+    <string name="cd_rating_description">%1$d out of  %2$s rating</string>
+    <string name="label_rating_counter">%1$d/%2$d</string>
+
+
+    <!-- ===================================================================== -->
+    <!-- Favorite                                                      -->
+    <!-- ===================================================================== -->
+    <string name="favorites_screen_title">Favorites</string>
+    <string name="favorites_description">Toggle Favorite</string>
+    <string name="favorites_search_placeholder">Search Favorites</string>
+    <string name="favorites_empty_message">No favorite recipes found.</string>
+    <string name="favorites_empty_search_message">No favorite recipes found for\"%1$s\"</string>
+    <string name="favorites_delete_all_description">Delete all favorites</string>
+    <string name="favorites_dialog_title">Confirm Deletion</string>
+    <string name="favorites_dialog_text">Are you sure you want to delete all your favorites? This action cannot be undone.</string>
+    <string name="favorites_section">Highlights</string>
+    <string name="no_favorites_yet">No favorites yet</string>
+    <string name="no_favorites_description">Hit the heart button on recipes you love to save them here.</string>
+
+
+    <!-- ===================================================================== -->
+    <!-- Navigation                                                      -->
+    <!-- ===================================================================== -->
+    <string name="navigation_main_screen_navigation_bar">Navigation</string>
+    <string name="navigation_mamas_kitchen_content_description_logo">Mama\'s Kitchen Logo</string>
+    <string name="navigation_mamas_kitchen_content_description">Mama\'s Kitchen</string>
+
+
+    <!-- ===================================================================== -->
+    <!-- Auth Screen                                                           -->
+    <!-- ===================================================================== -->
+    <string name="auth_error_with_code">Error %1$d: %2$s</string>
+    <string name="auth_error_unknown">Unknown error while fetching token</string>
+
 </resources>
