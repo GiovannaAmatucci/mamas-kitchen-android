@@ -234,6 +234,7 @@ The application is built with a carefully selected suite of tools to ensure a sc
 <details>
 <summary><b>🔑 API Configuration & Credentials (Click to expand)</b></summary>
 <br />
+<div align="center">
 
 The application communicates with the **FatSecret Platform API** to fetch nutritional data and recipes. Follow these steps to set up your environment:
 
