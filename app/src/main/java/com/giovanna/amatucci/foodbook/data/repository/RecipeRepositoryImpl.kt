@@ -26,7 +26,6 @@ class RecipeRepositoryImpl(
         recipeTypes: List<String>?
     ): Flow<PagingData<RecipeItem>> {
         logWriter.d(TAG.RECIPE_REPOSITORY, LogMessages.REPO_PAGER_CREATED.format(query))
-
         return Pager(
             config = PagingConfig(
                 pageSize = RepositoryConstants.RECIPE_REPOSITORY_PAGE_SIZE,
@@ -40,7 +39,6 @@ class RecipeRepositoryImpl(
 
     override suspend fun getRecipeDetails(recipeId: String): ResultWrapper<RecipeDetails> {
         logWriter.d(TAG.RECIPE_REPOSITORY, LogMessages.REPO_DETAILS_REQUEST.format(recipeId))
-
         api.getRecipeDetails(recipeId).let { apiResult ->
             return when (apiResult) {
                 is ResultWrapper.Success -> {
