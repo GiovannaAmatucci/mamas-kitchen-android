@@ -29,7 +29,6 @@ class AuthRepositoryImpl(
                     is ResultWrapper.Success -> {
                         try {
                             saveTokenToDatabase(apiResult.data)
-
                             logWriter.d(TAG.AUTH_REPOSITORY, LogMessages.TOKEN_REPO_SAVE_SUCCESS)
                             apiResult
                         } catch (e: Exception) {
