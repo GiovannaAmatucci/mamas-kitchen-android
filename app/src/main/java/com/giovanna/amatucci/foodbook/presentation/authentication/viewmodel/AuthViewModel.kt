@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-
 class AuthViewModel(
     private val checkAuthStatusUseCase: CheckAuthenticationStatusUseCase,
     private val fetchTokenUseCase: FetchAndSaveTokenUseCase
@@ -97,7 +96,7 @@ class AuthViewModel(
 
         _uiState.update {
             it.copy(
-                status = ScreenStatus.Error(errorMessage), // <--- ADICIONE ISSO
+                status = ScreenStatus.Error(errorMessage),
                 navigateToHome = false,
                 error = errorMessage
             )

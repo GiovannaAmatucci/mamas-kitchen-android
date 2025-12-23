@@ -1,5 +1,6 @@
 package com.giovanna.amatucci.foodbook.data.local.db
 
+import com.giovanna.amatucci.foodbook.util.CryptographyManager
 import com.giovanna.amatucci.foodbook.util.constants.KeyStoreConstants
 import org.junit.Assert
 import org.junit.Before

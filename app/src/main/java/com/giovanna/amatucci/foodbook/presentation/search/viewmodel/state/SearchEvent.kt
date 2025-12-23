@@ -5,10 +5,8 @@ sealed interface SearchEvent {
     data class SubmitSearch(val query: String = "") : SearchEvent
     data class RecentSearchClicked(val query: String = "") : SearchEvent
     data class ActiveChanged(val active: Boolean) : SearchEvent
-
     data object SearchTabSwitched : SearchEvent
     data object ClearSearchQuery : SearchEvent
     data object ClearSearchHistory : SearchEvent
-
     data object Retry : SearchEvent
 }

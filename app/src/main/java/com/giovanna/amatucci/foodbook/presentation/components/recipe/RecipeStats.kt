@@ -49,7 +49,6 @@ private fun StatItem(
     }
 }
 
-
 @Composable
 fun RecipeStatsRow(recipe: RecipeDetails) {
     recipe.apply {

@@ -108,7 +108,6 @@ fun FoodBookTheme(
     }
     val dimensions = Dimensions()
     val alphaColor = AlphaColor()
-
     CompositionLocalProvider(LocalDimens provides dimensions, LocalAlphaColor provides alphaColor) {
         MaterialTheme(
             colorScheme = colorScheme, typography = Typography, shapes = Shape, content = content

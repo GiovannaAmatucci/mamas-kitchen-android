@@ -7,7 +7,6 @@ import kotlinx.coroutines.withContext
 interface ClearSearchHistoryUseCase {
     suspend operator fun invoke()
 }
-
 class ClearSearchHistoryUseCaseImpl(
     private val repository: SearchRepository
 ) : ClearSearchHistoryUseCase {

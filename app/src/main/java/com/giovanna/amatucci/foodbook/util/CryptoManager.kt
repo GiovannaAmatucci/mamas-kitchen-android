@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.data.local.db
+package com.giovanna.amatucci.foodbook.util
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties

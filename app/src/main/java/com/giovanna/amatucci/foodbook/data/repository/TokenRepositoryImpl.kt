@@ -1,10 +1,10 @@
 package com.giovanna.amatucci.foodbook.data.repository
 
-import com.giovanna.amatucci.foodbook.data.local.db.CryptographyManager
 import com.giovanna.amatucci.foodbook.data.local.db.dao.AccessTokenDao
 import com.giovanna.amatucci.foodbook.data.local.model.TokenEntity
 import com.giovanna.amatucci.foodbook.data.remote.model.TokenResponse
 import com.giovanna.amatucci.foodbook.domain.repository.TokenRepository
+import com.giovanna.amatucci.foodbook.util.CryptographyManager
 import com.giovanna.amatucci.foodbook.util.LogWriter
 import com.giovanna.amatucci.foodbook.util.constants.LogMessages
 import com.giovanna.amatucci.foodbook.util.constants.TAG

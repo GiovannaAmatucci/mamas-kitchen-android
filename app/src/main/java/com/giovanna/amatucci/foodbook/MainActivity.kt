@@ -26,7 +26,8 @@ class MainActivity : ComponentActivity() {
                     AnimatedSplashScreen(
                         onAnimationFinished = {
                             showAnimatedSplash = false
-                        })
+                        }
+                    )
                 } else {
                     val navController = rememberNavController()
                     AppNavHost(navController = navController)

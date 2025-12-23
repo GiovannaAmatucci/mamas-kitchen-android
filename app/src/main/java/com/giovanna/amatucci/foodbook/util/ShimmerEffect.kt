@@ -17,10 +17,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
 
-/**
- * Extension function to apply a Shimmer effect to any composable.
- * It creates a linear gradient animation that moves across the component.
- */
 fun Modifier.shimmerEffect(): Modifier = composed {
     var size by remember {
         mutableStateOf(IntSize.Zero)

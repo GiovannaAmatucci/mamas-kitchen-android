@@ -63,7 +63,6 @@ fun ImageDetails(
     }
 }
 
-
 @Composable
 private fun NoImageDetails(imageHeight: Dp, modifier: Modifier = Modifier) {
     Image(

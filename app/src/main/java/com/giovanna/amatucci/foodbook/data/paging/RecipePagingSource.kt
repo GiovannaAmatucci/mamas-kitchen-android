@@ -11,7 +11,6 @@ import com.giovanna.amatucci.foodbook.util.constants.LogMessages
 import com.giovanna.amatucci.foodbook.util.constants.RepositoryConstants
 import com.giovanna.amatucci.foodbook.util.constants.TAG
 
-
 class RecipePagingSource(
     private val api: FatSecretRecipeApi, private val mapper: RecipesMapper,
     private val query: String, private val logWriter: LogWriter

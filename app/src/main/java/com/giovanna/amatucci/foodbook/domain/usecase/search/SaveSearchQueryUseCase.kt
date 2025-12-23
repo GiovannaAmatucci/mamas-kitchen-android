@@ -7,7 +7,6 @@ import kotlinx.coroutines.withContext
 interface SaveSearchQueryUseCase {
     suspend operator fun invoke(query: String)
 }
-
 class SaveSearchQueryUseCaseImpl(private val repository: SearchRepository) :
     SaveSearchQueryUseCase {
     override suspend fun invoke(query: String) = withContext(Dispatchers.IO) {

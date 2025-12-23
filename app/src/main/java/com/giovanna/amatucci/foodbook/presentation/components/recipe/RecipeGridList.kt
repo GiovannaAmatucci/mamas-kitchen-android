@@ -1,6 +1,5 @@
 package com.giovanna.amatucci.foodbook.presentation.components.recipe
 
-import RecipeCard
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -9,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
+import com.giovanna.amatucci.foodbook.presentation.components.cards.RecipeCard
 import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
 
 @Composable

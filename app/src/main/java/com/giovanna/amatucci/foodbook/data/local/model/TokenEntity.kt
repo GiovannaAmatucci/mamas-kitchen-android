@@ -6,10 +6,14 @@ import androidx.room.PrimaryKey
 
 @Entity("tokenEntity")
 data class TokenEntity(
-    @PrimaryKey val id: String = "default_token",
-    @ColumnInfo(typeAffinity = ColumnInfo.BLOB) val encryptedAccessToken: ByteArray,
-    @ColumnInfo(typeAffinity = ColumnInfo.BLOB) val initializationVector: ByteArray,
-    @ColumnInfo(name = "expires_at_millis") val expiresAtMillis: Long
+    @PrimaryKey
+    val id: String = "default_token",
+    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+    val encryptedAccessToken: ByteArray,
+    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+    val initializationVector: ByteArray,
+    @ColumnInfo(name = "expires_at_millis")
+    val expiresAtMillis: Long
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

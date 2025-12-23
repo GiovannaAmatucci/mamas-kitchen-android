@@ -21,21 +21,18 @@ class FavoritesRepositoryImpl(
     private val dao: FavoritesDao,
     private val logWriter: LogWriter
 ) : FavoritesRepository {
-
     override suspend fun addFavorite(recipe: RecipeDetails) {
         logWriter.d(TAG.FAVORITES_REPOSITORY, LogMessages.REPO_FAVORITE_ADD_START.format(recipe))
         mapper.favoriteDomainToDto(recipe).let {
             dao.insertFavorite(it)
         }
     }
-
     override suspend fun getFavoriteDetails(recipeId: String): RecipeDetails? =
         dao.getFavoriteById(recipeId)?.let { favoriteEntity ->
             mapper.favoriteEntityToDetailsDomain(favoriteEntity)
         }
 
-    override fun isFavorite(recipeId: String): Flow<Boolean> =
-        dao.isFavorite(recipeId.toLong())
+    override fun isFavorite(recipeId: String): Flow<Boolean> = dao.isFavorite(recipeId.toLong())
 
     override fun getFavorites(query: String): Flow<PagingData<RecipeItem>> {
         val preparedQuery = "%$query%"
@@ -50,20 +47,17 @@ class FavoritesRepositoryImpl(
             }
         }
     }
-
     override fun getLastFavorites(): Flow<List<RecipeItem>> {
         return dao.getLast3Favorites().map { list ->
             list.map { mapper.favoriteEntityToDomain(it) }
         }
     }
-
     override suspend fun removeFavorite(recipeId: String) {
         logWriter.d(
             TAG.FAVORITES_REPOSITORY, LogMessages.REPO_FAVORITE_REMOVE_START.format(recipeId)
         )
         dao.deleteFavorite(recipeId)
     }
-
     override suspend fun deleteAllFavorites() {
         dao.deleteAllFavorites()
     }

@@ -1,6 +1,5 @@
 package com.giovanna.amatucci.foodbook.presentation.components.image
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,5 +36,6 @@ fun FadedAsyncImage(
                 contentScale = contentScale,
                 modifier = Modifier.fillMaxSize()
             )
-        })
+        }
+    )
 }

@@ -3,7 +3,6 @@ package com.giovanna.amatucci.foodbook.di
 import androidx.room.Room
 import com.giovanna.amatucci.foodbook.BuildConfig
 import com.giovanna.amatucci.foodbook.data.local.db.AppDatabase
-import com.giovanna.amatucci.foodbook.data.local.db.CryptographyManager
 import com.giovanna.amatucci.foodbook.data.remote.api.AuthApi
 import com.giovanna.amatucci.foodbook.data.remote.api.AuthApiImpl
 import com.giovanna.amatucci.foodbook.data.remote.api.FatSecretRecipeApi
@@ -56,6 +55,7 @@ import com.giovanna.amatucci.foodbook.presentation.authentication.viewmodel.Auth
 import com.giovanna.amatucci.foodbook.presentation.details.viewmodel.DetailsViewModel
 import com.giovanna.amatucci.foodbook.presentation.favorites.viewmodel.FavoritesViewModel
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.SearchViewModel
+import com.giovanna.amatucci.foodbook.util.CryptographyManager
 import com.giovanna.amatucci.foodbook.util.LogWriter
 import com.giovanna.amatucci.foodbook.util.TimberLogWriter
 import com.giovanna.amatucci.foodbook.util.constants.KeyStoreConstants
@@ -65,6 +65,7 @@ import org.koin.dsl.module
 
 val coreModule = module {
     single<LogWriter> { TimberLogWriter() }
+    single { CryptographyManager() }
 }
 val networkModule = module {
     single<NetworkHttpClient>(createdAtStart = true) {
@@ -88,7 +89,6 @@ val networkModule = module {
     single { FavoritesMapper() }
 }
 val databaseModule = module {
-    single { CryptographyManager() }
     single(createdAtStart = true) {
         Room.databaseBuilder(
             androidContext(),

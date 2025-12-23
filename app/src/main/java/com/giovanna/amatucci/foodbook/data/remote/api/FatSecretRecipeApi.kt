@@ -20,7 +20,6 @@ interface FatSecretRecipeApi {
 
     suspend fun getRecipeDetails(id: String?): ResultWrapper<RecipeResponse>
 }
-
 class FatSecretRecipeApiImpl(
     private val client: NetworkHttpClient,
     logWriter: LogWriter
@@ -40,7 +39,6 @@ class FatSecretRecipeApiImpl(
             }.body()
         }
     }
-
     override suspend fun getRecipeDetails(id: String?): ResultWrapper<RecipeResponse> {
         logWriter.d(tag, API_RECIPE_DETAILS.format(id))
         return safeApiCall {

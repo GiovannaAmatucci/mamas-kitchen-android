@@ -28,7 +28,6 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.Json
 
-
 interface NetworkHttpClient {
     operator fun invoke(): HttpClient
 }
@@ -135,3 +134,4 @@ class NetworkHttpClientImpl(
         }
     }
 }
+

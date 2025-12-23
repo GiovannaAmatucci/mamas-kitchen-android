@@ -16,7 +16,6 @@ class RecipesMapper {
         description = searchDto.recipeDescription,
         imageUrl = searchDto.recipeImage
     )
-
     fun recipeDetailDtoToDomain(recipeDto: Recipe?): RecipeDetails =
         RecipeDetails(
             id = recipeDto?.recipeId,
@@ -41,11 +40,9 @@ class RecipesMapper {
             categories = recipeDto?.recipeCategories?.recipeCategory?.map { categories -> categories.recipeCategoryName }
                 ?: emptyList(),
             rating = recipeDto?.rating?.toIntOrNull())
-
     private fun ingredientDtoToDomain(ingredientDto: Ingredient): IngredientInfo = IngredientInfo(
         description = ingredientDto.ingredientDescription, foodName = ingredientDto.foodName
     )
-
     private fun directionDtoToDomain(directionDto: Direction): DirectionInfo = DirectionInfo(
         number = directionDto.directionNumber, description = directionDto.directionDescription
     )

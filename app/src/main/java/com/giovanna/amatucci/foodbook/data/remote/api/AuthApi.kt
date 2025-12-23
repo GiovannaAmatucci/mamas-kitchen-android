@@ -1,6 +1,5 @@
 package com.giovanna.amatucci.foodbook.data.remote.api
 
-
 import com.giovanna.amatucci.foodbook.BuildConfig
 import com.giovanna.amatucci.foodbook.data.remote.model.TokenResponse
 import com.giovanna.amatucci.foodbook.data.remote.network.TokenHttpClient
@@ -18,13 +17,10 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.parametersOf
 
-
 interface AuthApi {
     suspend fun getAccessToken(
     ): ResultWrapper<TokenResponse>
 }
-
-
 class AuthApiImpl(
     logWriter: LogWriter, private val client: TokenHttpClient
 ) : BaseApi(logWriter), AuthApi {

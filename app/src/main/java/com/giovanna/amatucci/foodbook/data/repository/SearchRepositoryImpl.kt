@@ -27,7 +27,6 @@ class SearchRepositoryImpl(
             logWriter.w(TAG.SEARCH_REPOSITORY, LogMessages.SAVE_QUERY_FAILURE.format(query), e)
         }
     }
-
     override suspend fun getSearchQueries(): List<String> {
         return try {
             val currentHistory = dao.getSearchHistory()
@@ -42,7 +41,6 @@ class SearchRepositoryImpl(
             emptyList()
         }
     }
-
     override suspend fun clearSearchHistory() {
         try {
             val currentHistory = dao.getSearchHistory()

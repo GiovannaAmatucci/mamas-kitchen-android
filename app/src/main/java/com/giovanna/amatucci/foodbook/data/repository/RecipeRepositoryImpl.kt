@@ -34,7 +34,6 @@ class RecipeRepositoryImpl(
                 RecipePagingSource(api, mapper, query, logWriter)
             }).flow
     }
-
     override suspend fun getRecipeDetails(recipeId: String): ResultWrapper<RecipeDetails> {
         logWriter.d(TAG.RECIPE_REPOSITORY, LogMessages.REPO_DETAILS_REQUEST.format(recipeId))
         api.getRecipeDetails(recipeId).let { apiResult ->

@@ -158,7 +158,6 @@ class SearchViewModel(
             fetchSearchHistory()
         }
     }
-
     private fun fetchSearchHistory() {
         viewModelScope.launch {
             runCatching { getSearchQueriesUseCase() }

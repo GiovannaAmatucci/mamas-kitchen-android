@@ -11,7 +11,6 @@ import com.giovanna.amatucci.foodbook.data.local.model.SearchEntity
 import com.giovanna.amatucci.foodbook.data.local.model.TokenEntity
 import com.giovanna.amatucci.foodbook.util.Converters
 
-
 @Database(
     entities = [SearchEntity::class, TokenEntity::class, FavoritesEntity::class],
     version = 2,
@@ -21,7 +20,6 @@ import com.giovanna.amatucci.foodbook.util.Converters
 abstract class AppDatabase : RoomDatabase() {
     abstract fun searchDao(): SearchDao
     abstract fun accessTokenDao(): AccessTokenDao
-
     abstract fun favoriteDao(): FavoritesDao
 }
 

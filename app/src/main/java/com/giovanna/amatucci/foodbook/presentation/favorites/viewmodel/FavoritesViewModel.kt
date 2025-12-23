@@ -69,7 +69,6 @@ class FavoritesViewModel(
             _uiState.update { it.copy(hasAnyFavorite = list.isNotEmpty()) }
         }
     }
-
     private fun initializeSearchFlow() {
         val recipesFlow = _uiState.map { it.searchQuery }.distinctUntilChanged()
             .debounce(FAVORITE_DEBOUNCE).flatMapLatest { query ->

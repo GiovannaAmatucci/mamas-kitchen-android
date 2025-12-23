@@ -8,7 +8,6 @@ interface AddFavoritesUseCase {
         recipe: RecipeDetails
     )
 }
-
 class AddFavoritesUseCaseImpl(private val repository: FavoritesRepository) : AddFavoritesUseCase {
     override suspend fun invoke(recipe: RecipeDetails) = repository.addFavorite(recipe)
 

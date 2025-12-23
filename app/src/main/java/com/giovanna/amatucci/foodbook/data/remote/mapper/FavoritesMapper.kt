@@ -31,7 +31,6 @@ class FavoritesMapper {
         categories = recipeDomain.categories,
         rating = recipeDomain.rating
     )
-
     fun favoriteEntityToDomain(entity: FavoritesEntity): RecipeItem = RecipeItem(
         id = entity.recipeId?.toLong(),
         name = entity.name,
@@ -39,7 +38,6 @@ class FavoritesMapper {
         imageUrl = entity.imageUrl,
         rating = entity.rating
     )
-
     fun favoriteEntityToDetailsDomain(entity: FavoritesEntity): RecipeDetails =
         RecipeDetails(
             id = entity.recipeId,

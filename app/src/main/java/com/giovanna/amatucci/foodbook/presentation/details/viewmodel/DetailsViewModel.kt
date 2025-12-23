@@ -51,7 +51,6 @@ class DetailsViewModel(
         }
     }
 
-
     private fun validateAndLoad(id: String) {
         if (id.isBlank()) {
             _uiState.update {
