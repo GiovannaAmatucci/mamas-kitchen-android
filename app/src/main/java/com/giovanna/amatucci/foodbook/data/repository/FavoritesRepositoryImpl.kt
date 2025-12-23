@@ -27,6 +27,7 @@ class FavoritesRepositoryImpl(
             dao.insertFavorite(it)
         }
     }
+
     override suspend fun getFavoriteDetails(recipeId: String): RecipeDetails? =
         dao.getFavoriteById(recipeId)?.let { favoriteEntity ->
             mapper.favoriteEntityToDetailsDomain(favoriteEntity)
@@ -47,17 +48,20 @@ class FavoritesRepositoryImpl(
             }
         }
     }
+
     override fun getLastFavorites(): Flow<List<RecipeItem>> {
         return dao.getLast3Favorites().map { list ->
             list.map { mapper.favoriteEntityToDomain(it) }
         }
     }
+
     override suspend fun removeFavorite(recipeId: String) {
         logWriter.d(
             TAG.FAVORITES_REPOSITORY, LogMessages.REPO_FAVORITE_REMOVE_START.format(recipeId)
         )
         dao.deleteFavorite(recipeId)
     }
+
     override suspend fun deleteAllFavorites() {
         dao.deleteAllFavorites()
     }

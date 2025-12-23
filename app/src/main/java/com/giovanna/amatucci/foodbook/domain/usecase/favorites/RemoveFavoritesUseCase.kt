@@ -8,5 +8,6 @@ interface RemoveFavoritesUseCase {
 
 class RemoveFavoritesUseCaseImpl(private val repository: FavoritesRepository) :
     RemoveFavoritesUseCase {
-    override suspend fun invoke(recipe: String?) = repository.removeFavorite(recipe.toString())
+    override suspend fun invoke(recipe: String?) =
+        repository.removeFavorite(recipe.toString())
 }

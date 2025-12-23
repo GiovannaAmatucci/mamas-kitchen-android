@@ -24,7 +24,6 @@ class AuthRepositoryImpl(
     override suspend fun fetchAndSaveToken(): ResultWrapper<TokenResponse> {
         return withContext(Dispatchers.IO) {
             logWriter.d(TAG.AUTH_REPOSITORY, LogMessages.AUTH_TOKEN_REQUEST)
-
             authApi.getAccessToken().let { apiResult ->
                 when (apiResult) {
                     is ResultWrapper.Success -> {
@@ -65,11 +64,9 @@ class AuthRepositoryImpl(
             expiresAtMillis = expiresAt
         )
         dao.saveToken(entity)
-
         logWriter.d(
-            TAG.AUTH_REPOSITORY, LogMessages.TOKEN_REPO_SAVE_SUCCESS.format(
-                Date(expiresAt)
-            )
+            TAG.AUTH_REPOSITORY, LogMessages.TOKEN_REPO_SAVE_SUCCESS
+                .format(Date(expiresAt))
         )
     }
 }

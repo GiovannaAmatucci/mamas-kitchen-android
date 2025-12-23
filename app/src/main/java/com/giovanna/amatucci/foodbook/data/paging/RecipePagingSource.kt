@@ -26,33 +26,33 @@ class RecipePagingSource(
                         val recipesSearch = apiResult.data.recipesSearch
                         val recipeDtos = recipesSearch?.recipeSearch ?: emptyList()
                         val domainData = recipeDtos.map { mapper.searchRecipeDtoToDomain(it) }
-                        val nextKey =
-                            if (recipeDtos.isEmpty()) null else position + RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX
+                        val nextKey = if (recipeDtos.isEmpty()) null
+                        else position + RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX
 
                         LoadResult.Page(
                             data = domainData,
-                            prevKey = if (position == RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX) null else position - RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX,
+                            prevKey =
+                                if (position == RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX) null
+                                else position - RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX,
                             nextKey = nextKey
                         )
                     }
 
                     is ResultWrapper.Error -> {
-                        val msg = LogMessages.PAGING_LOAD_API_ERROR.format(
-                            apiResult.message, apiResult.code
-                        )
+                        val msg = LogMessages.PAGING_LOAD_API_ERROR
+                            .format(apiResult.message, apiResult.code)
                         logWriter.e(TAG.RECIPE_PAGING_SOURCE, msg)
                         LoadResult.Error(Exception(apiResult.message))
                     }
 
                     is ResultWrapper.Exception -> {
-                        val msg =
-                            LogMessages.PAGING_LOAD_API_EXCEPTION.format(apiResult.exception.message)
+                        val msg = LogMessages.PAGING_LOAD_API_EXCEPTION
+                            .format(apiResult.exception.message)
                         logWriter.e(TAG.RECIPE_PAGING_SOURCE, msg)
                         LoadResult.Error(apiResult.exception)
                     }
                 }
             }
-
         } catch (e: Exception) {
             val msg = LogMessages.PAGING_LOAD_UNKNOWN_ERROR.format(e.message)
             logWriter.e(TAG.RECIPE_PAGING_SOURCE, msg, e)
@@ -62,8 +62,11 @@ class RecipePagingSource(
 
     override fun getRefreshKey(state: PagingState<Int, RecipeItem>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
-            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX)
-                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX)
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(
+                RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX
+            ) ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(
+                RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX
+            )
         }
     }
 }

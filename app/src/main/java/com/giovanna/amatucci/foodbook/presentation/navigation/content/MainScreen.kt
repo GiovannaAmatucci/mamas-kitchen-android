@@ -52,6 +52,7 @@ private fun MainScreen(
 ) {
     val pagerState = rememberPagerState(pageCount = { MainTab.entries.size })
     val scope = rememberCoroutineScope()
+
     pagerState.apply {
         LaunchedEffect(searchUiState.shouldScrollToSearchTab) {
             if (searchUiState.shouldScrollToSearchTab) animateScrollToPage(MainTab.Search.tab)

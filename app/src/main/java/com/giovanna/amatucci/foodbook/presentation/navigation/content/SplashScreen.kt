@@ -33,6 +33,7 @@ fun AnimatedSplashScreen(onAnimationFinished: () -> Unit) {
         targetValue = if (startAnimation) AppTheme.alphas.opaque else AppTheme.alphas.disabled,
         animationSpec = tween(durationMillis = AppTheme.dimens.animationDuration)
     )
+
     LaunchedEffect(key1 = true) {
         delay(DELAY)
         onAnimationFinished()

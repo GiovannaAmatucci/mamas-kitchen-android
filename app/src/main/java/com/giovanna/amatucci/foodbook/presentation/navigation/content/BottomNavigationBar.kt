@@ -33,20 +33,20 @@ internal sealed class MainScreenNavTab(
 fun BottomNavigationBar(
     pagerState: PagerState, onTabClick: (Int) -> Unit
 ) {
-    val tabs = listOf(
-        MainScreenNavTab.Search, MainScreenNavTab.Favorites
-    )
+    val tabs = listOf(MainScreenNavTab.Search, MainScreenNavTab.Favorites)
+
     NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
         tabs.forEachIndexed { index, tab ->
             val isSelected = pagerState.currentPage == index
 
             NavigationBarItem(
-                label = { Text(text = stringResource(id = tab.titleResId)) }, icon = {
-                Icon(
-                    imageVector = tab.icon,
-                    contentDescription = stringResource(R.string.navigation_main_screen_navigation_bar)
-                )
-            },
+                label = { Text(text = stringResource(id = tab.titleResId)) },
+                icon = {
+                    Icon(
+                        imageVector = tab.icon,
+                        contentDescription = stringResource(R.string.navigation_main_screen_navigation_bar)
+                    )
+                },
                 selected = isSelected,
                 onClick = {
                     onTabClick(index)

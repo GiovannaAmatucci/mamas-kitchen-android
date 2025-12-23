@@ -10,7 +10,6 @@ interface FetchAndSaveTokenUseCase {
 
 class FetchAndSaveTokenUseCaseImpl(private val authRepository: AuthRepository) :
     FetchAndSaveTokenUseCase {
-    override suspend operator fun invoke(): ResultWrapper<TokenResponse> {
-        return authRepository.fetchAndSaveToken()
-    }
+    override suspend operator fun invoke(): ResultWrapper<TokenResponse> =
+        authRepository.fetchAndSaveToken()
 }

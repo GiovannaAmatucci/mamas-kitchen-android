@@ -27,7 +27,6 @@ class FavoritesViewModel(
     private val deleteAllFavoritesUseCase: DeleteAllFavoritesUseCase,
     private val getRecentFavoritesUseCase: GetRecentFavoritesUseCase
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(FavoritesUiState())
     val uiState: StateFlow<FavoritesUiState> = _uiState.asStateFlow()
 

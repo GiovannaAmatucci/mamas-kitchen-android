@@ -6,8 +6,7 @@ interface GetSearchQueriesUseCase {
     suspend operator fun invoke(): List<String>
 }
 
-class GetSearchQueriesUseCaseImpl(private val repository: SearchRepository) :
-    GetSearchQueriesUseCase {
+class GetSearchQueriesUseCaseImpl(private val repository: SearchRepository) : GetSearchQueriesUseCase {
     private companion object {
         const val HISTORY_LIMIT = 5
     }

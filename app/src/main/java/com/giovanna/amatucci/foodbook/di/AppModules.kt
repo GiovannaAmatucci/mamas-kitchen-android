@@ -80,9 +80,7 @@ val networkModule = module {
             logWriter = get()
         )
     }
-    single<TokenHttpClient> {
-        TokenHttpClientImpl(baseUrl = BuildConfig.TOKEN_URL)
-    }
+    single<TokenHttpClient> { TokenHttpClientImpl(baseUrl = BuildConfig.TOKEN_URL) }
     single<AuthApi> { AuthApiImpl(logWriter = get(), get()) }
     single<FatSecretRecipeApi> { FatSecretRecipeApiImpl(client = get(), logWriter = get()) }
     single { RecipesMapper() }
@@ -101,11 +99,41 @@ val databaseModule = module {
     single { get<AppDatabase>().favoriteDao() }
 }
 val repositoryModule = module {
-    single<AuthRepository> { AuthRepositoryImpl(get(), get(), get(), get()) }
-    single<TokenRepository> { TokenRepositoryImpl(get(), get(), get()) }
-    single<RecipeRepository> { RecipeRepositoryImpl(get(), get(), get()) }
-    single<FavoritesRepository> { FavoritesRepositoryImpl(get(), get(), get()) }
-    single<SearchRepository> { SearchRepositoryImpl(get(), get()) }
+    single<AuthRepository> {
+        AuthRepositoryImpl(
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
+    single<TokenRepository> {
+        TokenRepositoryImpl(
+            get(),
+            get(),
+            get()
+        )
+    }
+    single<RecipeRepository> {
+        RecipeRepositoryImpl(
+            get(),
+            get(),
+            get()
+        )
+    }
+    single<FavoritesRepository> {
+        FavoritesRepositoryImpl(
+            get(),
+            get(),
+            get()
+        )
+    }
+    single<SearchRepository> {
+        SearchRepositoryImpl(
+            get(),
+            get()
+        )
+    }
 }
 val domainModule = module {
     factory<CheckAuthenticationStatusUseCase> { CheckAuthenticationStatusUseCaseImpl(get()) }
@@ -125,12 +153,39 @@ val domainModule = module {
 
 }
 val viewModelModule = module {
-    viewModel { AuthViewModel(get(), get()) }
-    viewModel { SearchViewModel(get(), get(), get(), get(), get()) }
-    viewModel { DetailsViewModel(get(), get(), get(), get(), get(), get()) }
-    viewModel { FavoritesViewModel(get(), get(), get()) }
+    viewModel {
+        AuthViewModel(
+            get(),
+            get()
+        )
+    }
+    viewModel {
+        SearchViewModel(
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
+    viewModel {
+        DetailsViewModel(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
+    viewModel {
+        FavoritesViewModel(
+            get(),
+            get(),
+            get()
+        )
+    }
 }
-
 val appModules = listOf(
     coreModule, networkModule, databaseModule, repositoryModule, domainModule, viewModelModule
 )

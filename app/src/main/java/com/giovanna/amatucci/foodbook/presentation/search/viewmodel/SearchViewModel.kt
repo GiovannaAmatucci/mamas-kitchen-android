@@ -30,7 +30,6 @@ class SearchViewModel(
     private val clearSearchHistoryUseCase: ClearSearchHistoryUseCase,
     private val getRecentFavoritesUseCase: GetRecentFavoritesUseCase
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(SearchUiState())
     val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
 
@@ -59,7 +58,9 @@ class SearchViewModel(
             is SearchEvent.ClearSearchQuery -> _uiState.update { it.copy(searchQuery = "") }
             is SearchEvent.ClearSearchHistory -> clearHistory()
             is SearchEvent.ActiveChanged -> {
-                _uiState.update { it.copy(isActive = event.active) }
+                _uiState.update {
+                    it.copy(isActive = event.active)
+                }
                 if (event.active) fetchSearchHistory()
             }
 
@@ -146,7 +147,6 @@ class SearchViewModel(
 
     private fun triggerSearchFlow(query: String) = viewModelScope.launch {
         val newPagingFlow = searchRecipesUseCase(query).cachedIn(viewModelScope)
-
         _uiState.update {
             it.copy(recipes = newPagingFlow, isActive = false)
         }
@@ -161,9 +161,7 @@ class SearchViewModel(
     private fun fetchSearchHistory() {
         viewModelScope.launch {
             runCatching { getSearchQueriesUseCase() }
-                .onSuccess { history ->
-                    _uiState.update { it.copy(searchHistory = history) }
-                }
+                .onSuccess { history -> _uiState.update { it.copy(searchHistory = history) } }
         }
     }
 

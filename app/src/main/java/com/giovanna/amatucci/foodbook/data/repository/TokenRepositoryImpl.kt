@@ -17,7 +17,6 @@ class TokenRepositoryImpl(
     private val cryptoManager: CryptographyManager,
     private val logWriter: LogWriter
 ) : TokenRepository {
-
     override suspend fun saveToken(response: TokenResponse) {
         withContext(Dispatchers.IO) {
             logWriter.d(TAG.TOKEN_REPOSITORY, LogMessages.TOKEN_REPO_SAVE_START)
@@ -25,7 +24,6 @@ class TokenRepositoryImpl(
                 val token = response.accessToken ?: return@withContext
                 val (iv, encryptedToken) = cryptoManager.encrypt(token)
                 val expiresInMillis = response.expiresIn * 1000L
-
                 val expiresAt = System.currentTimeMillis() + expiresInMillis
                 val entity = TokenEntity(
                     encryptedAccessToken = encryptedToken,
@@ -52,10 +50,12 @@ class TokenRepositoryImpl(
                     logWriter.w(TAG.TOKEN_REPOSITORY, LogMessages.TOKEN_REPO_GET_NOT_FOUND)
                     return@withContext null
                 }
+
                 if (System.currentTimeMillis() >= entity.expiresAtMillis) {
                     logWriter.w(TAG.TOKEN_REPOSITORY, LogMessages.TOKEN_REPO_GET_EXPIRED)
                     return@withContext null
                 }
+
                 return@withContext try {
                     val decryptedToken = cryptoManager.decrypt(
                         iv = entity.initializationVector,

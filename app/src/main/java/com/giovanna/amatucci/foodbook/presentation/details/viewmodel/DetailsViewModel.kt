@@ -31,10 +31,8 @@ class DetailsViewModel(
     private val removeFavoritesUseCase: RemoveFavoritesUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(DetailsUiState())
     val uiState = _uiState.asStateFlow()
-
     private val recipeId: String? = savedStateHandle.get<String>(ARG_RECIPE_ID)
 
     init {
@@ -112,6 +110,7 @@ class DetailsViewModel(
         val currentState = _uiState.value
         val recipe = currentState.recipe ?: return@launch
         val validId = recipe.id.takeIf { !it.isNullOrBlank() } ?: return@launch
+
         runCatching {
             if (currentState.isFavorite == true) {
                 removeFavoritesUseCase(validId)

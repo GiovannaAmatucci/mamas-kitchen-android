@@ -39,6 +39,7 @@ class FatSecretRecipeApiImpl(
             }.body()
         }
     }
+
     override suspend fun getRecipeDetails(id: String?): ResultWrapper<RecipeResponse> {
         logWriter.d(tag, API_RECIPE_DETAILS.format(id))
         return safeApiCall {

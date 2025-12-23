@@ -14,6 +14,7 @@ abstract class BaseApi(
     protected val logWriter: LogWriter
 ) {
     abstract val tag: String
+
     protected suspend inline fun <reified T> safeApiCall(
         crossinline apiCall: suspend () -> T
     ): ResultWrapper<T> {
@@ -58,5 +59,3 @@ abstract class BaseApi(
         }
     }
 }
-
-

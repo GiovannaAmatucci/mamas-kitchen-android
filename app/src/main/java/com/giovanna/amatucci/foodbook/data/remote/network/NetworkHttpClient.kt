@@ -42,13 +42,10 @@ class NetworkHttpClientImpl(
     private val isDebug: Boolean,
     private val logWriter: LogWriter
 ) : NetworkHttpClient {
-
     private val mutex = Mutex()
-
     private suspend fun fetchAndSaveNewToken(): BearerTokens? {
-        logWriter.d(TAG.NETWORK_HTTP_CLIENT, LogMessages.KTOR_REFRESH_MUTEX_EXECUTE)
         val result = auth.fetchAndSaveToken()
-
+        logWriter.d(TAG.NETWORK_HTTP_CLIENT, LogMessages.KTOR_REFRESH_MUTEX_EXECUTE)
         return if (result is ResultWrapper.Success) {
             logWriter.d(TAG.NETWORK_HTTP_CLIENT, LogMessages.KTOR_REFRESH_SUCCESS)
             result.data.accessToken?.let { newAccessToken ->
@@ -115,13 +112,11 @@ class NetworkHttpClientImpl(
                         }
                     }
                 }
-
                 install(HttpTimeout) {
                     requestTimeoutMillis = requestTimeout
                     connectTimeoutMillis = connectTimeout
                     socketTimeoutMillis = connectTimeout
                 }
-
                 install(Logging) {
                     level = if (isDebug) LogLevel.ALL else LogLevel.NONE
                     logger = object : Logger {

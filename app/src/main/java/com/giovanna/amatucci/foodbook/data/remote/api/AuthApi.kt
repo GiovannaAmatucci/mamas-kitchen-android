@@ -25,6 +25,7 @@ class AuthApiImpl(
     logWriter: LogWriter, private val client: TokenHttpClient
 ) : BaseApi(logWriter), AuthApi {
     override val tag: String = AUTH_API
+
     override suspend fun getAccessToken(): ResultWrapper<TokenResponse> {
         logWriter.d(tag, LogMessages.AUTH_TOKEN_REQUEST)
         return safeApiCall {

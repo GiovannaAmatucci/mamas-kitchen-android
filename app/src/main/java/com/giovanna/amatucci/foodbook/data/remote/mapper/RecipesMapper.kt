@@ -16,6 +16,7 @@ class RecipesMapper {
         description = searchDto.recipeDescription,
         imageUrl = searchDto.recipeImage
     )
+
     fun recipeDetailDtoToDomain(recipeDto: Recipe?): RecipeDetails =
         RecipeDetails(
             id = recipeDto?.recipeId,
