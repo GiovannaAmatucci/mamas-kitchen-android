@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface SearchRecipesUseCase {
     suspend operator fun invoke(query: String): Flow<PagingData<RecipeItem>>
 }
+
 class SearchRecipesUseCaseImpl(
     private val repository: RecipeRepository,
 ) : SearchRecipesUseCase {

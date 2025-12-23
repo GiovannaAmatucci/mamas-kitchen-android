@@ -5,6 +5,7 @@ import com.giovanna.amatucci.foodbook.domain.repository.SearchRepository
 interface GetSearchQueriesUseCase {
     suspend operator fun invoke(): List<String>
 }
+
 class GetSearchQueriesUseCaseImpl(private val repository: SearchRepository) :
     GetSearchQueriesUseCase {
     private companion object {

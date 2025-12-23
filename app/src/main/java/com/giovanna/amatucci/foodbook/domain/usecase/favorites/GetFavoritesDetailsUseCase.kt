@@ -6,6 +6,7 @@ import com.giovanna.amatucci.foodbook.domain.repository.FavoritesRepository
 interface GetFavoritesDetailsUseCase {
     suspend operator fun invoke(recipeId: String): RecipeDetails?
 }
+
 class GetFavoritesDetailsUseCaseImpl(
     private val repository: FavoritesRepository
 ) : GetFavoritesDetailsUseCase {

@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface GetRecentFavoritesUseCase {
     operator fun invoke(): Flow<List<RecipeItem>>
 }
+
 class GetRecentFavoritesUseCaseImpl(
     private val repository: FavoritesRepository
 ) : GetRecentFavoritesUseCase {

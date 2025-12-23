@@ -7,6 +7,7 @@ import com.giovanna.amatucci.foodbook.util.ResultWrapper
 interface GetRecipeDetailsUseCase {
     suspend operator fun invoke(id: String): ResultWrapper<RecipeDetails>
 }
+
 class GetRecipeDetailsUseCaseImpl(private val repository: RecipeRepository) :
     GetRecipeDetailsUseCase {
     override suspend operator fun invoke(id: String): ResultWrapper<RecipeDetails> {
