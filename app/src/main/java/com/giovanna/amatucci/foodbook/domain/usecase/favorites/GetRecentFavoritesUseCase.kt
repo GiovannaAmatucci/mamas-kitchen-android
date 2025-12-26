@@ -8,8 +8,6 @@ interface GetRecentFavoritesUseCase {
     operator fun invoke(): Flow<List<RecipeItem>>
 }
 
-class GetRecentFavoritesUseCaseImpl(
-    private val repository: FavoritesRepository
-) : GetRecentFavoritesUseCase {
+class GetRecentFavoritesUseCaseImpl(private val repository: FavoritesRepository) : GetRecentFavoritesUseCase {
     override fun invoke(): Flow<List<RecipeItem>> = repository.getLastFavorites()
 }

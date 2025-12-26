@@ -6,25 +6,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-/**
- * Material 3 Typography definitions.
- *
- * @param displayLarge Largest text, for short, important titles or hero sections.
- * @param displayMedium Large text, slightly smaller than displayLarge.
- * @param displaySmall Large text, for intro titles.
- * @param headlineLarge High-emphasis screen titles (e.g., "Favorite Recipes").
- * @param headlineMedium Section titles or important names (e.g., Recipe Name).
- * @param headlineSmall Smaller section titles.
- * @param titleLarge Prominent titles for lists or subsections (e.g., "Ingredients").
- * @param titleMedium Titles inside smaller components (e.g., Recipe Card title).
- * @param titleSmall Subtitles or tags.
- * @param bodyLarge Default body text for long content (e.g., Recipe description).
- * @param bodyMedium Secondary body text.
- * @param bodySmall Small body text (captions, legal).
- * @param labelLarge Text for buttons and inputs.
- * @param labelMedium Helper text.
- * @param labelSmall Smallest text (time labels, status).
- */
 val Typography = Typography(
     displayLarge = TextStyle(
         fontFamily = FontFamily.Default,

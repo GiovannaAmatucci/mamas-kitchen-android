@@ -50,12 +50,10 @@ class TokenRepositoryImpl(
                     logWriter.w(TAG.TOKEN_REPOSITORY, LogMessages.TOKEN_REPO_GET_NOT_FOUND)
                     return@withContext null
                 }
-
                 if (System.currentTimeMillis() >= entity.expiresAtMillis) {
                     logWriter.w(TAG.TOKEN_REPOSITORY, LogMessages.TOKEN_REPO_GET_EXPIRED)
                     return@withContext null
                 }
-
                 return@withContext try {
                     val decryptedToken = cryptoManager.decrypt(
                         iv = entity.initializationVector,
@@ -63,7 +61,6 @@ class TokenRepositoryImpl(
                     )
                     logWriter.d(TAG.TOKEN_REPOSITORY, LogMessages.TOKEN_REPO_GET_SUCCESS)
                     decryptedToken
-
                 } catch (e: Exception) {
                     logWriter.e(
                         TAG.TOKEN_REPOSITORY,

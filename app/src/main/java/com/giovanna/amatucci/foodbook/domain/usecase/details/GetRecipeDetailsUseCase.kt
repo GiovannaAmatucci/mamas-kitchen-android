@@ -8,8 +8,7 @@ interface GetRecipeDetailsUseCase {
     suspend operator fun invoke(id: String): ResultWrapper<RecipeDetails>
 }
 
-class GetRecipeDetailsUseCaseImpl(private val repository: RecipeRepository) :
-    GetRecipeDetailsUseCase {
+class GetRecipeDetailsUseCaseImpl(private val repository: RecipeRepository) : GetRecipeDetailsUseCase {
     override suspend operator fun invoke(id: String): ResultWrapper<RecipeDetails> {
         return repository.getRecipeDetails(id)
     }

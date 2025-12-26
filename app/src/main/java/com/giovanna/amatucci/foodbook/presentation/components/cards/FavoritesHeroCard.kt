@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 import com.giovanna.amatucci.foodbook.presentation.components.common.SectionSubTitle
 import com.giovanna.amatucci.foodbook.presentation.components.common.SectionTitle
-import com.giovanna.amatucci.foodbook.presentation.components.common.fadedBottomEdge
+import com.giovanna.amatucci.foodbook.ui.theme.fadedBottomEdge
 import com.giovanna.amatucci.foodbook.presentation.components.image.FadedAsyncImage
 import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
 

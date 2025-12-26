@@ -17,7 +17,10 @@ fun SectionTitleShimmer() {
         modifier = Modifier
             .width(AppTheme.dimens.recipeCardHeight)
             .height(AppTheme.dimens.paddingExtraLarge)
-            .padding(start = AppTheme.dimens.paddingMedium, bottom = AppTheme.dimens.paddingSmall)
+            .padding(
+                start = AppTheme.dimens.paddingMedium,
+                bottom = AppTheme.dimens.paddingSmall
+            )
             .clip(MaterialTheme.shapes.small)
             .shimmerEffect()
     )

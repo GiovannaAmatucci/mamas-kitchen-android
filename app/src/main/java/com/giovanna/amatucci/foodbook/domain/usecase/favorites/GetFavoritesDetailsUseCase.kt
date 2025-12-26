@@ -7,9 +7,6 @@ interface GetFavoritesDetailsUseCase {
     suspend operator fun invoke(recipeId: String): RecipeDetails?
 }
 
-class GetFavoritesDetailsUseCaseImpl(
-    private val repository: FavoritesRepository
-) : GetFavoritesDetailsUseCase {
-    override suspend fun invoke(recipeId: String): RecipeDetails? =
-        repository.getFavoriteDetails(recipeId)
+class GetFavoritesDetailsUseCaseImpl(private val repository: FavoritesRepository) : GetFavoritesDetailsUseCase {
+    override suspend fun invoke(recipeId: String): RecipeDetails? = repository.getFavoriteDetails(recipeId)
 }

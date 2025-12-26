@@ -31,8 +31,10 @@ fun RecipeInstructionItem(
                 .padding(horizontal = AppTheme.dimens.paddingLarge)
                 .animateContentSize()
                 .clickable(
-                    interactionSource = remember { MutableInteractionSource() }, indication = null
-                ) { isExpanded = !isExpanded }) {
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) { isExpanded = !isExpanded }
+        ) {
             SectionTitle(
                 title = "${number}.",
                 style = MaterialTheme.typography.bodyLarge,

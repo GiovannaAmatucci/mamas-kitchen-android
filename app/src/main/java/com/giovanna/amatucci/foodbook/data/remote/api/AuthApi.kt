@@ -18,9 +18,9 @@ import io.ktor.http.contentType
 import io.ktor.http.parametersOf
 
 interface AuthApi {
-    suspend fun getAccessToken(
-    ): ResultWrapper<TokenResponse>
+    suspend fun getAccessToken(): ResultWrapper<TokenResponse>
 }
+
 class AuthApiImpl(
     logWriter: LogWriter, private val client: TokenHttpClient
 ) : BaseApi(logWriter), AuthApi {

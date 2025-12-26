@@ -9,25 +9,19 @@ private val json = Json { ignoreUnknownKeys = true }
 
 class Converters {
     @TypeConverter
-    fun fromStringToList(value: String?): List<String>? {
-        return value?.let { json.decodeFromString(it) }
-    }
+    fun fromStringToList(value: String?): List<String>? = value?.let { json.decodeFromString(it) }
 
     @TypeConverter
-    fun fromListToString(list: List<String>?): String? {
-        return list?.let { json.encodeToString(it) }
-    }
+    fun fromListToString(list: List<String>?): String? = list?.let { json.encodeToString(it) }
 
     @TypeConverter
-    fun fromIngredientList(value: List<Ingredient>?): String =
-        json.encodeToString(value ?: emptyList())
+    fun fromIngredientList(value: List<Ingredient>?): String = json.encodeToString(value ?: emptyList())
 
     @TypeConverter
     fun toIngredientList(value: String): List<Ingredient> = json.decodeFromString(value)
 
     @TypeConverter
-    fun fromDirectionList(value: List<Direction>?): String =
-        json.encodeToString(value ?: emptyList())
+    fun fromDirectionList(value: List<Direction>?): String = json.encodeToString(value ?: emptyList())
 
     @TypeConverter
     fun toDirectionList(value: String): List<Direction> = json.decodeFromString(value)

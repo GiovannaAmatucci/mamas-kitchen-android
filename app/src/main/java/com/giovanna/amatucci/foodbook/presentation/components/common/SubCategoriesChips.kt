@@ -23,8 +23,7 @@ fun SubCategoriesChips(
         verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.paddingExtraSmall)
     ) {
         categories.forEach { category ->
-            CategoryChip(
-                category = category, onClick = { onTagClick(category) })
+            CategoryChip(category = category, onClick = { onTagClick(category) })
         }
     }
 }
@@ -34,14 +33,14 @@ private fun CategoryChip(
     category: String, onClick: () -> Unit
 ) {
     AssistChip(
-        onClick = onClick, label = {
-            Text(
-                text = category, style = MaterialTheme.typography.labelMedium
-            )
-        }, colors = AssistChipDefaults.assistChipColors(
+        onClick = onClick,
+        label = { Text(text = category, style = MaterialTheme.typography.labelMedium) },
+        colors = AssistChipDefaults.assistChipColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(
                 alpha = AppTheme.alphas.scrimSoft
-            ), labelColor = MaterialTheme.colorScheme.onSurfaceVariant
-        ), border = null
+            ),
+            labelColor = MaterialTheme.colorScheme.onSurfaceVariant
+        ),
+        border = null
     )
 }

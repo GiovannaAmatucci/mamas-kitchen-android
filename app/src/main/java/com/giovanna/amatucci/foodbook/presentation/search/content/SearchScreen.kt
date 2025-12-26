@@ -42,10 +42,7 @@ fun SearchScreen(
 ) {
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-
-    var areFiltersExpanded by rememberSaveable(isLandscape) {
-        mutableStateOf(!isLandscape)
-    }
+    var areFiltersExpanded by rememberSaveable(isLandscape) { mutableStateOf(!isLandscape) }
     SearchScreenContent(
         state = state,
         isLandscape = isLandscape,
@@ -142,11 +139,13 @@ private fun SearchScreenContentSuccess(
         ) {
             if (searchQuery.isBlank()) {
                 SearchInitialSection(
-                    recentFavorites = recentFavorites, onRecipeClick = onNavigateToRecipe
+                    recentFavorites = recentFavorites,
+                    onRecipeClick = onNavigateToRecipe
                 )
             } else {
                 SearchList(
-                    searchQuery = searchQuery, recipes = recipes, onRecipeClick = onNavigateToRecipe
+                    searchQuery = searchQuery, recipes = recipes,
+                    onRecipeClick = onNavigateToRecipe
                 )
             }
         }

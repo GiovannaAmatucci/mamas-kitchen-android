@@ -21,15 +21,12 @@ import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AnimatedCard(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
+    onClick: () -> Unit, modifier: Modifier = Modifier, content: @Composable () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
-
     val scale by animateFloatAsState(
-        targetValue = if (isPressed) AppTheme.dimens.cardPressedScale else AppTheme.alphas.opaque,
+        targetValue = if (isPressed) AppTheme.dimens.cardPressedScale else AppTheme.alphas.opaque
     )
     Card(
         modifier = modifier

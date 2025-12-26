@@ -39,32 +39,41 @@ fun SearchTopBar(
             query = searchQuery,
             isActive = isActive,
             placeholder = R.string.search_screen_title,
-            onQueryChange = { onQueryChange -> onEvent(SearchEvent.UpdateSearchQuery(onQueryChange)) },
-            onSearch = { onSearch -> onEvent(SearchEvent.SubmitSearch(onSearch)) },
-            onActiveChange = { onActiveChange -> onEvent(SearchEvent.ActiveChanged(onActiveChange)) },
+            onQueryChange = { onQueryChange ->
+                onEvent(SearchEvent.UpdateSearchQuery(onQueryChange))
+            },
+            onSearch = { onSearch ->
+                onEvent(SearchEvent.SubmitSearch(onSearch))
+            },
+            onActiveChange = { onActiveChange ->
+                onEvent(SearchEvent.ActiveChanged(onActiveChange))
+            },
             leadingIcon = {
                 SearchLeadingIcon(
-                    isActive = isActive, onActiveChange = { onActiveChange ->
+                    isActive = isActive,
+                    onActiveChange = { onActiveChange ->
                         onEvent(SearchEvent.ActiveChanged(onActiveChange))
                     }
                 )
             },
             trailingIcon = {
                 SearchTrailingIcon(
-                    query = searchQuery, onClearClick = { onEvent(SearchEvent.ClearSearchQuery) })
+                    query = searchQuery,
+                    onClearClick = { onEvent(SearchEvent.ClearSearchQuery) }
+                )
             },
             content = {
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    items(items = searchHistory, key = { it }) { historyItem ->
+                    items(
+                        items = searchHistory,
+                        key = { it }
+                    ) { historyItem ->
                         ListItem(
                             headlineContent = { Text(historyItem) },
                             leadingContent = {
-                                Icon(
-                                    Icons.Default.History,
-                                    contentDescription = null
-                                )
+                                Icon(Icons.Default.History, contentDescription = null)
                             },
                             modifier = Modifier.clickable {
                                 onEvent(SearchEvent.RecentSearchClicked(historyItem))

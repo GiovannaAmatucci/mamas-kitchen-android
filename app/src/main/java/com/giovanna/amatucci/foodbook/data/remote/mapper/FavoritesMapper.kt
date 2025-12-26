@@ -39,7 +39,7 @@ class FavoritesMapper {
         description = entity.description,
         imageUrl = entity.imageUrl,
         rating = entity.rating
-    )
+        )
 
     fun favoriteEntityToDetailsDomain(entity: FavoritesEntity): RecipeDetails =
         RecipeDetails(

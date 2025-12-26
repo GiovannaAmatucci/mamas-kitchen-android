@@ -46,10 +46,12 @@ private fun FavoriteTrailingIcon(onDeleteAllClick: () -> Unit) {
 
 @Composable
 private fun FavoriteLeadingIcon(
-    imageVector: ImageVector = Icons.Default.Search, contentDescription: String? = null
+    imageVector: ImageVector = Icons.Default.Search,
+    contentDescription: String? = null
 ) {
     Icon(
-        imageVector = imageVector, contentDescription = contentDescription
+        imageVector = imageVector,
+        contentDescription = contentDescription
     )
 }
 

@@ -4,8 +4,6 @@ import androidx.annotation.StringRes
 
 sealed class UiText {
     data class DynamicString(val value: String) : UiText()
-    class StringResource(
-        @param:StringRes val resId: Int, vararg val args: Int?
-    ) : UiText()
+    class StringResource(@param:StringRes val resId: Int) : UiText()
 }
 

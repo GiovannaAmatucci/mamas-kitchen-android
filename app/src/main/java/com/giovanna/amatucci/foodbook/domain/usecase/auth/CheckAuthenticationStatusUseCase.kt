@@ -8,8 +8,9 @@ interface CheckAuthenticationStatusUseCase {
     suspend operator fun invoke(): Boolean
 }
 
-class CheckAuthenticationStatusUseCaseImpl(private val tokenRepository: TokenRepository) :
-    CheckAuthenticationStatusUseCase {
+class CheckAuthenticationStatusUseCaseImpl(
+    private val tokenRepository: TokenRepository
+) : CheckAuthenticationStatusUseCase {
     override suspend operator fun invoke(): Boolean = withContext(Dispatchers.IO) {
         tokenRepository.getValidAccessToken() != null
     }

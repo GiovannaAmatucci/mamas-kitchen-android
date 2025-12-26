@@ -41,12 +41,10 @@ fun RecipeDetailsList(
                 RecipeHeader(recipe = recipe, onCategoryClick = onCategoryClick)
                 Spacer(modifier = Modifier.padding(AppTheme.dimens.paddingSmall))
             }
-
             item {
                 RecipeStatsRow(recipe = recipe)
                 Spacer(modifier = Modifier.padding(AppTheme.dimens.paddingSmall))
             }
-
             item {
                 SectionTitle(
                     stringResource(R.string.details_section_title_ingredients),
@@ -60,7 +58,6 @@ fun RecipeDetailsList(
                 RecipeIngredientItem(ingredient = ingredient)
                 Spacer(modifier = Modifier.height(AppTheme.dimens.paddingSmall))
             }
-
             item {
                 SectionTitle(
                     stringResource(R.string.details_section_title_instructions),

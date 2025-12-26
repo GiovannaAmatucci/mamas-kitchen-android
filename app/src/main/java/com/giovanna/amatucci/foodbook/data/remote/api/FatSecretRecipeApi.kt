@@ -15,18 +15,23 @@ import io.ktor.client.request.parameter
 
 interface FatSecretRecipeApi {
     suspend fun searchRecipes(
-        expression: String, pageNumber: Int, maxResult: Int
+        expression: String,
+        pageNumber: Int,
+        maxResult: Int
     ): ResultWrapper<SearchResponse>
 
     suspend fun getRecipeDetails(id: String?): ResultWrapper<RecipeResponse>
 }
+
 class FatSecretRecipeApiImpl(
     private val client: NetworkHttpClient,
     logWriter: LogWriter
 ) : BaseApi(logWriter), FatSecretRecipeApi {
     override val tag: String = FAT_SECRET_RECIPE_API
     override suspend fun searchRecipes(
-        expression: String, pageNumber: Int, maxResult: Int
+        expression: String,
+        pageNumber: Int,
+        maxResult: Int
     ): ResultWrapper<SearchResponse> {
         logWriter.d(tag, API_RECIPE_SEARCH.format(expression, pageNumber, maxResult))
         return safeApiCall {

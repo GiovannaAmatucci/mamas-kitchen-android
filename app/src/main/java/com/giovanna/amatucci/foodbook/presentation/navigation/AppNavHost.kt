@@ -36,26 +36,22 @@ fun AppNavHost(
             }
         }
         composable<MainGraph> { backStackEntry ->
-            val searchViewModel: SearchViewModel =
-                koinViewModel(viewModelStoreOwner = backStackEntry)
-            val favoriteViewModel: FavoritesViewModel =
-                koinViewModel(viewModelStoreOwner = backStackEntry)
-
+            val searchViewModel: SearchViewModel = koinViewModel(viewModelStoreOwner = backStackEntry)
+            val favoriteViewModel: FavoritesViewModel = koinViewModel(viewModelStoreOwner = backStackEntry)
             MainRoute(
-                searchViewModel = searchViewModel, favoriteViewModel = favoriteViewModel,
+                searchViewModel = searchViewModel,
+                favoriteViewModel = favoriteViewModel,
                 onNavigateToRecipe = { recipeId ->
                     navController.navigate(DetailsScreen(recipeId = recipeId))
                 }
             )
         }
         composable<DetailsScreen> {
-            val mainGraphEntry = remember(it) {
-                navController.getBackStackEntry<MainGraph>()
-            }
-            val searchViewModel: SearchViewModel =
-                koinViewModel(viewModelStoreOwner = mainGraphEntry)
+            val mainGraphEntry = remember(it) { navController.getBackStackEntry<MainGraph>() }
+            val searchViewModel: SearchViewModel = koinViewModel(viewModelStoreOwner = mainGraphEntry)
             DetailsRoute(
-                onNavigateBack = { navController.popBackStack() }, onSearchCategory = { query ->
+                onNavigateBack = { navController.popBackStack() },
+                onSearchCategory = { query ->
                     searchViewModel.onEvent(SearchEvent.UpdateSearchQuery(query))
                     searchViewModel.onEvent(SearchEvent.SubmitSearch(query))
                     navController.popBackStack<MainGraph>(inclusive = false)

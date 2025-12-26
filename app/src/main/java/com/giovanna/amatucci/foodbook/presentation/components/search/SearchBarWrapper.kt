@@ -54,10 +54,8 @@ fun SearchBarWrapper(
     val modifier = Modifier
         .fillMaxWidth()
         .then(
-            if (isActive && expandable) Modifier
-            else Modifier.padding(all = AppTheme.dimens.paddingMedium)
+            if (isActive && expandable) Modifier else Modifier.padding(all = AppTheme.dimens.paddingMedium)
         )
-
     SearchBar(
         modifier = modifier,
         query = query,

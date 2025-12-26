@@ -17,8 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.presentation.components.common.PagerIndicator
-import com.giovanna.amatucci.foodbook.presentation.components.common.fadedBottomEdge
 import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
+import com.giovanna.amatucci.foodbook.ui.theme.fadedBottomEdge
 
 @Composable
 fun ImageDetails(
@@ -31,9 +31,8 @@ fun ImageDetails(
     val currentPage = pagerState.currentPage
 
     if (images.isNotEmpty()) {
-        LaunchedEffect(currentPage) {
-            onImageDisplayed(images[currentPage])
-        }
+        LaunchedEffect(currentPage) { onImageDisplayed(images[currentPage]) }
+
         Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
             HorizontalPager(state = pagerState) { pageIndex ->
                 FadedAsyncImage(
@@ -54,12 +53,8 @@ fun ImageDetails(
             }
         }
     } else {
-        NoImageDetails(
-            imageHeight = imageHeight, modifier = modifier
-        )
-        LaunchedEffect(Unit) {
-            onImageDisplayed(null)
-        }
+        NoImageDetails(imageHeight = imageHeight, modifier = modifier)
+        LaunchedEffect(Unit) { onImageDisplayed(null) }
     }
 }
 

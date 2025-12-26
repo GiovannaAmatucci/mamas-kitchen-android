@@ -58,11 +58,11 @@ private fun MainScreen(
             if (searchUiState.shouldScrollToSearchTab) animateScrollToPage(MainTab.Search.tab)
             onSearchEvent(SearchEvent.SearchTabSwitched)
         }
-        Scaffold(topBar = {
-            when (currentPage) {
+        Scaffold(
+            topBar = {
+                when (currentPage) {
                 MainTab.Search.tab -> SearchTopBar(
                     state = searchUiState, onEvent = { onEvent -> onSearchEvent(onEvent) })
-
                 MainTab.Favorites.tab -> FavoritesTopBar(
                     state = favoritesUiState, onEvent = { onEvent -> onFavoritesEvent(onEvent) })
             }
@@ -87,7 +87,6 @@ private fun MainScreen(
                             state = searchUiState,
                             onEvent = { onEvent -> onSearchEvent(onEvent) })
                     }
-
                     MainTab.Favorites.tab -> {
                         FavoritesScreen(
                             onNavigateToRecipe = onNavigateToRecipe,

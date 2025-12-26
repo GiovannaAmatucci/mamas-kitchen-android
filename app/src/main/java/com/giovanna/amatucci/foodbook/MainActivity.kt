@@ -24,9 +24,7 @@ class MainActivity : ComponentActivity() {
                 var showAnimatedSplash by remember { mutableStateOf(true) }
                 if (showAnimatedSplash) {
                     AnimatedSplashScreen(
-                        onAnimationFinished = {
-                            showAnimatedSplash = false
-                        }
+                        onAnimationFinished = { showAnimatedSplash = false }
                     )
                 } else {
                     val navController = rememberNavController()

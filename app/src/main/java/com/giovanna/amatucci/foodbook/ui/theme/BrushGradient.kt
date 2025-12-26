@@ -1,8 +1,7 @@
-package com.giovanna.amatucci.foodbook.presentation.components.common
+package com.giovanna.amatucci.foodbook.ui.theme
 
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import com.giovanna.amatucci.foodbook.ui.theme.AlphaColor
 
 object BrushGradient {
     fun verticalScrim(
@@ -12,7 +11,7 @@ object BrushGradient {
             return startAlpha + (endAlpha - startAlpha) * factor
         }
 
-        return Brush.verticalGradient(
+        return Brush.Companion.verticalGradient(
             0.0f to color.copy(alpha = startAlpha),
             0.15f to color.copy(alpha = getAlpha(alphas.easeStep1)),
             0.30f to color.copy(alpha = getAlpha(alphas.easeStep2)),
@@ -24,5 +23,3 @@ object BrushGradient {
         )
     }
 }
-
-

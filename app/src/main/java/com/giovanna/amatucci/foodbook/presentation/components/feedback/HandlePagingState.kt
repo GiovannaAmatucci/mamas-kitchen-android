@@ -11,27 +11,12 @@ import androidx.paging.compose.LazyPagingItems
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.presentation.components.common.MessageComponent
 import com.giovanna.amatucci.foodbook.presentation.components.feedback.shimmer.RecipeCardShimmer
-
-/**
- * A generic component that handles common states of a [LazyPagingItems] list.
- * Displays Shimmer for Loading, Error Message for errors, and Empty Message for empty lists.
- *
- * @param T The type of item in the paging list.
- * @param pagingItems The [LazyPagingItems] to observe state from.
- * @param modifier The modifier to be applied to the container.
- * @param loadingContent Composable to display during initial loading (Defaults to 6 Shimmer Cards).
- * @param errorContent Composable to display when an error occurs.
- * @param emptyContent Composable to display when the list loads successfully but is empty.
- * @param content The main Composable to display when there are items (Success state).
- */
 @Composable
 fun <T : Any> HandlePagingState(
     pagingItems: LazyPagingItems<T>,
     modifier: Modifier = Modifier,
     loadingContent: @Composable () -> Unit = {
-        Column {
-            repeat(6) { RecipeCardShimmer() }
-        }
+        Column { repeat(6) { RecipeCardShimmer() } }
     },
     errorContent: @Composable (message: String) -> Unit = { MessageComponent(message = it) },
     emptyContent: @Composable () -> Unit = { MessageComponent(message = stringResource(R.string.search_empty_message)) },

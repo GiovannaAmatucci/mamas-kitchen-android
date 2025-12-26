@@ -21,7 +21,8 @@ fun FadedAsyncImage(
     SubcomposeAsyncImage(
         model = imageUrl,
         contentDescription = contentDescription,
-        contentScale = contentScale, modifier = modifier,
+        contentScale = contentScale,
+        modifier = modifier,
         loading = {
             Box(
                 modifier = Modifier

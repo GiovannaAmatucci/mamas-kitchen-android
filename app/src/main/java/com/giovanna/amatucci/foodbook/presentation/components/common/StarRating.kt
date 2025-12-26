@@ -36,15 +36,14 @@ fun StarRating(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier.semantics(mergeDescendants = true) {
             contentDescription = ratingContentDescription
-        }) {
+        }
+    ) {
         repeat(maxStars) { index ->
             StarIcon(
                 isFilled = index < rating, activeColor = activeColor, inactiveColor = inactiveColor
             )
         }
-
         Spacer(modifier = Modifier.width(AppTheme.dimens.paddingSmall))
-
         Text(
             text = ratingLabel,
             style = MaterialTheme.typography.labelLarge,

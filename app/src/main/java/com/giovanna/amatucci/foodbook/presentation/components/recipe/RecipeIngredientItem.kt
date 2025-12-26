@@ -20,7 +20,8 @@ fun RecipeIngredientItem(
             .padding(horizontal = AppTheme.dimens.paddingLarge)
     ) {
         SectionSubTitle(
-            subTitle = "• ${ingredient.description}", color = MaterialTheme.colorScheme.onSurface
+            subTitle = "• ${ingredient.description}",
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }

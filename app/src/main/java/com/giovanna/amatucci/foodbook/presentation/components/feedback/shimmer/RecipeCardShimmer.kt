@@ -27,8 +27,10 @@ fun RecipeCardShimmer() {
             .fillMaxWidth()
             .height(AppTheme.dimens.recipeCardHeight)
             .padding(
-                vertical = AppTheme.dimens.paddingSmall, horizontal = AppTheme.dimens.paddingSmall
-            ), shape = RoundedCornerShape(AppTheme.dimens.cardCornerRadius),
+                vertical = AppTheme.dimens.paddingSmall,
+                horizontal = AppTheme.dimens.paddingSmall
+            ),
+        shape = RoundedCornerShape(AppTheme.dimens.cardCornerRadius),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -58,7 +60,6 @@ fun RecipeCardShimmer() {
                         .shimmerEffect()
                 )
                 Spacer(modifier = Modifier.height(AppTheme.dimens.paddingMedium))
-
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -67,7 +68,6 @@ fun RecipeCardShimmer() {
                         .shimmerEffect()
                 )
                 Spacer(modifier = Modifier.height(AppTheme.dimens.paddingSmall))
-
                 Box(
                     modifier = Modifier
                         .fillMaxWidth(AppTheme.alphas.medium)

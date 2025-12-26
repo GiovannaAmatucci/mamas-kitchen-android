@@ -24,11 +24,14 @@ import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
 
 @Composable
 fun RecipeCard(
-    recipe: RecipeItem, onClick: () -> Unit, modifier: Modifier = Modifier
+    recipe: RecipeItem,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     recipe.apply {
         AnimatedCard(
-            onClick = onClick, modifier = modifier
+            onClick = onClick,
+            modifier = modifier
                 .fillMaxWidth()
                 .fillMaxSize()
         ) {

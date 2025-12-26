@@ -42,7 +42,6 @@ class SearchViewModel(
             is SearchEvent.UpdateSearchQuery -> {
                 _uiState.update { it.copy(searchQuery = event.query) }
             }
-
             is SearchEvent.SubmitSearch -> handleSearchSubmission(event.query)
             is SearchEvent.RecentSearchClicked -> {
                 _uiState.update {
@@ -58,9 +57,7 @@ class SearchViewModel(
             is SearchEvent.ClearSearchQuery -> _uiState.update { it.copy(searchQuery = "") }
             is SearchEvent.ClearSearchHistory -> clearHistory()
             is SearchEvent.ActiveChanged -> {
-                _uiState.update {
-                    it.copy(isActive = event.active)
-                }
+                _uiState.update { it.copy(isActive = event.active) }
                 if (event.active) fetchSearchHistory()
             }
 
@@ -70,11 +67,7 @@ class SearchViewModel(
 
             SearchEvent.Retry -> {
                 val currentQuery = _uiState.value.submittedQuery
-                if (currentQuery.isNotBlank()) {
-                    performSearch(currentQuery)
-                } else {
-                    initialDataLoad()
-                }
+                if (currentQuery.isNotBlank()) performSearch(currentQuery) else initialDataLoad()
             }
         }
     }
@@ -86,7 +79,6 @@ class SearchViewModel(
         fetchSearchHistory()
         _uiState.update { it.copy(status = ScreenStatus.Success) }
     }
-
     private fun loadCategories() {
         val categoriesList = listOf(
             Category(
@@ -115,7 +107,6 @@ class SearchViewModel(
                 R.drawable.ic_categories_salad
             )
         )
-
         _uiState.update { it.copy(categories = categoriesList) }
     }
 
@@ -129,7 +120,6 @@ class SearchViewModel(
 
     private fun handleSearchSubmission(query: String) {
         _uiState.update { it.copy(submittedQuery = query) }
-
         if (query.isBlank()) {
             _uiState.update {
                 it.copy(submittedQuery = "", recipes = flowOf(PagingData.empty()))
@@ -151,7 +141,6 @@ class SearchViewModel(
             it.copy(recipes = newPagingFlow, isActive = false)
         }
     }
-
     private fun saveQueryToHistory(query: String) = viewModelScope.launch {
         runCatching {
             saveSearchQueryUseCase(query)

@@ -1,4 +1,4 @@
-package com.giovanna.amatucci.foodbook.presentation.components.common
+package com.giovanna.amatucci.foodbook.ui.theme
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -10,16 +10,14 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
-import com.giovanna.amatucci.foodbook.presentation.components.common.BrushGradient.verticalScrim
-import com.giovanna.amatucci.foodbook.ui.theme.LocalAlphaColor
+import com.giovanna.amatucci.foodbook.ui.theme.BrushGradient.verticalScrim
 
 fun Modifier.fadedBottomEdge(
-    startAlpha: Float? = null, endAlpha: Float = 0f
+    startAlpha: Float? = null,
+    endAlpha: Float = 0f
 ): Modifier = composed {
-
     val alphas = LocalAlphaColor.current
     val effectiveStartAlpha = startAlpha ?: alphas.opaque
-
     this
         .graphicsLayer { compositingStrategy = CompositingStrategy.Offscreen }
         .drawWithCache {
@@ -35,7 +33,6 @@ fun Modifier.fadedBottomEdge(
             }
         }
 }
-
 
 fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
     this.clickable(

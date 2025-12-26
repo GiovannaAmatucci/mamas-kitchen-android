@@ -8,9 +8,7 @@ interface ClearSearchHistoryUseCase {
     suspend operator fun invoke()
 }
 
-class ClearSearchHistoryUseCaseImpl(
-    private val repository: SearchRepository
-) : ClearSearchHistoryUseCase {
+class ClearSearchHistoryUseCaseImpl(private val repository: SearchRepository) : ClearSearchHistoryUseCase {
     override suspend fun invoke() = withContext(Dispatchers.IO) {
         repository.clearSearchHistory()
     }

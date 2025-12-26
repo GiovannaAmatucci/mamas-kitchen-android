@@ -30,7 +30,6 @@ fun DetailsRoute(
     viewModel: DetailsViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-
     DetailsScreen(
         state = state,
         onEvent = { onEvent -> viewModel.onEvent(onEvent) },
@@ -48,22 +47,17 @@ private fun DetailsScreen(
     onSearchCategory: (String) -> Unit
 ) {
     state.apply {
-        BlurredBackground(
-            imageUrl = currentImageUrl, modifier = Modifier.fillMaxSize()
-        ) {
-            Box(
-                modifier = Modifier.fillMaxSize()
-            ) {
+        BlurredBackground(imageUrl = currentImageUrl, modifier = Modifier.fillMaxSize()) {
+            Box(modifier = Modifier.fillMaxSize()) {
                 DetailsScreenContent(
                     modifier = Modifier,
                     status = status,
                     recipe = recipe,
                     onImageDisplayed = { imageUrl ->
-                        imageUrl?.let { onEvent(DetailsEvent.OnImageChange(it)) }
+                        imageUrl?.let { onEvent(DetailsEvent.OnImageChange(imageUrl)) }
                     },
                     onCategoryClick = onSearchCategory
                 )
-
                 DetailsTopBar(
                     onNavigateBack = onNavigateBack,
                     onEvent = onEvent,

@@ -10,6 +10,5 @@ interface GetFavoritesUseCase {
 }
 
 class GetFavoritesUseCaseImpl(private val repository: FavoritesRepository) : GetFavoritesUseCase {
-    override operator fun invoke(query: String): Flow<PagingData<RecipeItem>> =
-        repository.getFavorites(query)
+    override operator fun invoke(query: String): Flow<PagingData<RecipeItem>> = repository.getFavorites(query)
 }

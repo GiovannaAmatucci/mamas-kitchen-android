@@ -36,7 +36,6 @@ fun FavoritesScreen(
             onNavigateToRecipe = onNavigateToRecipe,
             hasAnyFavorite = hasAnyFavorite
         )
-
         if (showConfirmDeleteAllDialog) {
             DeleteAllFavoritesDialog(
                 onConfirm = { onEvent(FavoritesEvent.ConfirmDeleteAll) },

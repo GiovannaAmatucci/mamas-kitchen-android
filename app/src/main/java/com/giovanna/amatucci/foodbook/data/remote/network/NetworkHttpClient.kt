@@ -90,7 +90,6 @@ class NetworkHttpClientImpl(
                                     )
                                     return@withLock BearerTokens(validToken, "")
                                 }
-
                                 logWriter.w(TAG.NETWORK_HTTP_CLIENT, LogMessages.KTOR_LOAD_FAILURE)
                                 return@withLock fetchAndSaveNewToken()
                             }

@@ -88,7 +88,6 @@ fun DetailsScreenShimmer() {
                 }
             }
         }
-
         Spacer(modifier = Modifier.height(AppTheme.dimens.paddingMedium))
         SectionTitleShimmer()
         repeat(4) {
@@ -104,7 +103,6 @@ fun DetailsScreenShimmer() {
                     .shimmerEffect()
             )
         }
-
         Spacer(modifier = Modifier.height(AppTheme.dimens.paddingMedium))
         SectionTitleShimmer()
         repeat(3) {

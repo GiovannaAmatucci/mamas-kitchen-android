@@ -19,9 +19,7 @@ fun NetworkErrorComponent(
         imageRes = R.drawable.ic_no_internet,
         modifier = modifier,
         action = {
-            Button(onClick = onRetry) {
-                Text(stringResource(R.string.common_button_retry))
-            }
+            Button(onClick = onRetry) { Text(stringResource(R.string.common_button_retry)) }
         }
     )
 }

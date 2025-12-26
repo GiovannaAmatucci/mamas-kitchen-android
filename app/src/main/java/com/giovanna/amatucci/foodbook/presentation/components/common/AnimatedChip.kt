@@ -23,6 +23,7 @@ import androidx.compose.ui.semantics.semantics
 import com.giovanna.amatucci.foodbook.domain.model.Category
 import com.giovanna.amatucci.foodbook.presentation.components.image.IconImage
 import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
+import com.giovanna.amatucci.foodbook.ui.theme.noRippleClickable
 
 @Composable
 fun AnimatedChip(
@@ -36,12 +37,12 @@ fun AnimatedChip(
             if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
         val elevation = if (isSelected) cardElevation else cardElevationPressed
         val width by animateDpAsState(
-            targetValue = targetWidth, animationSpec = spring(stiffness = Spring.StiffnessLow)
+            targetValue = targetWidth,
+            animationSpec = spring(stiffness = Spring.StiffnessLow)
         )
         val backgroundColor by animateColorAsState(
             targetValue = targetColor
         )
-
         Surface(
             modifier = Modifier
                 .height(categoryCardHeight)
@@ -61,9 +62,10 @@ fun AnimatedChip(
                     imageRes = category.imageRes,
                     iconSize = categoryIconSize,
                 )
-
                 ChipText(
-                    isVisible = isSelected, textRes = category.title, textColor = contentColor
+                    isVisible = isSelected,
+                    textRes = category.title,
+                    textColor = contentColor
                 )
             }
         }

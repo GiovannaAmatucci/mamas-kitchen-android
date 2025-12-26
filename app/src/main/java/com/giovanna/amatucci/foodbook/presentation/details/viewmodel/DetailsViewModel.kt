@@ -65,14 +65,12 @@ class DetailsViewModel(
     private fun loadRecipeData(id: String) = viewModelScope.launch {
         _uiState.update { it.copy(status = ScreenStatus.Loading) }
         val localRecipe = runCatching { getFavoritesDetailsUseCase(id) }.getOrNull()
-
         if (localRecipe != null) {
             onRecipeLoaded(localRecipe)
             return@launch
         }
         fetchRemoteDetails(id)
     }
-
     private suspend fun fetchRemoteDetails(id: String) {
         getRecipeDetailsUseCase(id).let { result ->
             when (result) {
@@ -110,7 +108,6 @@ class DetailsViewModel(
         val currentState = _uiState.value
         val recipe = currentState.recipe ?: return@launch
         val validId = recipe.id.takeIf { !it.isNullOrBlank() } ?: return@launch
-
         runCatching {
             if (currentState.isFavorite == true) {
                 removeFavoritesUseCase(validId)

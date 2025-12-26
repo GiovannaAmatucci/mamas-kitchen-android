@@ -19,7 +19,8 @@ import com.giovanna.amatucci.foodbook.util.shimmerEffect
 @Composable
 fun CategorySectionShimmer() {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Box(
             modifier = Modifier

@@ -10,7 +10,8 @@ import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 
 class RecipesMapper {
-    fun searchRecipeDtoToDomain(searchDto: RecipeSearch): RecipeItem = RecipeItem(
+    fun searchRecipeDtoToDomain(searchDto: RecipeSearch): RecipeItem =
+        RecipeItem(
         id = searchDto.recipeId.toLong(),
         name = searchDto.recipeName,
         description = searchDto.recipeDescription,
@@ -30,21 +31,26 @@ class RecipesMapper {
                 ingredientDtoToDomain(
                     ingredient
                 )
-            }
-                ?: emptyList(),
+            } ?: emptyList(),
             directions = recipeDto?.directions?.direction?.map { direction ->
                 directionDtoToDomain(
                     direction
                 )
-            }
-                ?: emptyList(),
+            } ?: emptyList(),
             categories = recipeDto?.recipeCategories?.recipeCategory?.map { categories -> categories.recipeCategoryName }
                 ?: emptyList(),
-            rating = recipeDto?.rating?.toIntOrNull())
-    private fun ingredientDtoToDomain(ingredientDto: Ingredient): IngredientInfo = IngredientInfo(
-        description = ingredientDto.ingredientDescription, foodName = ingredientDto.foodName
+            rating = recipeDto?.rating?.toIntOrNull()
+        )
+
+    private fun ingredientDtoToDomain(ingredientDto: Ingredient): IngredientInfo =
+        IngredientInfo(
+            description = ingredientDto.ingredientDescription,
+            foodName = ingredientDto.foodName
     )
-    private fun directionDtoToDomain(directionDto: Direction): DirectionInfo = DirectionInfo(
-        number = directionDto.directionNumber, description = directionDto.directionDescription
+
+    private fun directionDtoToDomain(directionDto: Direction): DirectionInfo =
+        DirectionInfo(
+            number = directionDto.directionNumber,
+            description = directionDto.directionDescription
     )
 }

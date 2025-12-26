@@ -69,11 +69,11 @@ class FavoritesViewModel(
         }
     }
     private fun initializeSearchFlow() {
-        val recipesFlow = _uiState.map { it.searchQuery }.distinctUntilChanged()
-            .debounce(FAVORITE_DEBOUNCE).flatMapLatest { query ->
-                getFavoritesUseCase(query)
-            }.cachedIn(viewModelScope)
-
+        val recipesFlow = _uiState.map { it.searchQuery }
+            .distinctUntilChanged()
+            .debounce(FAVORITE_DEBOUNCE)
+            .flatMapLatest { query -> getFavoritesUseCase(query) }
+            .cachedIn(viewModelScope)
         _uiState.update { it.copy(recipes = recipesFlow) }
     }
 

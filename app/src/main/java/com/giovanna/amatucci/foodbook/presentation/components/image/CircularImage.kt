@@ -32,7 +32,7 @@ fun CircularImage(
             .background(
                 color = MaterialTheme.colorScheme.surface.copy(alpha = AppTheme.alphas.disabled),
                 shape = CircleShape
-            ),
+            )
     ) {
         Image(
             painter = painterResource(id = imageRes),

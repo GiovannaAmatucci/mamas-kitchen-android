@@ -33,10 +33,7 @@ fun SearchScreenShimmer() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Spacer(modifier = Modifier.width(AppTheme.dimens.paddingExtraSmall))
-
-            repeat(5) {
-                CategorySectionShimmer()
-            }
+            repeat(5) { CategorySectionShimmer() }
         }
         Box(
             modifier = Modifier
@@ -49,15 +46,12 @@ fun SearchScreenShimmer() {
                 .clip(MaterialTheme.shapes.small)
                 .shimmerEffect()
         )
-
         Spacer(modifier = Modifier.height(AppTheme.dimens.paddingMedium))
         Column(
             modifier = Modifier.padding(horizontal = AppTheme.dimens.paddingMedium),
             verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.paddingMedium)
         ) {
-            repeat(3) {
-                HeroCardShimmer()
-            }
+            repeat(3) { HeroCardShimmer() }
         }
     }
 }

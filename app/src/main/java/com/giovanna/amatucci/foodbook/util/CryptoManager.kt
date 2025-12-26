@@ -11,7 +11,6 @@ import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
 class CryptographyManager {
-
     private val keyStore = KeyStore.getInstance(KeyStoreConstants.ANDROID_KEYSTORE).apply {
         load(null)
     }
@@ -25,11 +24,11 @@ class CryptographyManager {
         val keyGenerator = KeyGenerator.getInstance(
             KeyStoreConstants.ENCRYPTION_ALGORITHM, KeyStoreConstants.ANDROID_KEYSTORE
         )
-
         val keyGenSpec = KeyGenParameterSpec.Builder(
             KeyStoreConstants.KEY_STORE_ALIAS,
             KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
-        ).setBlockModes(KeyStoreConstants.BLOCK_MODE)
+        )
+            .setBlockModes(KeyStoreConstants.BLOCK_MODE)
             .setEncryptionPaddings(KeyStoreConstants.PADDING).setKeySize(256)
             .setUserAuthenticationRequired(false).build()
 
@@ -41,7 +40,6 @@ class CryptographyManager {
         val cipher = Cipher.getInstance(KeyStoreConstants.TRANSFORMATION)
         val secretKey = getOrCreateSecretKey()
         cipher.init(Cipher.ENCRYPT_MODE, secretKey)
-
         val iv = cipher.iv
         val encryptedData = cipher.doFinal(data?.toByteArray(Charset.defaultCharset()))
 
@@ -51,12 +49,10 @@ class CryptographyManager {
     fun decrypt(iv: ByteArray, encryptedData: ByteArray): String {
         val cipher = Cipher.getInstance(KeyStoreConstants.TRANSFORMATION)
         val secretKey = getOrCreateSecretKey()
-
         val spec = GCMParameterSpec(KeyStoreConstants.GCM_TAG_LENGTH_BITS, iv)
         cipher.init(Cipher.DECRYPT_MODE, secretKey, spec)
 
         val decryptedData = cipher.doFinal(encryptedData)
-
         return String(decryptedData, Charset.defaultCharset())
     }
 }

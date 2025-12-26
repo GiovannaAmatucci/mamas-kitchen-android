@@ -88,11 +88,14 @@ val networkModule = module {
 }
 val databaseModule = module {
     single(createdAtStart = true) {
-        Room.databaseBuilder(
-            androidContext(),
-            AppDatabase::class.java,
-            KeyStoreConstants.KEY_STORE_ALIAS
-        ).fallbackToDestructiveMigration(true).build()
+        Room
+            .databaseBuilder(
+                androidContext(),
+                AppDatabase::class.java,
+                KeyStoreConstants.KEY_STORE_ALIAS
+            )
+            .fallbackToDestructiveMigration(true)
+            .build()
     }
     single { get<AppDatabase>().accessTokenDao() }
     single { get<AppDatabase>().searchDao() }

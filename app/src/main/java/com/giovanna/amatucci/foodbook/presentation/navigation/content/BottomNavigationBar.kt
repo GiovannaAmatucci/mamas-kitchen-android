@@ -19,13 +19,10 @@ import com.giovanna.amatucci.foodbook.R
 internal sealed class MainScreenNavTab(
     val titleResId: Int, val icon: ImageVector
 ) {
-    data object Search : MainScreenNavTab(
-        titleResId = R.string.search_screen_title, icon = Icons.Default.Search
-    )
+    data object Search :
+        MainScreenNavTab(titleResId = R.string.search_screen_title, icon = Icons.Default.Search)
 
-    data object Favorites : MainScreenNavTab(
-        titleResId = R.string.favorites_screen_title, icon = Icons.Default.Favorite
-    )
+    data object Favorites : MainScreenNavTab(titleResId = R.string.favorites_screen_title, icon = Icons.Default.Favorite)
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -35,10 +32,11 @@ fun BottomNavigationBar(
 ) {
     val tabs = listOf(MainScreenNavTab.Search, MainScreenNavTab.Favorites)
 
-    NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
+    NavigationBar(
+        containerColor = MaterialTheme.colorScheme.surface
+    ) {
         tabs.forEachIndexed { index, tab ->
             val isSelected = pagerState.currentPage == index
-
             NavigationBarItem(
                 label = { Text(text = stringResource(id = tab.titleResId)) },
                 icon = {

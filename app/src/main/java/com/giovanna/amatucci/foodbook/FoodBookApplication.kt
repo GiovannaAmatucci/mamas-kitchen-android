@@ -14,11 +14,13 @@ class FoodBookApplication : Application() {
         setupKoin()
         setupTimber()
     }
+
     private fun setupTimber() {
         if (BuildConfig.DEBUG_MODE) {
             Timber.plant(Timber.DebugTree())
         }
     }
+
     private fun setupKoin() {
         startKoin {
             if (BuildConfig.DEBUG_MODE) androidLogger(Level.DEBUG) else androidLogger(Level.NONE)

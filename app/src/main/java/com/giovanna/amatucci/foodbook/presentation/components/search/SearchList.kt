@@ -23,17 +23,19 @@ fun SearchList(
     recipes: LazyPagingItems<RecipeItem>,
     onRecipeClick: (String) -> Unit,
 ) {
-    HandlePagingState(pagingItems = recipes, emptyContent = {
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            MessageComponent(stringResource(R.string.search_empty_message, searchQuery))
-        }
-    }, errorContent = {
-        Box(
-            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
-        ) {
+    HandlePagingState(
+        pagingItems = recipes,
+        emptyContent = {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                MessageComponent(stringResource(R.string.search_empty_message, searchQuery))
+            }
+        },
+        errorContent = {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             NetworkErrorComponent(onRetry = { recipes.retry() })
+            }
         }
-    }) { loadedRecipes ->
+    ) { loadedRecipes ->
         RecipeGridList(
             recipes = loadedRecipes, onRecipeClick = onRecipeClick
         )

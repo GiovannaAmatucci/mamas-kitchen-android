@@ -12,13 +12,14 @@ import com.giovanna.amatucci.foodbook.util.constants.RepositoryConstants
 import com.giovanna.amatucci.foodbook.util.constants.TAG
 
 class RecipePagingSource(
-    private val api: FatSecretRecipeApi, private val mapper: RecipesMapper,
-    private val query: String, private val logWriter: LogWriter
+    private val api: FatSecretRecipeApi,
+    private val mapper: RecipesMapper,
+    private val query: String,
+    private val logWriter: LogWriter
 ) : PagingSource<Int, RecipeItem>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RecipeItem> {
         val position = params.key ?: RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX
         val maxResults = params.loadSize
-
         return try {
             api.searchRecipes(query, position, maxResults).let { apiResult ->
                 when (apiResult) {
