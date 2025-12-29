@@ -15,7 +15,9 @@ import com.giovanna.amatucci.foodbook.util.constants.LogMessages
 import com.giovanna.amatucci.foodbook.util.constants.RepositoryConstants
 import com.giovanna.amatucci.foodbook.util.constants.TAG
 import kotlinx.coroutines.flow.Flow
+import org.koin.core.annotation.Single
 
+@Single(binds = [RecipeRepository::class])
 class RecipeRepositoryImpl(
     private val api: FatSecretRecipeApi,
     private val mapper: RecipesMapper,

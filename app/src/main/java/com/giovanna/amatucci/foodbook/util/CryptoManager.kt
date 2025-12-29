@@ -4,12 +4,13 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import com.giovanna.amatucci.foodbook.util.constants.KeyStoreConstants
 import io.ktor.utils.io.charsets.Charset
+import org.koin.core.annotation.Single
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
-
+@Single
 class CryptographyManager {
     private val keyStore = KeyStore.getInstance(KeyStoreConstants.ANDROID_KEYSTORE).apply {
         load(null)

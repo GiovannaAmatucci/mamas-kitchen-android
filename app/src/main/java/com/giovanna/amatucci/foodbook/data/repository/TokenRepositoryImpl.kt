@@ -10,8 +10,9 @@ import com.giovanna.amatucci.foodbook.util.constants.LogMessages
 import com.giovanna.amatucci.foodbook.util.constants.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Single
 import java.util.Date
-
+@Single(binds = [TokenRepository::class])
 class TokenRepositoryImpl(
     private val dao: AccessTokenDao,
     private val cryptoManager: CryptographyManager,

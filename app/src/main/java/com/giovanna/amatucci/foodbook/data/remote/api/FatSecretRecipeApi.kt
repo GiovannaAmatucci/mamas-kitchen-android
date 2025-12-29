@@ -12,6 +12,7 @@ import com.giovanna.amatucci.foodbook.util.constants.TAG.FAT_SECRET_RECIPE_API
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import org.koin.core.annotation.Single
 
 interface FatSecretRecipeApi {
     suspend fun searchRecipes(
@@ -22,7 +23,7 @@ interface FatSecretRecipeApi {
 
     suspend fun getRecipeDetails(id: String?): ResultWrapper<RecipeResponse>
 }
-
+@Single(binds = [FatSecretRecipeApi::class])
 class FatSecretRecipeApiImpl(
     private val client: NetworkHttpClient,
     logWriter: LogWriter

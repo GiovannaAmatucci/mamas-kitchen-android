@@ -8,7 +8,9 @@ import com.giovanna.amatucci.foodbook.domain.model.DirectionInfo
 import com.giovanna.amatucci.foodbook.domain.model.IngredientInfo
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
+import org.koin.core.annotation.Single
 
+@Single
 class RecipesMapper {
     fun searchRecipeDtoToDomain(searchDto: RecipeSearch): RecipeItem =
         RecipeItem(

@@ -10,6 +10,10 @@ import com.giovanna.amatucci.foodbook.data.local.model.SearchEntity
 interface SearchDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSearch(search: SearchEntity)
-    @Query("SELECT * FROM searchEntity")
-    suspend fun getSearchHistory(): SearchEntity?
+
+    @Query("SELECT query_text FROM searchEntity ORDER BY timestamp_millis DESC LIMIT :limit")
+    suspend fun getRecentQueries(limit: Int = 5): List<String>
+
+    @Query("DELETE FROM searchEntity")
+    suspend fun clearHistory()
 }

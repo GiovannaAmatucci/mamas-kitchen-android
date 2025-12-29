@@ -5,25 +5,20 @@ import com.giovanna.amatucci.foodbook.data.local.model.SearchEntity
 import com.giovanna.amatucci.foodbook.domain.repository.SearchRepository
 import com.giovanna.amatucci.foodbook.util.LogWriter
 import com.giovanna.amatucci.foodbook.util.constants.LogMessages
-import com.giovanna.amatucci.foodbook.util.constants.RepositoryConstants
 import com.giovanna.amatucci.foodbook.util.constants.TAG
+import org.koin.core.annotation.Single
 
+@Single(binds = [SearchRepository::class])
 class SearchRepositoryImpl(
     private val dao: SearchDao, private val logWriter: LogWriter
 ) : SearchRepository {
     override suspend fun saveSearchQuery(query: String) {
         try {
             if (query.isNotBlank()) {
-                dao.getSearchHistory().let { currentHistory ->
-                    val oldQueries = currentHistory?.queries?.toMutableList() ?: mutableListOf()
-
-                    oldQueries.remove(query)
-                    oldQueries.add(RepositoryConstants.SEARCH_REPOSITORY_OLD_QUERY_ADD_INDEX, query)
-
-                    val newQueries = oldQueries.take(RepositoryConstants.SEARCH_REPOSITORY_NEW_QUERY_TAKE)
-                    val newHistory = SearchEntity(id = currentHistory?.id ?: 0, queries = newQueries)
-                    dao.insertSearch(newHistory)
-                }
+                val entity = SearchEntity(
+                    query = query, timestamp = System.currentTimeMillis()
+                )
+                dao.insertSearch(entity)
             }
         } catch (e: Exception) {
             logWriter.w(
@@ -34,15 +29,9 @@ class SearchRepositoryImpl(
         }
     }
 
-    override suspend fun getSearchQueries(): List<String> {
+    override suspend fun getSearchQueries(limit: Int): List<String> {
         return try {
-            dao.getSearchHistory().let { currentHistory ->
-                if (currentHistory?.queries.isNullOrEmpty()) {
-                    emptyList()
-                } else {
-                    currentHistory.queries
-                }
-            }
+            dao.getRecentQueries(limit)
         } catch (e: Exception) {
             logWriter.w(TAG.SEARCH_REPOSITORY, LogMessages.GET_QUERIES_FAILURE, e)
             emptyList()
@@ -51,10 +40,7 @@ class SearchRepositoryImpl(
 
     override suspend fun clearSearchHistory() {
         try {
-            dao.getSearchHistory().let { currentHistory ->
-                val emptyHistory = SearchEntity(id = currentHistory?.id ?: 0, queries = emptyList())
-                dao.insertSearch(emptyHistory)
-            }
+            dao.clearHistory()
         } catch (e: Exception) {
             logWriter.w(TAG.SEARCH_REPOSITORY, LogMessages.CLEAR_HISTORY_FAILURE, e)
         }
