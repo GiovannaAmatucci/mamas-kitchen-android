@@ -22,7 +22,7 @@ class GetSearchQueriesUseCaseImplTest {
     @MockK
     lateinit var searchRepository: SearchRepository
 
-    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
+    private val testDispatcher = UnconfinedTestDispatcher()
     private lateinit var getSearchQueriesUseCase: GetSearchQueriesUseCase
 
     @Before
@@ -38,13 +38,16 @@ class GetSearchQueriesUseCaseImplTest {
     }
 
     @Test
-    fun `GetSearchQueriesUseCase SHOULD call repository getSearchQueries`() = runTest {
+    fun `invoke SHOULD return list from repository with correct limit`() = runTest {
+        // Arrange
         val expectedList = listOf("pizza", "burger")
-        coEvery { searchRepository.getSearchQueries() } returns expectedList
+        coEvery { searchRepository.getSearchQueries(any()) } returns expectedList
 
+        // Act
         val result = getSearchQueriesUseCase()
 
+        // Assert
         assertEquals(expectedList, result)
-        coVerify(exactly = 1) { searchRepository.getSearchQueries() }
+        coVerify(exactly = 1) { searchRepository.getSearchQueries(5) }
     }
 }
