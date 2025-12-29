@@ -17,10 +17,10 @@ class RecipePagingSource(
     private val query: String,
     private val logWriter: LogWriter
 ) : PagingSource<Int, RecipeItem>() {
+    private val index = RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RecipeItem> {
         val position = params.key ?: RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX
         val maxResults = params.loadSize
-        val index = RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX
         return try {
             api.searchRecipes(query, position, maxResults).let { apiResult ->
                 when (apiResult) {
@@ -43,8 +43,9 @@ class RecipePagingSource(
                     }
 
                     is ResultWrapper.Exception -> {
-                        val msg = LogMessages.PAGING_LOAD_API_EXCEPTION
-                            .format(apiResult.exception.message)
+                        val msg = LogMessages.PAGING_LOAD_API_EXCEPTION.format(
+                            apiResult.exception.message
+                        )
                         logWriter.e(TAG.RECIPE_PAGING_SOURCE, msg)
                         LoadResult.Error(apiResult.exception)
                     }
@@ -57,13 +58,9 @@ class RecipePagingSource(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, RecipeItem>): Int? {
-        return state.anchorPosition?.let { anchorPosition ->
-            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(
-                RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX
-            ) ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(
-                RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX
-            )
+    override fun getRefreshKey(state: PagingState<Int, RecipeItem>): Int? =
+        state.anchorPosition?.let { anchorPosition ->
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(index)
+                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(index)
         }
-    }
 }

@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.itemKey
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
 import com.giovanna.amatucci.foodbook.presentation.components.cards.RecipeCard
 import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
@@ -22,9 +21,8 @@ fun RecipeGridList(
         verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.paddingSmall)
     ) {
         items(
-            count = recipes.itemCount, key = recipes.itemKey { recipe ->
-                recipe.id ?: recipe.hashCode()
-            }
+            count = recipes.itemCount,
+            key = { index -> index }
         ) { index ->
             val recipe = recipes[index]
             if (recipe != null) {

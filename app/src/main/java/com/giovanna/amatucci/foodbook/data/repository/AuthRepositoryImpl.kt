@@ -45,7 +45,7 @@ class AuthRepositoryImpl(
                     is ResultWrapper.Error, is ResultWrapper.Exception -> {
                         logWriter.e(
                             TAG.AUTH_REPOSITORY,
-                            message = LogMessages.AUTH_TOKEN_FAILURE.format(apiResult.toString())
+                            message = LogMessages.AUTH_TOKEN_FAILURE.format(apiResult)
                         )
                         apiResult
                     }
