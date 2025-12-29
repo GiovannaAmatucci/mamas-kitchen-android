@@ -8,6 +8,7 @@ import org.koin.core.annotation.Factory
 interface GetRecentFavoritesUseCase {
     operator fun invoke(): Flow<List<RecipeItem>>
 }
+
 @Factory(binds = [GetRecentFavoritesUseCase::class])
 class GetRecentFavoritesUseCaseImpl(private val repository: FavoritesRepository) : GetRecentFavoritesUseCase {
     override fun invoke(): Flow<List<RecipeItem>> = repository.getLastFavorites()

@@ -6,6 +6,7 @@ import org.koin.core.annotation.Factory
 interface SaveSearchQueryUseCase {
     suspend operator fun invoke(query: String)
 }
+
 @Factory(binds = [SaveSearchQueryUseCase::class])
 class SaveSearchQueryUseCaseImpl(private val repository: SearchRepository) : SaveSearchQueryUseCase {
     override suspend fun invoke(query: String) {

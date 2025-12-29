@@ -21,6 +21,7 @@ import org.koin.core.annotation.Single
 interface AuthApi {
     suspend fun getAccessToken(): ResultWrapper<TokenResponse>
 }
+
 @Single(binds = [AuthApi::class])
 class AuthApiImpl(
     logWriter: LogWriter, private val client: TokenHttpClient

@@ -9,6 +9,7 @@ import org.koin.core.annotation.Factory
 interface GetFavoritesUseCase {
     operator fun invoke(query: String): Flow<PagingData<RecipeItem>>
 }
+
 @Factory(binds = [GetFavoritesUseCase::class])
 class GetFavoritesUseCaseImpl(private val repository: FavoritesRepository) : GetFavoritesUseCase {
     override operator fun invoke(query: String): Flow<PagingData<RecipeItem>> = repository.getFavorites(query)

@@ -6,6 +6,7 @@ import org.koin.core.annotation.Factory
 interface GetSearchQueriesUseCase {
     suspend operator fun invoke(): List<String>
 }
+
 @Factory(binds = [GetSearchQueriesUseCase::class])
 class GetSearchQueriesUseCaseImpl(private val repository: SearchRepository) : GetSearchQueriesUseCase {
     private companion object {

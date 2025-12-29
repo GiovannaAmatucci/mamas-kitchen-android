@@ -8,6 +8,7 @@ import org.koin.core.annotation.Factory
 interface CheckAuthenticationStatusUseCase {
     suspend operator fun invoke(): Boolean
 }
+
 @Factory(binds = [CheckAuthenticationStatusUseCase::class])
 class CheckAuthenticationStatusUseCaseImpl(
     private val tokenRepository: TokenRepository

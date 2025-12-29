@@ -39,7 +39,9 @@ class RecipesMapper {
                     direction
                 )
             } ?: emptyList(),
-            categories = recipeDto?.recipeCategories?.recipeCategory?.map { categories -> categories.recipeCategoryName }
+            categories = recipeDto?.recipeCategories?.recipeCategory?.map { categories ->
+                categories.recipeCategoryName
+            }
                 ?: emptyList(),
             rating = recipeDto?.rating?.toIntOrNull()
         )

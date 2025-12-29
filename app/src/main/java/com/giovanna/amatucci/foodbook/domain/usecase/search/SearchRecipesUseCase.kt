@@ -9,6 +9,7 @@ import org.koin.core.annotation.Factory
 interface SearchRecipesUseCase {
     suspend operator fun invoke(query: String): Flow<PagingData<RecipeItem>>
 }
+
 @Factory(binds = [SearchRecipesUseCase::class])
 class SearchRecipesUseCaseImpl(private val repository: RecipeRepository, ) : SearchRecipesUseCase {
     override suspend operator fun invoke(query: String): Flow<PagingData<RecipeItem>> {

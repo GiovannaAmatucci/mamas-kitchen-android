@@ -23,6 +23,7 @@ interface FatSecretRecipeApi {
 
     suspend fun getRecipeDetails(id: String?): ResultWrapper<RecipeResponse>
 }
+
 @Single(binds = [FatSecretRecipeApi::class])
 class FatSecretRecipeApiImpl(
     private val client: NetworkHttpClient,
@@ -34,7 +35,13 @@ class FatSecretRecipeApiImpl(
         pageNumber: Int,
         maxResult: Int
     ): ResultWrapper<SearchResponse> {
-        logWriter.d(tag, API_RECIPE_SEARCH.format(expression, pageNumber, maxResult))
+        logWriter.d(
+            tag, API_RECIPE_SEARCH.format(
+                expression,
+                pageNumber,
+                maxResult
+            )
+        )
         return safeApiCall {
             client().get(ApiConstants.Methods.REST_RECIPES_SEARCH_V3) {
                 parameter(ApiConstants.Params.METHOD, ApiConstants.Methods.RECIPES_SEARCH)

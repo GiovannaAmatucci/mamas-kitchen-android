@@ -6,6 +6,7 @@ import org.koin.core.annotation.Factory
 interface ClearSearchHistoryUseCase {
     suspend operator fun invoke()
 }
+
 @Factory(binds = [ClearSearchHistoryUseCase::class])
 class ClearSearchHistoryUseCaseImpl(private val repository: SearchRepository) : ClearSearchHistoryUseCase {
     override suspend fun invoke() = repository.clearSearchHistory()

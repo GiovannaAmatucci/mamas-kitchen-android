@@ -8,10 +8,10 @@ import org.koin.core.annotation.Factory
 interface GetRecipeDetailsUseCase {
     suspend operator fun invoke(id: String): ResultWrapper<RecipeDetails>
 }
+
 @Factory(binds = [GetRecipeDetailsUseCase::class])
 class GetRecipeDetailsUseCaseImpl(private val repository: RecipeRepository) : GetRecipeDetailsUseCase {
-    override suspend operator fun invoke(id: String): ResultWrapper<RecipeDetails> {
-        return repository.getRecipeDetails(id)
-    }
+    override suspend operator fun invoke(id: String): ResultWrapper<RecipeDetails> =
+        repository.getRecipeDetails(id)
 }
 

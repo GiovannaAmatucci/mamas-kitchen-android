@@ -10,6 +10,7 @@ import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
+
 @Single
 class CryptographyManager {
     private val keyStore = KeyStore.getInstance(KeyStoreConstants.ANDROID_KEYSTORE).apply {
