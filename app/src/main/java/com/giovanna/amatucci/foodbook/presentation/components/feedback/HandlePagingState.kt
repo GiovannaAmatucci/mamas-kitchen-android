@@ -11,6 +11,7 @@ import androidx.paging.compose.LazyPagingItems
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.presentation.components.common.MessageComponent
 import com.giovanna.amatucci.foodbook.presentation.components.feedback.shimmer.RecipeCardShimmer
+
 @Composable
 fun <T : Any> HandlePagingState(
     pagingItems: LazyPagingItems<T>,

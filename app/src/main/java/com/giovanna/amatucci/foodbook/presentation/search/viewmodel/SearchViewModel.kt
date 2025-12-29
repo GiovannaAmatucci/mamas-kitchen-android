@@ -14,15 +14,15 @@ import com.giovanna.amatucci.foodbook.domain.usecase.search.SearchRecipesUseCase
 import com.giovanna.amatucci.foodbook.presentation.ScreenStatus
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchEvent
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchUiState
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@KoinViewModel
 class SearchViewModel(
     private val searchRecipesUseCase: SearchRecipesUseCase,
     private val saveSearchQueryUseCase: SaveSearchQueryUseCase,
@@ -30,6 +30,7 @@ class SearchViewModel(
     private val clearSearchHistoryUseCase: ClearSearchHistoryUseCase,
     private val getRecentFavoritesUseCase: GetRecentFavoritesUseCase
 ) : ViewModel() {
+
     private val _uiState = MutableStateFlow(SearchUiState())
     val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
 
@@ -53,18 +54,15 @@ class SearchViewModel(
                 }
                 performSearch(event.query)
             }
-
             is SearchEvent.ClearSearchQuery -> _uiState.update { it.copy(searchQuery = "") }
             is SearchEvent.ClearSearchHistory -> clearHistory()
             is SearchEvent.ActiveChanged -> {
                 _uiState.update { it.copy(isActive = event.active) }
                 if (event.active) fetchSearchHistory()
             }
-
             is SearchEvent.SearchTabSwitched -> {
                 _uiState.update { it.copy(shouldScrollToSearchTab = false) }
             }
-
             SearchEvent.Retry -> {
                 val currentQuery = _uiState.value.submittedQuery
                 if (currentQuery.isNotBlank()) performSearch(currentQuery) else initialDataLoad()
@@ -79,8 +77,74 @@ class SearchViewModel(
         fetchSearchHistory()
         _uiState.update { it.copy(status = ScreenStatus.Success) }
     }
+
     private fun loadCategories() {
-        val categoriesList = listOf(
+        _uiState.update { it.copy(categories = STATIC_CATEGORIES) }
+    }
+
+    private fun fetchLastFavorites() {
+        viewModelScope.launch {
+            getRecentFavoritesUseCase().collect { favorites ->
+                _uiState.update { it.copy(lastFavorites = favorites) }
+            }
+        }
+    }
+
+    private fun handleSearchSubmission(query: String) {
+        if (query.isBlank()) {
+            _uiState.update {
+                it.copy(
+                    submittedQuery = "", recipes = flowOf(PagingData.empty())
+                )
+            }
+        } else {
+            performSearch(query)
+            _uiState.update {
+                it.copy(
+                    submittedQuery = query, shouldScrollToSearchTab = true
+                )
+            }
+        }
+    }
+
+    private fun performSearch(query: String) {
+        triggerSearchFlow(query)
+        saveQueryToHistory(query)
+    }
+
+    private fun triggerSearchFlow(query: String) = viewModelScope.launch {
+        val newPagingFlow = searchRecipesUseCase(query).cachedIn(viewModelScope)
+        _uiState.update {
+            it.copy(recipes = newPagingFlow, isActive = false)
+        }
+    }
+
+    private fun saveQueryToHistory(query: String) = viewModelScope.launch {
+        runCatching {
+            saveSearchQueryUseCase(query)
+            fetchSearchHistory()
+        }
+    }
+
+    private fun fetchSearchHistory() {
+        viewModelScope.launch {
+            runCatching { getSearchQueriesUseCase() }.onSuccess { history ->
+                _uiState.update { it.copy(searchHistory = history) }
+            }
+        }
+    }
+
+    private fun clearHistory() {
+        viewModelScope.launch {
+            runCatching {
+                clearSearchHistoryUseCase()
+                fetchSearchHistory()
+            }
+        }
+    }
+
+    companion object {
+        private val STATIC_CATEGORIES = listOf(
             Category(
                 R.string.search_categories_burguer,
                 R.string.search_categories_burguer,
@@ -107,59 +171,5 @@ class SearchViewModel(
                 R.drawable.ic_categories_salad
             )
         )
-        _uiState.update { it.copy(categories = categoriesList) }
-    }
-
-    private fun fetchLastFavorites() {
-        viewModelScope.launch {
-            getRecentFavoritesUseCase().collect { favorites ->
-                _uiState.update { it.copy(lastFavorites = favorites) }
-            }
-        }
-    }
-
-    private fun handleSearchSubmission(query: String) {
-        _uiState.update { it.copy(submittedQuery = query) }
-        if (query.isBlank()) {
-            _uiState.update {
-                it.copy(submittedQuery = "", recipes = flowOf(PagingData.empty()))
-            }
-        } else {
-            performSearch(query)
-            _uiState.update { it.copy(shouldScrollToSearchTab = true) }
-        }
-    }
-
-    private fun performSearch(query: String) {
-        triggerSearchFlow(query)
-        saveQueryToHistory(query)
-    }
-
-    private fun triggerSearchFlow(query: String) = viewModelScope.launch {
-        val newPagingFlow = searchRecipesUseCase(query).cachedIn(viewModelScope)
-        _uiState.update {
-            it.copy(recipes = newPagingFlow, isActive = false)
-        }
-    }
-    private fun saveQueryToHistory(query: String) = viewModelScope.launch {
-        runCatching {
-            saveSearchQueryUseCase(query)
-            fetchSearchHistory()
-        }
-    }
-    private fun fetchSearchHistory() {
-        viewModelScope.launch {
-            runCatching { getSearchQueriesUseCase() }
-                .onSuccess { history -> _uiState.update { it.copy(searchHistory = history) } }
-        }
-    }
-
-    private fun clearHistory() {
-        viewModelScope.launch {
-            runCatching {
-                clearSearchHistoryUseCase()
-                fetchSearchHistory()
-            }
-        }
     }
 }

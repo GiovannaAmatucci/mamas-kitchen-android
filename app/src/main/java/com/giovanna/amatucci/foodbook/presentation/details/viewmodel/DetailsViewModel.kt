@@ -22,7 +22,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 
+@KoinViewModel
 class DetailsViewModel(
     private val getRecipeDetailsUseCase: GetRecipeDetailsUseCase,
     private val isFavoritesUseCase: IsFavoritesUseCase,
