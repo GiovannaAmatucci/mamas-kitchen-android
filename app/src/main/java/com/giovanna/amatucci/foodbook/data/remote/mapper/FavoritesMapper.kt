@@ -7,7 +7,9 @@ import com.giovanna.amatucci.foodbook.domain.model.DirectionInfo
 import com.giovanna.amatucci.foodbook.domain.model.IngredientInfo
 import com.giovanna.amatucci.foodbook.domain.model.RecipeDetails
 import com.giovanna.amatucci.foodbook.domain.model.RecipeItem
+import org.koin.core.annotation.Single
 
+@Single
 class FavoritesMapper {
     fun favoriteDomainToDto(recipeDomain: RecipeDetails): FavoritesEntity = FavoritesEntity(
         recipeId = recipeDomain.id.toString(),

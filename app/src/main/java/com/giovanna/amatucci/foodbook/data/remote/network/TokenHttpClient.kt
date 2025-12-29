@@ -13,12 +13,12 @@ import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import org.koin.core.annotation.Single
 import timber.log.Timber
 
 interface TokenHttpClient {
     operator fun invoke(): HttpClient
 }
-
 class TokenHttpClientImpl(private val baseUrl: String) : TokenHttpClient {
     override operator fun invoke(): HttpClient = HttpClient(Android) {
         install(ContentNegotiation) {

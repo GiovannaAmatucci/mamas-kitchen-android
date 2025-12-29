@@ -1,11 +1,12 @@
 package com.giovanna.amatucci.foodbook
 
 import android.app.Application
-import com.giovanna.amatucci.foodbook.di.appModules
+import com.giovanna.amatucci.foodbook.di.AppModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
+import org.koin.ksp.generated.module
 import timber.log.Timber
 
 class FoodBookApplication : Application() {
@@ -25,7 +26,7 @@ class FoodBookApplication : Application() {
         startKoin {
             if (BuildConfig.DEBUG_MODE) androidLogger(Level.DEBUG) else androidLogger(Level.NONE)
             androidContext(this@FoodBookApplication)
-            modules(appModules)
+            modules(AppModule().module)
         }
     }
 }

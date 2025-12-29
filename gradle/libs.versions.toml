@@ -37,6 +37,7 @@ leakCanary = "2.14"
 
 # 💉 Dependency Injection
 koin = "4.1.1"
+koinAnnotations = "2.0.0"
 
 # Timber (Logging)
 timber = "5.0.1"
@@ -53,6 +54,7 @@ security = "1.1.0"
 paging = "3.3.6"
 
 [libraries]
+
 # ---------- 🧱 Core & Kotlin ----------
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appCompat" }
@@ -69,7 +71,8 @@ koin-core = { module = "io.insert-koin:koin-core" }
 koin-android = { module = "io.insert-koin:koin-android" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose" }
 koin-androidx-compose-navigation = { module = "io.insert-koin:koin-androidx-compose-navigation" }
-
+koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koinAnnotations" }
+koin-ksp-compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koinAnnotations" }
 
 # ---------- 🎨 Jetpack Compose UI ----------
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -126,7 +129,6 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
 
-
 # Security
 sqlcipher = { module = "net.zetetic:android-database-sqlcipher", version.ref = "sqlcipher" }
 sqlite-ktx = { module = "androidx.sqlite:sqlite-ktx", version.ref = "sqlite" }
@@ -135,7 +137,6 @@ security-crypto = { module = "androidx.security:security-crypto", version.ref = 
 # Paging
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
-
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

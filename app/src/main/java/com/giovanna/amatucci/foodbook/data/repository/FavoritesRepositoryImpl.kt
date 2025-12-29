@@ -15,7 +15,9 @@ import com.giovanna.amatucci.foodbook.util.constants.RepositoryConstants
 import com.giovanna.amatucci.foodbook.util.constants.TAG
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import org.koin.core.annotation.Single
 
+@Single(binds = [FavoritesRepository::class])
 class FavoritesRepositoryImpl(
     private val mapper: FavoritesMapper,
     private val dao: FavoritesDao,

@@ -1,15 +1,12 @@
 package com.giovanna.amatucci.foodbook.domain.usecase.search
 
 import com.giovanna.amatucci.foodbook.domain.repository.SearchRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Factory
 
 interface ClearSearchHistoryUseCase {
     suspend operator fun invoke()
 }
-
+@Factory(binds = [ClearSearchHistoryUseCase::class])
 class ClearSearchHistoryUseCaseImpl(private val repository: SearchRepository) : ClearSearchHistoryUseCase {
-    override suspend fun invoke() = withContext(Dispatchers.IO) {
-        repository.clearSearchHistory()
-    }
+    override suspend fun invoke() = repository.clearSearchHistory()
 }

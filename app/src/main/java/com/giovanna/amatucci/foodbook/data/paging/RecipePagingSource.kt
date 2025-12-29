@@ -20,22 +20,18 @@ class RecipePagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RecipeItem> {
         val position = params.key ?: RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX
         val maxResults = params.loadSize
+        val index = RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX
         return try {
             api.searchRecipes(query, position, maxResults).let { apiResult ->
                 when (apiResult) {
                     is ResultWrapper.Success -> {
-                        val recipesSearch = apiResult.data.recipesSearch
-                        val recipeDtos = recipesSearch?.recipeSearch ?: emptyList()
-                        val domainData = recipeDtos.map { mapper.searchRecipeDtoToDomain(it) }
-                        val nextKey = if (recipeDtos.isEmpty()) null
-                        else position + RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX
+                        val recipes = apiResult.data.recipesSearch?.recipeSearch ?: emptyList()
+                        val domainData = recipes.map { mapper.searchRecipeDtoToDomain(it) }
 
                         LoadResult.Page(
                             data = domainData,
-                            prevKey =
-                                if (position == RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX) null
-                                else position - RepositoryConstants.RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX,
-                            nextKey = nextKey
+                            prevKey = if (position == index) null else position - index,
+                            nextKey = if (recipes.isEmpty()) null else position + index
                         )
                     }
 

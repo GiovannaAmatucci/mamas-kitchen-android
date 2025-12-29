@@ -16,7 +16,6 @@ val keyProperties = Properties().apply {
 android {
     namespace = "com.giovanna.amatucci.foodbook"
     compileSdk = 36
-
     defaultConfig {
         applicationId = "com.giovanna.amatucci.foodbook"
         minSdk = 27
@@ -39,6 +38,11 @@ android {
             "FATSECRET_CLIENT_SECRET",
             "\"${keyProperties.getProperty("FATSECRET_CLIENT_SECRET")}\""
         )
+    }
+    sourceSets {
+        getByName("main") {
+            java.srcDir("build/generated/ksp/main/kotlin")
+        }
     }
 
     buildTypes {
@@ -91,6 +95,7 @@ android {
 }
 
 dependencies {
+
     // ---------- 🧱 Core & Kotlin ----------
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -107,7 +112,8 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     implementation(libs.koin.androidx.compose.navigation)
-
+    implementation(libs.koin.annotations)
+    ksp(libs.koin.ksp.compiler)
 
     // ---------- 🎨 Jetpack Compose UI ----------
     implementation(platform(libs.androidx.compose.bom))
@@ -135,11 +141,9 @@ dependencies {
     implementation(libs.kotlin.coroutines.android)
     implementation(libs.ktor.client.mock)
 
-
     // ---------- 🖼️ Image Loading ----------
     implementation(libs.coil.compose)
     implementation(libs.androidx.palette)
-
 
     // ---------- 🧪 Testing (Local) ----------
     testImplementation(libs.junit)
@@ -161,7 +165,6 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.android.leakcanary)
-
 
     // --- Logging (Timber) ---
     implementation(libs.timber)
