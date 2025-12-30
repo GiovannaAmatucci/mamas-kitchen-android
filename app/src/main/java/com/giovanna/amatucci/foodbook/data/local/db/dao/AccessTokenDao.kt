@@ -10,8 +10,10 @@ import com.giovanna.amatucci.foodbook.data.local.model.TokenEntity
 interface AccessTokenDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveToken(token: TokenEntity)
+
     @Query("SELECT * FROM tokenEntity WHERE id = :id LIMIT 1")
     suspend fun getToken(id: String = "current_user_token"): TokenEntity?
+
     @Query("DELETE FROM tokenEntity WHERE id = :id")
     suspend fun deleteToken(id: String = "current_user_token")
 }

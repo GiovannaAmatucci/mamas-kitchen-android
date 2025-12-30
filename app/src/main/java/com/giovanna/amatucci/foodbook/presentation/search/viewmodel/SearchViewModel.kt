@@ -30,7 +30,6 @@ class SearchViewModel(
     private val clearSearchHistoryUseCase: ClearSearchHistoryUseCase,
     private val getRecentFavoritesUseCase: GetRecentFavoritesUseCase
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(SearchUiState())
     val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
 
@@ -77,7 +76,6 @@ class SearchViewModel(
         fetchSearchHistory()
         _uiState.update { it.copy(status = ScreenStatus.Success) }
     }
-
     private fun loadCategories() {
         _uiState.update { it.copy(categories = STATIC_CATEGORIES) }
     }

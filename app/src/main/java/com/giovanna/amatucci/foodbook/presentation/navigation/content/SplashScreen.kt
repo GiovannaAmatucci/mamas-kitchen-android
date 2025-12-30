@@ -24,7 +24,6 @@ import androidx.compose.ui.res.stringResource
 import com.giovanna.amatucci.foodbook.R
 import com.giovanna.amatucci.foodbook.ui.theme.AppTheme
 import kotlinx.coroutines.delay
-
 private const val DELAY = 2000L
 @Composable
 fun AnimatedSplashScreen(onAnimationFinished: () -> Unit) {

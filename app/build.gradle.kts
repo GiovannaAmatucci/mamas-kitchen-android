@@ -12,7 +12,6 @@ val keyProperties = Properties().apply {
     load(File(rootDir, "key.properties").inputStream())
 }
 
-
 android {
     namespace = "com.giovanna.amatucci.foodbook"
     compileSdk = 36
@@ -44,7 +43,6 @@ android {
             java.srcDir("build/generated/ksp/main/kotlin")
         }
     }
-
     buildTypes {
         release {
             applicationIdSuffix = ".release"
@@ -95,7 +93,6 @@ android {
 }
 
 dependencies {
-
     // ---------- 🧱 Core & Kotlin ----------
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -183,6 +180,4 @@ dependencies {
     // --- Paging ---
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
-
-
 }

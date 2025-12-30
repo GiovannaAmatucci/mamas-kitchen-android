@@ -13,5 +13,4 @@ interface FavoritesRepository {
     suspend fun removeFavorite(recipeId: String)
     fun getLastFavorites(): Flow<List<RecipeItem>>
     suspend fun deleteAllFavorites()
-
 }

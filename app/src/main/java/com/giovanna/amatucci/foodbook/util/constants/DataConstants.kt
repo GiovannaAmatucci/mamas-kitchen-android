@@ -30,11 +30,8 @@ object ApiConstants {
 
 object RepositoryConstants {
     const val RECIPE_PAGING_SOURCE_STARTING_PAGE_INDEX = 1
-
     const val FAVORITE_REPOSITORY_PAGE_SIZE = 20
-
     const val RECIPE_REPOSITORY_PAGE_SIZE = 20
-
     const val AUTH_REPOSITORY_EXPIRES_IN = 1000L
 
 }
@@ -48,7 +45,6 @@ object TAG {
     const val FAVORITES_REPOSITORY = "FavoritesRepository"
     const val AUTH_API = "AuthApi"
     const val FAT_SECRET_RECIPE_API = "FatSecretRecipeApi"
-
     const val NETWORK_HTTP_CLIENT = "NetworkHttpClient"
 }
 
