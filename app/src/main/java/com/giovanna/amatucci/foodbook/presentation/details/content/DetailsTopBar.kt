@@ -44,7 +44,6 @@ fun DetailsTopBar(
             )
         }
         Spacer(modifier = Modifier.weight(AppTheme.dimens.weightDefault))
-
         IconButton(onClick = { onEvent(DetailsEvent.ToggleFavorite) }) {
             Icon(
                 contentDescription = stringResource(R.string.favorites_description),
