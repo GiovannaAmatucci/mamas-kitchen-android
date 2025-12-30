@@ -43,6 +43,7 @@ fun SearchScreen(
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
     var areFiltersExpanded by rememberSaveable(isLandscape) { mutableStateOf(!isLandscape) }
+
     SearchScreenContent(
         state = state,
         isLandscape = isLandscape,

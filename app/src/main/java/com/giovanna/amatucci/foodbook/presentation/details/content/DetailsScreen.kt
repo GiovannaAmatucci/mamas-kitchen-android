@@ -30,6 +30,7 @@ fun DetailsRoute(
     viewModel: DetailsViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+
     DetailsScreen(
         state = state,
         onEvent = { onEvent -> viewModel.onEvent(onEvent) },
