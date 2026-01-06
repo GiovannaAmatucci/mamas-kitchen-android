@@ -13,6 +13,7 @@ import com.giovanna.amatucci.foodbook.presentation.navigation.content.MainRoute
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.SearchViewModel
 import com.giovanna.amatucci.foodbook.presentation.search.viewmodel.state.SearchEvent
 import org.koin.androidx.compose.koinViewModel
+
 @Composable
 fun AppNavHost(
     navController: NavHostController,
